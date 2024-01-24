@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo.gui.FMController">
+   <children>
+      <ImageView fitHeight="720.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@images/menuBackground.png" />
+         </image>
+      </ImageView>
+      <VBox layoutX="530.0" layoutY="450.0" prefHeight="200.0" prefWidth="300.0">
+         <children>
+            <ImageView fx:id="ivNewGame" fitHeight="250.0" fitWidth="290.0" onMouseClicked="#NewGameClicked" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@images/newGame.png" />
+               </image>
+               <VBox.margin>
+                  <Insets bottom="50.0" />
+               </VBox.margin>
+            </ImageView>
+            <ImageView fx:id="ivLoadGame" disable="true" fitHeight="250.0" fitWidth="290.0" onMouseClicked="#LoadGameClicked" pickOnBounds="true" preserveRatio="true" visible="false">
+               <image>
+                  <Image url="@images/loadGame.png" />
+               </image>
+            </ImageView>
+         </children>
+      </VBox>
+   </children>
+</Pane>

@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.effect.Blend?>
+<?import javafx.scene.effect.ColorAdjust?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.TextFlow?>
+
+<Pane xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo.gui.RuleController">
+   <children>
+      <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="633.0" prefWidth="1100.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab text="Regler">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="600.0">
+                     <children>
+                        <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" layoutX="1.0" layoutY="1.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" pannable="true" prefHeight="600.0" AnchorPane.bottomAnchor="4.0" AnchorPane.rightAnchor="0.0">
+                           <content>
+                              <SplitPane dividerPositions="0.005037783375314861, 0.1385390428211587, 0.29093198992443325, 0.43828715365239296, 0.593198992443325, 0.7304785894206549, 0.8677581863979849" maxHeight="-Infinity" maxWidth="-Infinity" orientation="VERTICAL" prefHeight="600.0" prefWidth="1100.0">
+                                <items>
+                                  <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="336.0" prefWidth="1100.0">
+                                       <children>
+                                          <TextArea editable="false" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="61.0" prefWidth="1100.0" text="Texas Hold’em är idag den vanligaste pokervarianten. Varje spelare blir tilldelad två hålkort. Dessa kort är privata och inte synliga för de andra spelarna. &#10;Under spelets gång kommer även fem uppåtvända kort läggas upp på bordet. Dessa kort är gemensamma kort som alla spelare får använda sig av. Spelarna får sedan använda sig av vilken femkortskombination bland de fem gemensamma och de två privata kort för att skapa sin hand. &#10;Man kan alltså använda alla fem korten som ligger på bordet eller använda en eller två av de korten som man har på hand." wrapText="true">
+                                             <effect>
+                                                <Blend mode="SRC_ATOP" />
+                                             </effect>
+                                             <font>
+                                                <Font name="Tw Cen MT" size="14.0" />
+                                             </font>
+                                             <padding>
+                                                <Insets top="40.0" />
+                                             </padding>
+                                          </TextArea>
+                                          <Label text="Sammanfattning" underline="true">
+                                             <font>
+                                                <Font name="Tw Cen MT" size="24.0" />
+                                             </font>
+                                             <effect>
+                                                <Glow level="0.04" />
+                                             </effect>
+                                          </Label>
+                                       </children>
+                                    </AnchorPane>
+                                  <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="106.0" prefWidth="1100.0">
+                                       <children>
+                                          <TextArea blendMode="DARKEN" editable="false" layoutY="-7.0" maxHeight="-Infinity" prefHeight="105.0" prefWidth="1100.0" text="I Texas Hold’em använder man sig av en dealerknapp för att markera vart korten ska delas ifrån. Efter varje spel flyttas dealerknappen vidare ett steg. &#10;Lilla och stora mörken (blind) satsas av de två spelare direkt till dealerns vänster.&#10;" wrapText="true">
+                                             <padding>
+                                                <Insets top="40.0" />
+                                             </padding>
+                                             <effect>
+                                                <Blend mode="DIFFERENCE" opacity="0.0" />
+                                             </effect>
+                                             <font>
+                                                <Font name="Tw Cen MT" size="14.0" />
+                                             </font>
+                                          </TextArea>
+                                          <Label text="Mörkar/Blinds" underline="true">
+                                             <font>
+                                                <Font name="Tw Cen MT" size="24.0" />
+                                             </font>
+                                             <effect>
+                                                <Glow />
+                                             </effect>
+                                          </Label>
+                                       </children>
+                                    </AnchorPane>
+                                    <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="120.0" prefWidth="1100.0">
+                                       <children>
+                                          <TextArea blendMode="DARKEN" editable="false" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="155.0" prefWidth="1100.0" text="När mörkarna är satsade delar dealern ut två nedåtvända kort (hålkort) till samtliga spelare med start från lilla mörken. Dessa kort är spelarnas privata kort. &#10;Spelaren till vänster om stora mörken (big blind) startar första satsningsrundan genom att syna (satsa lika mycket som stora mörken), höja (lägsta höjning är den samma som stora &#10;mörken) eller lägga sig. &#10;Första satsningsrundan är klar när alla spelare satsat lika mycket i potten eller lagt sig (efter en spelares bet).&#10;&#10;" wrapText="true">
+                                             <padding>
+                                                <Insets top="40.0" />
+                                             </padding>
+                                             <effect>
+                                                <Blend mode="SRC_ATOP" />
+                                             </effect>
+                                             <font>
+                                                <Font name="Tw Cen MT" size="14.0" />
+                                             </font>
+                                          </TextArea>
+                                          <Label prefHeight="41.0" prefWidth="1100.0" text="Första Satsningsrundan (Pre-Flop)" underline="true">
+                                             <font>
+                                                <Font name="Tw Cen MT" size="24.0" />
+                                             </font>
+                                             <effect>
+                                                <Glow />
+                                             </effect>
+                                          </Label>
+                                       </children>
+                                    </AnchorPane>
+                                    <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="85.0" prefWidth="1100.0">
+                                       <children>
+                                          <TextArea blendMode="DARKEN" editable="false" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="124.0" prefWidth="1100.0" text="Dealern lägger upp tre öppna kort på bordet. Dessa kort kallas The Flop eller floppen, och är tillgängliga för alla spelare. &#10;Spelaren till vänster om dealern startar andra satsningsrundan genom att checka (passa) eller ”öppna potten” genom att satsa. &#10;Andra satsningsrundan är klar när alla spelare satsat lika mycket i potten, checkat (passat) varvet runt eller lagt sig (efter en spelares bet).&#10;" wrapText="true">
+                                             <padding>
+                                                <Insets top="40.0" />
+                                             </padding>
+                                             <effect>
+                                                <Blend mode="SRC_ATOP" />
+                                             </effect>
+                                             <font>
+                                                <Font name="Tw Cen MT" size="14.0" />
+                                             </font>
+                                          </TextArea>
+                                          <Label text="Andra Satsningsrundan (The Flop)" underline="true">
+                                             <font>
+                                                <Font name="Tw Cen MT" size="24.0" />
+                                             </font>
+                                             <effect>
+                                                <Glow />
+                                             </effect>
+                                          </Label>
+                                       </children>
+                                    </AnchorPane>
+                                    <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="136.0" prefWidth="1096.0">
+                                       <children>
+                                          <TextArea blendMode="DARKEN" editable="false" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="136.0" prefWidth="1100.0" text="När den andra satsningsrundan är avklarad bränner dealern åter igen det översta kortet i leken och lägger därefter ytterligare ett öppet kort på bordet. &#10;Detta kort kallas för The Turn. Även detta kort är tillgängligt för alla spelare. &#10;Tredje satsningsrundan går till på exakt samma sätt som andra rundan och är klar när alla spelare satsat lika mycket i potten, checkat (passat) varvet runt eller &#10;lagt sig (efter en spelares bet).&#10;" wrapText="true">
+                                             <padding>
+                                                <Insets top="40.0" />
+                                             </padding>
+                                             <effect>
+                                                <Blend mode="SRC_ATOP" />
+                                             </effect>
+                                             <font>
+                                                <Font name="Tw Cen MT" size="14.0" />
+                                             </font>
+                                          </TextArea>
+                                          <Label text="Tredje Satsningsrundan (The Turn)" underline="true">
+                                             <font>
+                                                <Font name="Tw Cen MT" size="24.0" />
+                                             </font>
+                                             <effect>
+                                                <Glow />
+                                             </effect>
+                                          </Label>
+                                       </children>
+                                    </AnchorPane>
+                                    <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="101.0" prefWidth="1098.0">
+                                       <children>
+                                          <TextArea blendMode="DARKEN" editable="false" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="124.0" prefWidth="1100.0" text="Dealern lägger ut ytterligare ett öppet kort på bordet. Detta kort kallas för The River eller 5th Street och är det femte och sista öppna kortet spelarna får använda sig av &#10;för att skapa sin hand. &#10;En fjärde och sista satsningsrunda startar och går till på exakt samma sätt som de två tidigare." wrapText="true">
+                                             <padding>
+                                                <Insets top="40.0" />
+                                             </padding>
+                                             <effect>
+                                                <Blend mode="SRC_ATOP" />
+                                             </effect>
+                                             <font>
+                                                <Font name="Tw Cen MT" size="14.0" />
+                                             </font>
+                                          </TextArea>
+                                          <Label text="Fjärde Satsningsrundan (The River)" underline="true">
+                                             <font>
+                                                <Font name="Tw Cen MT" size="24.0" />
+                                             </font>
+                                             <effect>
+                                                <Glow />
+                                             </effect>
+                                          </Label>
+                                       </children>
+                                    </AnchorPane>
+                                    <AnchorPane prefHeight="109.0" prefWidth="1098.0">
+                                       <children>
+                                          <TextArea blendMode="DARKEN" editable="false" layoutY="-1.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="126.0" prefWidth="1100.0" text="Spelarna får använda sig av vilken femkortskombination bland de fem gemensamma korten och de två privata kort för att skapa sin hand.&#10;Man kan alltså använda alla fem korten som ligger på bordet eller använda en eller två av de korten som man har på hand. &#10;Spelaren med den bästa femkortskombinationen vinner potten. Är två eller flera händer lika bra delas potten mellan vinnarna." wrapText="true">
+                                             <padding>
+                                                <Insets top="40.0" />
+                                             </padding>
+                                             <effect>
+                                                <Blend mode="SRC_ATOP" />
+                                             </effect>
+                                             <font>
+                                                <Font name="Tw Cen MT" size="14.0" />
+                                             </font>
+                                          </TextArea>
+                                          <Label layoutY="1.0" prefHeight="27.0" prefWidth="173.0" text="Hur man vinner" underline="true">
+                                             <font>
+                                                <Font name="Tw Cen MT" size="24.0" />
+                                             </font>
+                                             <effect>
+                                                <Glow />
+                                             </effect>
+                                          </Label>
+                                       </children>
+                                    </AnchorPane>
+                                    <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                       <children>
+                                          <TextArea blendMode="DARKEN" editable="false" layoutY="1.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="101.0" prefWidth="1100.0" text="Reglerna är hämtade från http://www.spelregler.org/texas-holdem-regler/&#10;" wrapText="true">
+                                             <padding>
+                                                <Insets top="40.0" />
+                                             </padding>
+                                             <effect>
+                                                <Blend mode="SCREEN" />
+                                             </effect>
+                                             <font>
+                                                <Font name="Tw Cen MT" size="14.0" />
+                                             </font>
+                                          </TextArea>
+                                       </children>
+                                    </AnchorPane>
+                                </items>
+                              </SplitPane>
+                           </content>
+                           <effect>
+                              <ColorAdjust contrast="0.07" />
+                           </effect>
+                        </ScrollPane>
+                     </children></AnchorPane>
+            </content>
+          </Tab>
+          <Tab fx:id="handrank" text="Handrankning">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="600.0" prefWidth="1100.0">
+                     <children>
+                        <ImageView fitHeight="600.0" fitWidth="1100.0" pickOnBounds="true" AnchorPane.leftAnchor="2.0" AnchorPane.topAnchor="-17.0">
+                           <image>
+                              <Image url="@images/handrankingHelp.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+            <Tab text="Ordlista">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="600.0" prefWidth="1100.0">
+                     <children>
+                        <ScrollPane hbarPolicy="NEVER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" pannable="true" prefHeight="600.0" prefWidth="1100.0">
+                           <content>
+                              <SplitPane dividerPositions="0.17224080267558528" prefHeight="600.0" prefWidth="1100.0">
+                                <items>
+                                  <AnchorPane maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="598.0" prefWidth="137.0">
+                                       <children>
+                                          <TextFlow lineSpacing="20.0" prefHeight="366.0" prefWidth="135.0" AnchorPane.topAnchor="30.0">
+                                             <children>
+                                                <Label layoutY="20.0" prefHeight="50.0" prefWidth="85.0" text="All in" underline="true">
+                                                   <font>
+                                                      <Font name="Tw Cen MT" size="24.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label layoutX="10.0" layoutY="10.0" prefHeight="50.0" prefWidth="86.0" text="Blinds" underline="true">
+                                                   <font>
+                                                      <Font name="Tw Cen MT" size="24.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label layoutX="10.0" layoutY="27.0" prefHeight="50.0" prefWidth="85.0" text="Call" underline="true">
+                                                   <font>
+                                                      <Font name="Tw Cen MT" size="24.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label layoutX="10.0" layoutY="44.0" prefHeight="50.0" prefWidth="87.0" text="Check" underline="true">
+                                                   <font>
+                                                      <Font name="Tw Cen MT" size="24.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label layoutX="10.0" layoutY="61.0" prefHeight="50.0" prefWidth="167.0" text="Fold" underline="true">
+                                                   <font>
+                                                      <Font name="Tw Cen MT" size="24.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label layoutX="10.0" layoutY="78.0" prefHeight="50.0" prefWidth="167.0" text="Pott" underline="true">
+                                                   <font>
+                                                      <Font name="Tw Cen MT" size="24.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label layoutX="10.0" layoutY="95.0" prefHeight="50.0" prefWidth="167.0" text="Raise" underline="true">
+                                                   <font>
+                                                      <Font name="Tw Cen MT" size="24.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                             <padding>
+                                                <Insets left="10.0" />
+                                             </padding>
+                                          </TextFlow>
+                                       </children>
+                                    </AnchorPane>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                       <children>
+                                          <TextFlow lineSpacing="20.0" prefHeight="550.0" prefWidth="931.0" AnchorPane.topAnchor="30.0">
+                                             <padding>
+                                                <Insets left="5.0" />
+                                             </padding>
+                                             <children>
+                                                <Label layoutY="20.0" prefHeight="50.0" prefWidth="800.0" text="Användaren/AI satsar alla sina pengar/medel.">
+                                                   <padding>
+                                                      <Insets bottom="10.0" />
+                                                   </padding>
+                                                   <font>
+                                                      <Font name="Tw Cen MT" size="18.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label layoutY="10.0" prefHeight="50.0" prefWidth="800.0" text="Vid start av varje spelomgång behöver två av spelarna lägga in en förbestämd summa till potten. " wrapText="true">
+                                                   <font>
+                                                      <Font name="Tw Cen MT" size="18.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label layoutY="47.0" prefHeight="50.0" prefWidth="800.0" text="Användaren/AI synar den högsta satsningen och är därmed delaktig i rundan." wrapText="true">
+                                                   <font>
+                                                      <Font name="Tw Cen MT" size="18.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label layoutY="92.0" prefHeight="50.0" prefWidth="800.0" text="Användaren/AI säger hen är med men lägger inte in en summa." wrapText="true">
+                                                   <font>
+                                                      <Font name="Tw Cen MT" size="18.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label layoutY="140.0" prefHeight="50.0" prefWidth="800.0" text="Användaren/AI lägger sig för den spelomgången." wrapText="true">
+                                                   <font>
+                                                      <Font name="Tw Cen MT" size="18.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label layoutY="166.0" prefHeight="50.0" prefWidth="800.0" text="De pengar/medel som är placerat i mitten på bordet och som spelarna försöker vinna." wrapText="true">
+                                                   <font>
+                                                      <Font name="Tw Cen MT" size="18.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label layoutY="300.0" prefHeight="50.0" prefWidth="800.0" text="Användaren/AI höjer vad de andra måste lägga in för att vara med på denna rundan." wrapText="true">
+                                                   <font>
+                                                      <Font name="Tw Cen MT" size="18.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                          </TextFlow>
+                                       </children></AnchorPane>
+                                </items>
+                              </SplitPane>
+                           </content>
+                        </ScrollPane>
+                     </children></AnchorPane>
+              </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+   </children>
+</Pane>

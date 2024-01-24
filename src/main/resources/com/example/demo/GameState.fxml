@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Rectangle2D?>
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.effect.Light.Distant?>
+<?import javafx.scene.effect.Lighting?>
+<?import javafx.scene.effect.Shadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo.gui.GameController">
+	<children>
+		<AnchorPane id="AnchorPaneAll" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0">
+			<children>
+				<ImageView id="background.png" fitHeight="720.0" fitWidth="1280.0" layoutX="1.0" layoutY="-1.0" visible="true">
+					<image>
+						<Image url="@images/background.png" />
+					</image>
+				</ImageView>
+				<ImageView id="table.png" fitHeight="379.0" fitWidth="916.0" layoutX="211.0" layoutY="120.0">
+					<image>
+						<Image url="@images/table.png" />
+					</image>
+				</ImageView>
+				<ImageView id="rulesButton.png" fitHeight="45.0" fitWidth="45.0" layoutX="1150.0" layoutY="40.0" onMouseReleased="#rulesState">
+					<image>
+						<Image url="@images/rulesButton.png" />
+					</image>
+				</ImageView>
+				<ImageView id="soundButton.png" fx:id="ivSound" fitHeight="45.0" fitWidth="45.0" layoutX="1220.0" layoutY="40.0" onMouseReleased="#soundSetting">
+					<image>
+						<Image url="@images/soundButton.png" />
+					</image>
+				</ImageView>
+				<ImageView id="saveButton.png" disable="true" fitHeight="45.0" fitWidth="45.0" layoutX="1230.0" layoutY="100.0" onMouseReleased="#saveGame" visible="false">
+					<image>
+						<Image url="@images/saveButton.png" />
+					</image>
+				</ImageView>
+				<ImageView id="dealer.png" fx:id="ivDealer" fitHeight="37.0" fitWidth="37.0" layoutX="417.0" layoutY="172.0">
+					<image>
+						<Image url="@images/dealer.png" />
+					</image>
+				</ImageView>
+				<ImageView id="smallBlind.png" fx:id="ivSmallBlind" fitHeight="37.0" fitWidth="37.0" layoutX="524.0" layoutY="172.0">
+					<image>
+						<Image url="@images/smallBlind.png" />
+					</image>
+				</ImageView>
+				<ImageView id="bigBlind.png" fx:id="ivBigBlind" fitHeight="37.0" fitWidth="37.0" layoutX="474.0" layoutY="172.0">
+					<image>
+						<Image url="@images/bigBlind.png" />
+					</image>
+				</ImageView>
+				<Accordion layoutX="17.0" layoutY="432.0" />
+				<AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+				<Slider fx:id="slider" blockIncrement="1.0" layoutX="693.0" layoutY="610.0" majorTickUnit="500.0" max="2000.0" min="50.0" minorTickCount="100" mouseTransparent="false" onDragDetected="#sliderChange" onDragDone="#sliderChange" onDragDropped="#sliderChange" onScrollFinished="#showAllIn" orientation="HORIZONTAL" pickOnBounds="false" prefWidth="214.0" showTickLabels="true" showTickMarks="true" snapToTicks="false" value="50.0">
+					<effect>
+						<Lighting diffuseConstant="1.5238095238095237" specularConstant="2.0" surfaceScale="0.0">
+							<bumpInput>
+								<Shadow />
+							</bumpInput>
+							<light>
+								<javafx.scene.effect.Light.Distant />
+							</light>
+						</Lighting>
+					</effect>
+				</Slider>
+				<Pane id="pane" fx:id="playerCardsArea" layoutX="570.0" layoutY="395.0" prefHeight="131.0" prefWidth="203.0" />
+				<MenuBar layoutX="0.0" layoutY="0.0" mouseTransparent="false" prefWidth="1280.0">
+					<menus>
+						<Menu mnemonicParsing="false" text="Meny">
+							<items>
+								<MenuItem fx:id="miNewGame" mnemonicParsing="false" onAction="#goToMainMenu" text="Huvudmeny" />
+								<MenuItem fx:id="miClose" mnemonicParsing="false" onAction="#closeProgram" text="Stäng" />
+							</items>
+						</Menu>
+						<Menu mnemonicParsing="false" text="Hjälp">
+							<items>
+								<MenuItem fx:id="miSettings" mnemonicParsing="false" onAction="#goToTutorial" text="Se Tutorial" />
+                        <MenuItem fx:id="miRules" mnemonicParsing="false" onAction="#rulesState" text="Regler" />
+							</items>
+						</Menu>
+						<Menu mnemonicParsing="false" text="Om">
+							<items>
+								<MenuItem fx:id="miAbout" mnemonicParsing="false" onAction="#aboutBox" text="Om projektet" />
+							</items>
+						</Menu>
+					</menus>
+				</MenuBar>
+				<TitledPane id="helpBox" alignment="TOP_CENTER" contentDisplay="LEFT" graphicTextGap="1.0" layoutX="114.0" layoutY="388.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" pickOnBounds="false" prefHeight="444.0" prefWidth="217.0" rotate="270.0" text="Hjälp">
+					<content>
+						<AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="180.0">
+							<children>
+								<Label fx:id="helpLabel" layoutX="40.0" layoutY="139.0" prefHeight="37.0" prefWidth="302.0" rotate="90.0" text="">
+																		<font>
+										<Font name="Tw Cen MT" size="22.0" fx:id="x9" />
+									</font>
+																		<font>
+										<Font name="Tw Cen MT" size="28.0" fx:id="x10" />
+									</font>
+									<font>
+										<Font name="Tw Cen MT" size="15.0" fx:id="x1" />
+									</font>
+								
+								</Label>
+								<Label id="adviseLabel" fx:id="adviceLabel" layoutX="-50.0" layoutY="107.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="117.0" prefWidth="318.0" rotate="90.0" text="" wrapText="true">
+									<font>
+										<Font name="Tw Cen MT" size="15.0" />
+									</font>
+								</Label>
+								<Pane id="powerBar" fx:id="powerBarArea" layoutX="53.0" layoutY="259.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="180.0" prefWidth="108.0" rotate="90.0">
+									<opaqueInsets>
+										<Insets />
+									</opaqueInsets>
+								</Pane>
+							</children>
+						</AnchorPane>
+					</content>
+					<font>
+						<Font name="Tw Cen MT" size="18.0" />
+					</font>
+					<effect>
+						<DropShadow />
+					</effect>
+				</TitledPane>
+
+				<ImageView id="userBar.png" fitHeight="155.0" fitWidth="203.0" layoutX="464.0" layoutY="550.0">
+					<image>
+						<Image url="@images/userBar.png" />
+					</image>
+				</ImageView>
+				<Label id="label" fx:id="lbPlayerAction" alignment="CENTER" contentDisplay="CENTER" font="$x3" graphicTextGap="4.0" layoutX="474.0" layoutY="662.0" prefHeight="18.0" prefWidth="184.0" text="Your bet" textAlignment="CENTER" textOverrun="CLIP">
+					<font>
+						<Font name="Tw Cen MT" size="15.0" fx:id="x3" />
+						<Font fx:id="decisionFont" name="Tw Cen MT" size="10.0" />
+					</font>
+					<labelFor>
+						<TextField fx:id="field" editable="false" layoutX="972.0" layoutY="379.0" prefWidth="75.0" />
+					</labelFor>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+				</Label>
+				<Label fx:id="userName" alignment="CENTER" contentDisplay="CENTER" font="$x3" layoutX="474.0" layoutY="572.0" prefHeight="18.0" prefWidth="184.0" text="Vedrana" textAlignment="CENTER" />
+				<Label id="potValueLabel" fx:id="lbPotValue" alignment="CENTER" contentDisplay="CENTER" font="$x3" graphicTextGap="4.0" layoutX="474.0" layoutY="618.0" prefHeight="18.0" prefWidth="184.0" text="Your pot" textAlignment="CENTER" />
+				<Label fx:id="raiseLabel" layoutX="918.0" layoutY="612.0" textFill="#e8dbdb" />
+				<ImageView id="aiBarWithCards.png" fx:id="imgPlayerOneCards" fitHeight="148.0" fitWidth="114.0" layoutX="170.0" layoutY="290.0" visible="false">
+					<image>
+						<Image preserveRatio="true" smooth="true" url="@images/aiBarWithCards.png" />
+					</image>
+				</ImageView>
+				<ImageView id="aiBarWithCards.png" fx:id="imgPlayerFiveCards" fitHeight="148.0" fitWidth="114.0" layoutX="1095.0" layoutY="290.0" visible="false">
+					<image>
+						<Image preserveRatio="true" smooth="true" url="@images/aiBarWithCards.png" />
+					</image>
+				</ImageView>
+				<ImageView id="aiBarWithCards.png" fx:id="imgPlayerFourCards" fitHeight="148.0" fitWidth="114.0" layoutX="980.0" layoutY="43.0" visible="false">
+					<image>
+						<Image preserveRatio="true" smooth="true" url="@images/aiBarWithCards.png" />
+					</image>
+				</ImageView>
+				<ImageView id="aiBarWithCards.png" fx:id="imgPlayerThreeCards" fitHeight="148.0" fitWidth="114.0" layoutX="628.0" layoutY="34.0" visible="false">
+					<image>
+						<Image preserveRatio="true" smooth="true" url="@images/aiBarWithCards.png" />
+					</image>
+				</ImageView>
+				<ImageView id="aiBarWithCards.png" fx:id="imgPlayerTwoCards" fitHeight="148.0" fitWidth="114.0" layoutX="258.0" layoutY="43.0" visible="false">
+					<image>
+						<Image preserveRatio="true" smooth="true" url="@images/aiBarWithCards.png" />
+					</image>
+				</ImageView>
+				<Pane id="paneRounds.png" fx:id="paneRounds" layoutX="10.0" layoutY="33.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="56.0" prefWidth="108.0">
+					<opaqueInsets>
+					<Insets />
+					</opaqueInsets>
+				</Pane>
+<!--             <Pane fx:id="paneRounds" layoutX="10.0" layoutY="33.0" prefHeight="200.0" prefWidth="200.0">
+               <children>
+      
+      				<ImageView id="gameRound.png" fx:id="imgRoundStatus" fitHeight="56.0" fitWidth="175.0" visible="true">
+      					<image>
+      						<Image url="@images/roundPreFlop.png" />
+      					</image>
+      				</ImageView>
+               </children>
+            </Pane> -->
+            	<Pane id="panePots.png" fx:id="panePots" layoutX="10.0" layoutY="33.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="56.0" prefWidth="108.0">
+					<opaqueInsets>
+						<Insets />
+					</opaqueInsets>
+				</Pane>
+				<Label fx:id="subPotOne" alignment="TOP_CENTER" layoutX="0" layoutY="0" text="pot1" textFill="#ffffff" visible="false" />
+            	<Label fx:id="subPotTwo" alignment="TOP_CENTER" layoutX="0" layoutY="0" text="pot2" textFill="#ffffff" visible="false" />
+            	<Label fx:id="subPotThree" alignment="TOP_CENTER" layoutX="0" layoutY="0" text="pot3" textFill="#ffffff" visible="false" />
+            	<Label fx:id="subPotFour" alignment="TOP_CENTER" layoutX="0" layoutY="0" text="pot4" textFill="#ffffff" visible="false" />
+            	<Label fx:id="subPotFive" alignment="TOP_CENTER" layoutX="0" layoutY="0" text="pot5" textFill="#ffffff" visible="false" />
+            	<Label fx:id="subPotSix" alignment="TOP_CENTER" layoutX="0" layoutY="0" text="pot1" textFill="#ffffff" visible="false" />
+            	<Label fx:id="mainPot" alignment="TOP_CENTER" layoutX="0" layoutY="0" text="potMain" textFill="#ffffff" visible="false">
+            	            	               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font></Label>
+            	
+            	
+            	
+				<Label fx:id="labelPlayerThreeName" alignment="TOP_CENTER" font="$x3" layoutX="653.0" layoutY="109.0" text="PlayerThreeName" visible="false" />
+				<Label fx:id="labelPlayerFourName" font="$x3" layoutX="1005.0" layoutY="119.0" text="PlayerFourName" visible="false" />
+				<Label fx:id="labelPlayerFiveName" font="$x3" layoutX="1118.0" layoutY="364.0" text="PlayerFiveName" visible="false" />
+				<Label fx:id="labelPlayerOneName" font="$x3" layoutX="193.0" layoutY="364.0" text="PlayerOneName" visible="false" />
+				<Label fx:id="labelPlayerTwoName" font="$x3" layoutX="280.0" layoutY="119.0" text="PlayerTwoName" visible="false" />
+
+				<Label fx:id="labelPlayerThreePot" font="$x3" layoutX="653.0" layoutY="135.0" text="PlayerThreePot" visible="false" />
+				<Label fx:id="labelPlayerFourPot" font="$x3" layoutX="1005.0" layoutY="143.0" text="PlayerFourPot" visible="false" />
+				<Label fx:id="labelPlayerFivePot" font="$x3" layoutX="1118.0" layoutY="392.0" text="PlayerFivePot" visible="false" />
+				<Label fx:id="labelPlayerOnePot" font="$x3" layoutX="193.0" layoutY="392.0" text="PlayerOnePot" visible="false" />
+				<Label fx:id="labelPlayerTwoPot" font="$x3" layoutX="280.0" layoutY="143.0" text="PlayerTwoPot" visible="false" />
+
+				<Label fx:id="labelPlayerThreeAction" font="$decisionFont" layoutX="653.0" layoutY="160.0" text="PlayerThreeAction" visible="false" />
+				<Label fx:id="labelPlayerFourAction" font="$decisionFont" layoutX="1005.0" layoutY="169.0" text="PlayerFourAction" visible="false" />
+				<Label fx:id="labelPlayerFiveAction" font="$decisionFont" layoutX="1118.0" layoutY="413.0" text="PlayerFiveAction" visible="false" />
+				<Label fx:id="labelPlayerOneAction" font="$decisionFont" layoutX="193.0" layoutY="413.0" text="PlayerOneAction" visible="false" />
+				<Label fx:id="labelPlayerTwoAction" font="$decisionFont" layoutX="280.0" layoutY="169.0" text="PlayerTwoAction" visible="false" />
+
+				<ImageView id="checkButton.png" fx:id="btCheck" fitHeight="44.0" fitWidth="101.0" layoutX="693.0" layoutY="550.0" onMouseReleased="#playerCheck">
+					<image>
+						<Image url="@images/checkButton.png" />
+					</image>
+				</ImageView>
+				<ImageView id="callButton.png" fx:id="btCall" fitHeight="44.0" fitWidth="101.0" layoutX="693.0" layoutY="550.0" onMouseReleased="#playerCall">
+					<image>
+						<Image url="@images/callButton.png" />
+					</image>
+				</ImageView>
+				<ImageView id="foldButton.png" fx:id="btFold" fitHeight="44.0" fitWidth="101.0" layoutX="814.0" layoutY="550.0" onMouseReleased="#playerFold">
+					<image>
+						<Image url="@images/foldButton.png" />
+					</image>
+				</ImageView>
+				<ImageView id="raiseButton.png" fx:id="btRaise" fitHeight="44.0" fitWidth="101.0" layoutX="745.0" layoutY="660.0" onMouseReleased="#playerRaise">
+					<image>
+						<Image url="@images/raiseButton.png" />
+					</image>
+				</ImageView>
+
+				<Label fx:id="lbAllIn" disable="false" focusTraversable="false" font="$x3" labelFor="$slider" layoutX="870.0" layoutY="650.0" prefHeight="28.0" prefWidth="49.0" text="ALL IN" textFill="WHITE" visible="false" />
+				<Pane fx:id="tabelCardArea" layoutX="435.0" layoutY="231.0" prefHeight="164.0" prefWidth="471.0" />
+				<!-- <ImageView id="img1Table.png" fx:id="imgCard1" fitHeight="166.0" 
+					fitWidth="120.0" layoutX="0.0" layoutY="0.0" visible="false"> </ImageView> 
+      					<ImageView id="img2Table.png" fx:id="imgCard2" fitHeight="166.0" fitWidth="120.0" 
+      					layoutX="0.0" layoutY="0.0" visible="false"> </ImageView> -->
+				<ImageView id="img3Table.png" fx:id="imgCard3" fitHeight="166.0" fitWidth="120.0" layoutX="105" layoutY="0.0" visible="true">
+				</ImageView>
+
+				<ImageView id="img4Table.png" fx:id="imgCard4" fitHeight="166.0" fitWidth="120.0" layoutX="210" layoutY="0.0" visible="true">
+				</ImageView>
+
+				<ImageView id="img5Table.png" fx:id="imgCard5" fitHeight="166.0" fitWidth="120.0" layoutX="315.0" layoutY="0.0" visible="true">
+				</ImageView>
+
+				<ImageView id="img6Table.png" fx:id="imgCard6" fitHeight="166.0" fitWidth="120.0" layoutX="420" layoutY="0.0" visible="true">
+				</ImageView>
+
+				<ImageView id="img7Table.png" fx:id="imgCard7" fitHeight="166.0" fitWidth="120.0" layoutX="525" layoutY="0.0" visible="true">
+				</ImageView>
+
+				<TitledPane alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="1008.0" layoutY="448.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="318.0" prefWidth="224.0" rotate="90.0" text="Handrankning" textOverrun="CLIP">
+					<content>
+						<ScrollPane centerShape="false" fitToHeight="true" fitToWidth="true" hvalue="1.0" layoutX="1020.0" layoutY="465.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="290.0" prefWidth="222.0" rotate="180.0" scaleShape="false" vbarPolicy="NEVER" vvalue="0.59">
+							<content>
+								<ImageView cache="true" fitHeight="268.0" fitWidth="975.0" pickOnBounds="true">
+									<image>
+										<Image url="@images/handRanking.png" />
+									</image>
+									<viewport>
+										<Rectangle2D />
+									</viewport>
+								</ImageView>
+							</content>
+							<opaqueInsets>
+								<Insets right="10.0" />
+							</opaqueInsets>
+						</ScrollPane>
+					</content>
+					<font>
+						<Font name="Tw Cen MT" size="18.0" />
+						
+					</font>
+				</TitledPane>
+          
+
+			</children>
+		</AnchorPane>
+	</children>
+</Pane>
