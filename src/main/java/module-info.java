@@ -1,11 +1,10 @@
-module com.example.demo {
+module org.pokergame {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.desktop;
     requires javafx.media;
 
 
-
-    exports com.example.demo.gui;
-    opens com.example.demo.gui to javafx.fxml;
+    opens org.pokergame.gui to javafx.fxml;
+    exports org.pokergame.gui;
 }
