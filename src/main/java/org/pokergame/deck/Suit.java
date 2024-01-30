@@ -5,10 +5,10 @@ package org.pokergame.deck;
  * @author Vedrana Zeba
  */
 public enum Suit {
-	HEARTS('H'),
-	SPADES('S'),
-	CLUBS('C'),
-	DIAMONDS('D');
+	HEARTS('h'),
+	SPADES('s'),
+	CLUBS('c'),
+	DIAMONDS('d');
 
 	private char suit;
 	
