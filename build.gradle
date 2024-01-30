@@ -4,13 +4,6 @@ plugins {
     id 'org.openjfx.javafxplugin' version '0.1.0'
 }
 
-group = 'org.pokergame'
-version = '1.0-SNAPSHOT'
-
-repositories {
-    mavenCentral()
-}
-
 application {
     mainClass = 'org.pokergame.gui.Main'
 }
@@ -18,6 +11,13 @@ application {
 javafx {
     version = "17.0.8"
     modules = ['javafx.controls', 'javafx.fxml', 'javafx.media']
+}
+
+group = 'org.pokergame'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
 }
 
 dependencies {
