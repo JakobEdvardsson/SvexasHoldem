@@ -53,7 +53,7 @@ public class WinnerBox {
 
 		Label messageText = new Label();
 		messageText.setFont(font);
-		messageText.setTextFill(Color.WHITE);
+		messageText.setTextFill(Color.BLACK);
 		messageText.setWrapText(true);
 		
 		if(nr == 1){
