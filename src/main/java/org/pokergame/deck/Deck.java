@@ -60,8 +60,11 @@ public class Deck {
 
     for (Suit suit : Suit.values()) {
       for (CardValue card : CardValue.values()) {
+
+        System.out.println("suit: " + suit);
+        System.out.println("card: " + card);
+
         Image cardImage = new Image(getClass().getResource(BASE_PATH + "images/" +
-                card.getCardValue() + suit.getSuitLetter() + ".png").toString());
         ImageIcon cardImageView = new ImageIcon(getClass().getResource(BASE_PATH + "images/" +
                 card.getCardValue() + suit.getSuitLetter() + ".png").toString());
         deck.add(new Card(suit, card, cardImageView));

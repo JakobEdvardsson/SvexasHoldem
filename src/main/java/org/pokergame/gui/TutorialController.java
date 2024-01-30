@@ -106,7 +106,7 @@ public class TutorialController {
 	public void placeImg(){
 		this.tutorialProgress = tutorialProgress+1;
 		System.out.println(tutorialProgress);
-		String buttonName = "nästaButton";
+		String buttonName = "nextButton";
 		if(tutorialProgress == 17){
 			buttonName = "spelaButton"; 
 		}
