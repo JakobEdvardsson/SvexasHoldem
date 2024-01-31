@@ -29,7 +29,10 @@ public class TestSPController {
     }
 
     @Test
-    public void testUserNameNull() {}
+    public void testUserNameNull() {
+        SPController.setName(null);
+        assertEquals("", SPController.getName());
+    }
 
     @Test
     public void testUserNameTooLong() {
