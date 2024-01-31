@@ -11,4 +11,9 @@ public class TestSPController {
         assertEquals(0, SPController.getCurrentMaxBet()); //TODO: Ändra expected value.
         assertEquals(0, SPController.getSmallBlind()); //TODO: Ändra expected value.
     }
+
+    @Test
+    public void testUserName() {
+
+    }
 }
