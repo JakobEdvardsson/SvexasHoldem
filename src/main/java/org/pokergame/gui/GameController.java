@@ -624,17 +624,13 @@ public class GameController {
             BASE_PATH + "images/" + card2.getCardValue() + card2.getCardSuit().charAt(0) + "O.png";
       }
 
-      Image imageTemp = null;
-      ImageView imgCard1 = new ImageView(imageTemp);
-      ImageView imgCard2 = new ImageView(imageTemp);
-
-      Image image = new Image(Paths.get(cardOne).toUri().toString(), 114, 148, true, true);
+      Image image = new Image(cardOne, 114, 148, true, true);
       imgCard1 = new ImageView(image);
       playerCardsArea.getChildren().add(imgCard1);
       imgCard1.setX(0);
       imgCard1.setY(0);
 
-      image = new Image(Paths.get(cardTwo).toUri().toString(), 114, 148, true, true);
+      image = new Image(cardTwo, 114, 148, true, true);
       imgCard2 = new ImageView(image);
       playerCardsArea.getChildren().add(imgCard2);
       imgCard2.setX(105);
