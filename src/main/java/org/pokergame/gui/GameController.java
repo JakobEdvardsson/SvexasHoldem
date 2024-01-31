@@ -752,20 +752,17 @@ public class GameController {
 
   /**
    * Method which controls the players decision
-   * 
-   * @return The players decision
    */
-  public String askForPlayerDecision() {
+  public void askForPlayerDecision() {
     handleButtons();
     playerMadeDecision = false;
     while (!playerMadeDecision) {
       try {
         SPController.sleep(100);
       } catch (InterruptedException e) {
-        e.printStackTrace();
+          throw new RuntimeException(e);
       }
     }
-    return decision;
   }
 
   /**
@@ -776,7 +773,7 @@ public class GameController {
   public void playerReset(String resetDecision) {
     decision = resetDecision;
     alreadyPaid = 0;
-    cards = new ArrayList<Card>();
+    cards = new ArrayList<>();
   }
 
   /**
@@ -799,8 +796,7 @@ public class GameController {
       btRaise.setVisible(true);
       btFold.setVisible(true);
     } else {
-      if (alreadyPaid < spController.getCurrentMaxBet()
-          && (playerPot + alreadyPaid) >= spController.getCurrentMaxBet()) {
+      if (alreadyPaid < spController.getCurrentMaxBet() && (playerPot + alreadyPaid) >= spController.getCurrentMaxBet()) {
         // hide check, show call
         btCheck.setVisible(false);
         btCall.setVisible(true);
@@ -812,8 +808,7 @@ public class GameController {
         btFold.setVisible(true);
       }
 
-      if ((spController.getCurrentMaxBet() - alreadyPaid) + spController.getBigBlind() <= playerPot
-          && playerPot != 0) {
+      if ((spController.getCurrentMaxBet() - alreadyPaid) + spController.getBigBlind() <= playerPot && playerPot != 0) {
         // show raise
         btRaise.setVisible(true);
       } else {
@@ -853,19 +848,6 @@ public class GameController {
   }
 
   /**
-   * Method which dims an AI player
-   * 
-   * @param AI an AI player
-   */
-  public void removeAiPlayer(int AI) {
-    Platform.runLater(() -> {
-      collectionOfLabelsAi[AI][0].setVisible(false);
-      collectionOfLabelsAi[AI][1].setVisible(false);
-      collectionOfLabelsAi[AI][2].setVisible(false);
-    });
-  }
-
-  /**
    * Places the AI-players in the correct position depending on chosen number of players.
    * 
    * @param aiPlayers All the AI-players that are active.
@@ -889,7 +871,7 @@ public class GameController {
         setShowUIAiBar(3);
         setShowUIAiBar(4);
       }
-    } else if (notFirstRound) {
+    } else {
       endOfRound(deadAIIndex);
     }
   }
@@ -907,9 +889,7 @@ public class GameController {
     int setOfPlayers = 0;
 
     // Decides (based on chosen AI-players) which position to place the AI at
-    if (setAINr == 1) {
-      setOfPlayers = 0;
-    } else if (setAINr == 3) {
+    if (setAINr == 3) {
       setOfPlayers = 1;
     } else if (setAINr == 5) {
       setOfPlayers = 2;
@@ -917,7 +897,7 @@ public class GameController {
 
     int currentAIPosition = aiPositions[setOfPlayers][currentAI];
 
-    // If there does exists a previous active AI-player
+    // If there does exist a previous active AI-player
     if (prevPlayerActive != -1) {
       // Resets the previous player's image from glowing(active) to non-glowning(idle)
       setUIAiStatus(prevPlayerActive, "idle");
@@ -1010,7 +990,7 @@ public class GameController {
       changeScene.switchToMainMenu();
       changeScene.prepGame();
     } catch (IOException e) {
-      e.printStackTrace();
+        throw new RuntimeException(e);
     }
   }
 
@@ -1050,7 +1030,7 @@ public class GameController {
 
         changeScene.switchToMainMenu();
       } catch (IOException | InstantiationException | IllegalAccessException e) {
-        e.printStackTrace();
+          throw new RuntimeException(e);
       }
     });
   }
@@ -1123,100 +1103,53 @@ public class GameController {
    * @param hand Int number from spController that represent the value of the winning hand. 
    */
   public void setWinnerLabel(String winner, int hand) {
-    String winnerOfRound = winner;
+    switch (hand) {
+      case 0 -> winnerHand = "högsta kort";
+      case 1 -> winnerHand = "ett par";
+      case 3 -> winnerHand = "två par";
+      case 4 -> winnerHand = "triss";
+      case 5 -> winnerHand = "straight";
+      case 6 -> winnerHand = "flush";
+      case 7 -> winnerHand = "full house";
+      case 8 -> winnerHand = "four of a kind";
+      case 9 -> winnerHand = "straight flush";
+      case 99 -> winnerHand = "Du vann när resten av spelarna foldade!";
+      case 98 -> winnerHand = "när resterande spelare foldade.";
+      case 97 -> winnerHand = "Du förlorade!";
+    }
 
-      switch (hand) {
-          case 0 -> winnerHand = "högsta kort";
-          case 1 -> winnerHand = "ett par";
-          case 3 -> winnerHand = "två par";
-          case 4 -> winnerHand = "triss";
-          case 5 -> winnerHand = "straight";
-          case 6 -> winnerHand = "flush";
-          case 7 -> winnerHand = "full house";
-          case 8 -> winnerHand = "four of a kind";
-          case 9 -> winnerHand = "straight flush";
-          case 99 -> winnerHand = "Du vann när resten av spelarna foldade!";
-          case 98 -> winnerHand = "när resterande spelare foldade.";
-          case 97 -> winnerHand = "Du förlorade!";
+    Platform.runLater(() -> {
+      winnerBox = new WinnerBox();
+
+      if(hand < 10){ //Should maybe be if(hand <= 10)
+        if(winner.equals(getUsername())){
+          sound.playSound("coinSound");
+          winnerBox.displayWinner("Rundans vinnare", winner, 1, winnerHand);
+        } else {
+          winnerBox.displayWinner("Rundans vinnare", winner, 2, winnerHand);
+        }
+      } else { //If hand is > 10
+        if(winner.equals(getUsername())){
+          sound.playSound("coinSound");
+          winnerBox.displayWinner("Rundans vinnare", winner, 3, winnerHand);
+        } else {
+          winnerBox.displayWinner("Rundans vinnare", winner, 4, winnerHand);
+        }
       }
-
-    /*if (hand == 0) {
-      winnerHand = "högsta kort";
-    }
-    if (hand == 1) {
-      winnerHand = "ett par";
-    }
-    if (hand == 2) {
-      winnerHand = "två par";
-    }
-    if (hand == 3) {
-      winnerHand = "triss";
-    }
-    if (hand == 4) {
-      winnerHand = "straight";
-    }
-    if (hand == 5) {
-      winnerHand = "flush";
-    }
-    if (hand == 6) {
-      winnerHand = "full house";
-    }
-    if (hand == 7) {
-      winnerHand = "four of a kind";
-    }
-    if (hand == 8) {
-      winnerHand = "straight flush";
-    }
-    if (hand == 99) {
-      winnerHand = "Du vann när resten av spelarna foldade!";
-    }
-    if (hand == 98) {
-      winnerHand = "när resterande spelare foldade.";
-    }
-    if (hand == 97) {
-      winnerHand = "Du förlorade!";
-    }*/
-
-    if (!winnerOfRound.equals(getUsername()) && (hand < 10)) {
-      Platform.runLater(() -> {
-        winnerBox = new WinnerBox();
-        winnerBox.displayWinner("Rundans vinnare", winnerOfRound, 2, winnerHand);
-      });
-
-    } else if (winnerOfRound.equals(getUsername()) && (hand < 10)) {
-      Platform.runLater(() -> {
-        sound.playSound("coinSound");
-        winnerBox = new WinnerBox();
-        winnerBox.displayWinner("Rundans vinnare", winnerOfRound, 1, winnerHand);
-      });
-
-    } else if (winnerOfRound.equals(getUsername()) && (hand > 10)) {
-      Platform.runLater(() -> {
-        sound.playSound("coinSound");
-        winnerBox = new WinnerBox();
-        winnerBox.displayWinner("Rundans vinnare", winnerOfRound, 3, winnerHand);
-      });
-
-    } else if (!winnerOfRound.equals(getUsername()) && (hand > 10)) {
-      Platform.runLater(() -> {
-        winnerBox = new WinnerBox();
-        winnerBox.displayWinner("Rundans vinnare", winnerOfRound, 4, winnerHand);
-      });
-    }
+    });
   }
 
   /**
    * Method which creates a new tutorial and shows it.
-   * 
-   * @throws IOException
+   *
    */
-  public void goToTutorial() throws IOException {
+  public void goToTutorial(){
     Platform.runLater(() -> {
       this.tutorialWindow = new TutorialController(this);
       try {
         tutorialWindow.setupUIinGame();
       } catch (IOException e) {
-        e.printStackTrace();
+          throw new RuntimeException(e);
       }
     });
   }
@@ -1257,8 +1190,7 @@ public class GameController {
       this.collectionOfPots = new Label[] {subPotOne, subPotTwo};
     }
     Platform.runLater(() -> {
-      String[] potOrder = {"Sub-Pot One: ", "Sub-Pot Two: ", "Sub-Pot Three: ", "Sub-Pot Four: ",
-          "Sub-Pot Five: ", "Sub-Pot Six: "};
+      String[] potOrder = {"Sub-Pot One: ", "Sub-Pot Two: ", "Sub-Pot Three: ", "Sub-Pot Four: ", "Sub-Pot Five: ", "Sub-Pot Six: "};
       for (int i = 0; i < collectionOfPots.length; i++) {
         if (potSplits[i][0] > 0) {
           collectionOfPots[i].setText(potOrder[i] + "§" + potSplits[i][0]);

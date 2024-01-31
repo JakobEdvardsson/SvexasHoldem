@@ -520,7 +520,7 @@ public class SPController extends Thread {
               gController.setWinnerLabel(winner, bestHand);
             } else {
               if (!secWin.isEmpty()) {
-                int divBy = allInPotSize = secWin.size();
+                int divBy = secWin.size();
                 for (int x : secWin) {
                   aiPlayers.get(x).updateWinner(divBy);
                 }
@@ -533,7 +533,7 @@ public class SPController extends Thread {
             }
           } else {
             if (!secWin.isEmpty()) {
-              int divBy = allInPotSize = secWin.size();
+              int divBy = secWin.size();
               for (int x : secWin) {
                 aiPlayers.get(x).updateWinner(divBy);
               }
@@ -545,7 +545,7 @@ public class SPController extends Thread {
           }
         } else {
           if (!secWin.isEmpty()) {
-            int divBy = allInPotSize = secWin.size();
+            int divBy = secWin.size();
             for (int x : secWin) {
               aiPlayers.get(x).updateWinner(divBy);
             }
