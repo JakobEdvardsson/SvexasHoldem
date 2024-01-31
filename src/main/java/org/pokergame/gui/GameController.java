@@ -771,7 +771,7 @@ public class GameController {
 
       if (powerBarValue == 1) {
         powerBarArea.getChildren().remove(imgPowerBar);
-        image = new Image(Paths.get(powerBarWeakHand).toUri().toString(), 120, 166, true, true);
+        image = new Image(powerBarWeakHand, 120, 166, true, true);
         imgPowerBar = new ImageView(image);
         powerBarArea.getChildren().add(imgPowerBar);
         imgPowerBar.setX(15);
@@ -779,7 +779,7 @@ public class GameController {
 
       } else if (powerBarValue == 2) {
         powerBarArea.getChildren().remove(imgPowerBar);
-        image = new Image(Paths.get(powerBarMediumWeakHand).toUri().toString(), 120, 166, true, true);
+        image = new Image(powerBarMediumWeakHand, 120, 166, true, true);
         imgPowerBar = new ImageView(image);
         powerBarArea.getChildren().add(imgPowerBar);
         imgPowerBar.setX(15);
@@ -788,7 +788,7 @@ public class GameController {
       } else if (powerBarValue == 3) {
         powerBarArea.getChildren().remove(imgPowerBar);
         image =
-            new Image(Paths.get(powerBarMediumStrongHand).toUri().toString(), 120, 166, true, true);
+            new Image(powerBarMediumStrongHand, 120, 166, true, true);
         imgPowerBar = new ImageView(image);
         powerBarArea.getChildren().add(imgPowerBar);
         imgPowerBar.setX(15);
@@ -796,7 +796,7 @@ public class GameController {
 
       } else if (powerBarValue == 4) {
         powerBarArea.getChildren().remove(imgPowerBar);
-        image = new Image(Paths.get(powerBarStrongHand).toUri().toString(), 120, 166, true, true);
+        image = new Image(powerBarStrongHand, 120, 166, true, true);
         imgPowerBar = new ImageView(image);
         powerBarArea.getChildren().add(imgPowerBar);
         imgPowerBar.setX(15);
@@ -1172,7 +1172,7 @@ public class GameController {
     Platform.runLater(() -> {
       paneRounds.getChildren().remove(imgRoundStatus);
       Image tempImage =
-          new Image(Paths.get(BASE_PATH + "images/" + roundStatus[round] + ".png").toUri().toString(),
+          new Image(BASE_PATH + "images/" + roundStatus[round] + ".png",
               175, 56, true, true);
       imgRoundStatus = new ImageView(tempImage);
       imgRoundStatus.setImage(tempImage);
