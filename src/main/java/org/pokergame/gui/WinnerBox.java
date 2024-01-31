@@ -23,8 +23,8 @@ public class WinnerBox {
 	public boolean answer = false;
 	public Stage window = new Stage();
 	public Font font = new Font("Tw Cen MT", 18);
-	private ImageView back = new ImageView(Paths.get("resources/images/background.png").toUri().toString());
-	private ImageView btnOk = new ImageView(Paths.get("resources/images/okButton.png").toUri().toString());
+	private ImageView back = new ImageView("org/pokergame/images/background.png");
+	private ImageView btnOk = new ImageView("org/pokergame/images/okButton.png");
 	
 	
 	/**
