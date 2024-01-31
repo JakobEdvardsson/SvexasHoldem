@@ -845,7 +845,7 @@ public class SPController extends Thread {
     }
     if (dealer != noOfPlayers - 1) {
     } else {
-      gController.playerIsDealer(dealer);
+      gController.playerIsDealer();
     }
     // update GUI.
     gController.setBlindsMarker(dealer, smallBlindPlayer, bigBlindPlayer);

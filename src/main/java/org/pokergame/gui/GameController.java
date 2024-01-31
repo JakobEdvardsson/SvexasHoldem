@@ -9,14 +9,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Slider;
-import javafx.scene.control.TitledPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Objects;
@@ -48,8 +45,6 @@ public class GameController {
   @FXML
   private Pane powerBarArea;
   @FXML
-  private ImageView cardOne;
-  @FXML
   private Pane playerCardsArea;
   @FXML
   private Label adviceLabel;
@@ -61,8 +56,6 @@ public class GameController {
   private Label raiseLabel;
   @FXML
   private Pane tabelCardArea;
-  @FXML
-  private AnchorPane AnchorPaneAll;
 
   @FXML
   private ImageView imgRoundStatus;
@@ -135,8 +128,6 @@ public class GameController {
   @FXML
   private ImageView ivDealer;
   @FXML
-  private TitledPane tpHandRanking;
-  @FXML
   public ImageView ivSound;
   @FXML
   public MenuItem miNewGame;
@@ -146,11 +137,7 @@ public class GameController {
   public MenuItem miSettings;
   @FXML
   public MenuItem miAbout;
-  @FXML
-  public MenuItem miTutorial;
 
-  @FXML
-  public Pane panePot;
   @FXML
   public Label subPotOne;
   @FXML
@@ -167,11 +154,10 @@ public class GameController {
   public Label mainPot;
 
   private WinnerBox winnerBox;
-  private ConfirmBox confirmBox;
   private ChangeScene changeScene;
   private int powerBarValue = 0;
   private Image image;
-  private ArrayList<Card> cards = new ArrayList<Card>();
+  private ArrayList<Card> cards = new ArrayList<>();
   private Hand hand;
   private int tablePotValue = 2000;
   private int playerPot = 0;
@@ -200,10 +186,9 @@ public class GameController {
 
   /**
    * Method for initializing FXML
-   * 
-   * @throws Exception
+   *
    */
-  public void initialize() throws Exception {
+  public void initialize() {
     // Groups together labels for each AI-position.
     this.collectionOfLabelsAi =
         new Label[][] {{labelPlayerOneName, labelPlayerOnePot, labelPlayerOneAction},
@@ -212,20 +197,16 @@ public class GameController {
             {labelPlayerFourName, labelPlayerFourPot, labelPlayerFourAction},
             {labelPlayerFiveName, labelPlayerFivePot, labelPlayerFiveAction}};
 
-    // Placeholders for the AI (based on their position). Shows their
-    // cardbacks/no cards or
-    // highlighted cards (AI-frame).
+    // Placeholders for the AI (based on their position). Shows their cardbacks/no cards or highlighted cards (AI-frame).
     this.collectionOfPots = new Label[6];
     this.collectionOfCardsAi = new ImageView[] {imgPlayerOneCards, imgPlayerTwoCards,
         imgPlayerThreeCards, imgPlayerFourCards, imgPlayerFiveCards};
 
-    // Used to place AI-players into the right position depending on the
-    // chosen number of AI:s.
+    // Used to place AI-players into the right position depending on the chosen number of AI:s.
     this.aiPositions = new int[][] {{2}, {0, 2, 4}, {0, 1, 2, 3, 4, 5}};
 
     // Table cards placeholders.
-    this.collectionOfCardsTable =
-        new ImageView[] {imgCard3, imgCard4, imgCard5, imgCard6, imgCard7};
+    this.collectionOfCardsTable = new ImageView[] {imgCard3, imgCard4, imgCard5, imgCard6, imgCard7};
 
     // Used by method: inactivateAllAiCardGlows and aiAction.
     this.prevPlayerActive = -1;
@@ -282,13 +263,9 @@ public class GameController {
    *        active (currently it's turn).
    */
   public void setUIAiStatus(int position, String state) {
-    String resource = BASE_PATH + "images/"; // 122, 158
-    Image hideCards = new Image("org/pokergame/images/aiBarWithoutCards.png",
-        122, 158, true, true);
-    Image showCards = new Image("org/pokergame/images/aiBarWithCards.png", 122,
-        158, true, true);
-    Image showActiveCards = new Image("org/pokergame/images/aiBarWithCardsCurrentPlayer.png",
-            122,158, true, true);
+    Image hideCards = new Image("org/pokergame/images/aiBarWithoutCards.png",122, 158, true, true);
+    Image showCards = new Image("org/pokergame/images/aiBarWithCards.png", 122,158, true, true);
+    Image showActiveCards = new Image("org/pokergame/images/aiBarWithCardsCurrentPlayer.png",122,158, true, true);
 
     if (Objects.equals(state, "inactive")) {
       collectionOfCardsAi[position].setImage(hideCards);
@@ -353,10 +330,10 @@ public class GameController {
 
     //Already paid + (Current maxbet - already paid) = WHAT THE PLAYER HAS ALREADY PAID
     this.alreadyPaid += (spController.getCurrentMaxBet() - alreadyPaid);
-    this.decision = "call," + Integer.toString(alreadyPaid);
+    this.decision = "call," + alreadyPaid;
     playerMadeDecision = true;
     sound.playSound("chipSingle");
-    updatePlayerValues("Call, §" + Integer.toString(alreadyPaid));
+    updatePlayerValues("Call, §" + alreadyPaid);
   }
 
   /**
@@ -365,10 +342,6 @@ public class GameController {
    */
   public void playerRaise() {
     disableButtons();
-
-    //If the player hasn't matched the current maxbet
-    if (spController.getCurrentMaxBet() != alreadyPaid) {
-    }
 
     int raisedBet = (int) (slider.getValue());
     this.playerPot -= raisedBet;
@@ -381,22 +354,19 @@ public class GameController {
 
     updatePlayerValues("Raise, §" + raisedBet);
 
-    try {
-      // Checks if the player has gone all in.
-      if (playerPot == 0) {
-        updatePlayerValues("All-In, §" + raisedBet);
-        this.decision = "allin," + (raisedBet) + "," + alreadyPaid;
-        this.alreadyPaid += raisedBet;
-        slider.setDisable(true);
-        showAllIn();
-        disableButtons();
-      } else {
-        updatePlayerValues("Raise, §" + raisedBet);
-        //Already paid + (raised amount + the amount the player has to match(if the player has to match)) =
-        //WHAT THE PLAYER HAS ALREADY PAID
-        this.alreadyPaid += raisedBet;
-      }
-    } catch (Exception e) {
+    // Checks if the player has gone all in.
+    if (playerPot == 0) {
+      updatePlayerValues("All-In, §" + raisedBet);
+      this.decision = "allin," + (raisedBet) + "," + alreadyPaid;
+      this.alreadyPaid += raisedBet;
+      slider.setDisable(true);
+      showAllIn();
+      disableButtons();
+    } else {
+      updatePlayerValues("Raise, §" + raisedBet);
+      //Already paid + (raised amount + the amount the player has to match(if the player has to match)) =
+      //WHAT THE PLAYER HAS ALREADY PAID
+      this.alreadyPaid += raisedBet;
     }
   }
 
@@ -483,21 +453,10 @@ public class GameController {
 
   /**
    * Creates a new ruleController.
-   * 
-   * @throws IOException
    */
   public void rulesState() throws IOException {
     RuleController rc = new RuleController();
     rc.rules();
-  }
-
-  /**
-   * Method which returns the potValue for the table.
-   * 
-   * @return tablePotValue the potValue for the table.
-   */
-  public double getPotValue() {
-    return tablePotValue;
   }
 
   /**
@@ -568,10 +527,8 @@ public class GameController {
    */
   public void setStartingHand(Card card1, Card card2) {
     isReady = false;
-    Platform.runLater(() -> {
-      // Clears the table cards
-      clearFlopTurnRiver();
-    });
+    // Clears the table cards
+    Platform.runLater(this::clearFlopTurnRiver);
 
     Platform.runLater(() -> {
       // Resets AI labels and removes all previous glow-effects.
@@ -646,7 +603,7 @@ public class GameController {
    */
   public void setFlopTurnRiver(Card[] setOfCards) {
     // Clears the cards list
-    this.cards = new ArrayList<Card>();
+    this.cards = new ArrayList<>();
     cards.add(card1); // Adds card one and card two (player's cards in the hand)
     cards.add(card2);
 
@@ -738,10 +695,9 @@ public class GameController {
 
   /**
    * Method which sets the player as dealer
-   * 
-   * @param i not used.
+   *
    */
-  public void playerIsDealer(int i) {
+  public void playerIsDealer() {
     if ((int) ivBigBlind.getLayoutX() == 520 || (int) ivSmallBlind.getLayoutX() == 520) {
       ivDealer.setLayoutX(500);
       ivDealer.setLayoutY(425);
@@ -761,47 +717,26 @@ public class GameController {
     String powerBarStrongHand = BASE_PATH + "images/StrongHand.png";
 
     Platform.runLater(() -> {
-
       String helpText = hand.theHelp();
       helpLabel.setText("Du har: \n" + helpText);
       String adviceText = hand.theAdvice();
       adviceLabel.setText("Råd: \n" + adviceText);
 
       powerBarValue = hand.toPowerBar();
+      powerBarArea.getChildren().remove(imgPowerBar);
 
-      if (powerBarValue == 1) {
-        powerBarArea.getChildren().remove(imgPowerBar);
-        image = new Image(powerBarWeakHand, 120, 166, true, true);
-        imgPowerBar = new ImageView(image);
-        powerBarArea.getChildren().add(imgPowerBar);
-        imgPowerBar.setX(15);
-        imgPowerBar.setY(0);
-
-      } else if (powerBarValue == 2) {
-        powerBarArea.getChildren().remove(imgPowerBar);
-        image = new Image(powerBarMediumWeakHand, 120, 166, true, true);
-        imgPowerBar = new ImageView(image);
-        powerBarArea.getChildren().add(imgPowerBar);
-        imgPowerBar.setX(15);
-        imgPowerBar.setY(0);
-
-      } else if (powerBarValue == 3) {
-        powerBarArea.getChildren().remove(imgPowerBar);
-        image =
-            new Image(powerBarMediumStrongHand, 120, 166, true, true);
-        imgPowerBar = new ImageView(image);
-        powerBarArea.getChildren().add(imgPowerBar);
-        imgPowerBar.setX(15);
-        imgPowerBar.setY(0);
-
-      } else if (powerBarValue == 4) {
-        powerBarArea.getChildren().remove(imgPowerBar);
-        image = new Image(powerBarStrongHand, 120, 166, true, true);
-        imgPowerBar = new ImageView(image);
-        powerBarArea.getChildren().add(imgPowerBar);
-        imgPowerBar.setX(15);
-        imgPowerBar.setY(0);
+      switch (powerBarValue) {
+          case 1 -> image = new Image(powerBarWeakHand, 120, 166, true, true);
+          case 2 -> image = new Image(powerBarMediumWeakHand, 120, 166, true, true);
+          case 3 -> image = new Image(powerBarMediumStrongHand, 120, 166, true, true);
+          case 4 -> image = new Image(powerBarStrongHand, 120, 166, true, true);
       }
+
+      imgPowerBar = new ImageView(image);
+      powerBarArea.getChildren().add(imgPowerBar);
+      imgPowerBar.setX(15);
+      imgPowerBar.setY(0);
+
       this.handStrength = hand.getHandStrenght();
     });
   }
@@ -1083,7 +1018,7 @@ public class GameController {
    * Method which creates an "about" box.
    */
   public void aboutBox() {
-    confirmBox = new ConfirmBox();
+    ConfirmBox confirmBox = new ConfirmBox();
     confirmBox.display("Om projektet",
         "Detta projekt är format och skapat av "
             + "Vedrana Zeba, Rikard Almgren, Amin Harirchian, Max Frennessen och Lykke Levin under "
