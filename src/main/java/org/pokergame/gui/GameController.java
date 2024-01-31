@@ -283,11 +283,11 @@ public class GameController {
    */
   public void setUIAiStatus(int position, String state) {
     String resource = BASE_PATH + "images/"; // 122, 158
-    Image hideCards = new Image(Paths.get(resource + "aiBarWithoutCards.png").toUri().toString(),
+    Image hideCards = new Image("org/pokergame/images/aiBarWithoutCards.png",
         122, 158, true, true);
-    Image showCards = new Image(Paths.get(resource + "aiBarWithCards.png").toUri().toString(), 122,
+    Image showCards = new Image("org/pokergame/images/aiBarWithCards.png", 122,
         158, true, true);
-    Image showActiveCards = new Image(Paths.get(resource + "aiBarWithCardsCurrentPlayer.png").toUri().toString(),
+    Image showActiveCards = new Image("org/pokergame/images/aiBarWithCardsCurrentPlayer.png",
             122,158, true, true);
 
     if (Objects.equals(state, "inactive")) {
