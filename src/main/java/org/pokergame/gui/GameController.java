@@ -678,7 +678,7 @@ public class GameController {
         } else if (i > 1) {
           xCord += 105;
         }
-        Image imageTemp = new Image(Paths.get(baseCard).toUri().toString(), 114, 148, true, true);
+        Image imageTemp = new Image(baseCard, 114, 148, true, true);
 
         collectionOfCardsTable[i] = new ImageView(imageTemp);
         tabelCardArea.getChildren().add(collectionOfCardsTable[i]);
