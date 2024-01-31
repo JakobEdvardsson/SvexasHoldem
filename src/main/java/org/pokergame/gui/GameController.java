@@ -283,11 +283,11 @@ public class GameController {
    */
   public void setUIAiStatus(int position, String state) {
     String resource = BASE_PATH + "images/"; // 122, 158
-    Image hideCards = new Image(Paths.get(resource + "aiBarWithoutCards.png").toUri().toString(),
+    Image hideCards = new Image("org/pokergame/images/aiBarWithoutCards.png",
         122, 158, true, true);
-    Image showCards = new Image(Paths.get(resource + "aiBarWithCards.png").toUri().toString(), 122,
+    Image showCards = new Image("org/pokergame/images/aiBarWithCards.png", 122,
         158, true, true);
-    Image showActiveCards = new Image(Paths.get(resource + "aiBarWithCardsCurrentPlayer.png").toUri().toString(),
+    Image showActiveCards = new Image("org/pokergame/images/aiBarWithCardsCurrentPlayer.png",
             122,158, true, true);
 
     if (Objects.equals(state, "inactive")) {
@@ -624,17 +624,13 @@ public class GameController {
             BASE_PATH + "images/" + card2.getCardValue() + card2.getCardSuit().charAt(0) + "O.png";
       }
 
-      Image imageTemp = null;
-      ImageView imgCard1 = new ImageView(imageTemp);
-      ImageView imgCard2 = new ImageView(imageTemp);
-
-      Image image = new Image(Paths.get(cardOne).toUri().toString(), 114, 148, true, true);
+      Image image = new Image(cardOne, 114, 148, true, true);
       imgCard1 = new ImageView(image);
       playerCardsArea.getChildren().add(imgCard1);
       imgCard1.setX(0);
       imgCard1.setY(0);
 
-      image = new Image(Paths.get(cardTwo).toUri().toString(), 114, 148, true, true);
+      image = new Image(cardTwo, 114, 148, true, true);
       imgCard2 = new ImageView(image);
       playerCardsArea.getChildren().add(imgCard2);
       imgCard2.setX(105);
@@ -682,7 +678,7 @@ public class GameController {
         } else if (i > 1) {
           xCord += 105;
         }
-        Image imageTemp = new Image(Paths.get(baseCard).toUri().toString(), 114, 148, true, true);
+        Image imageTemp = new Image(baseCard, 114, 148, true, true);
 
         collectionOfCardsTable[i] = new ImageView(imageTemp);
         tabelCardArea.getChildren().add(collectionOfCardsTable[i]);
@@ -775,7 +771,7 @@ public class GameController {
 
       if (powerBarValue == 1) {
         powerBarArea.getChildren().remove(imgPowerBar);
-        image = new Image(Paths.get(powerBarWeakHand).toUri().toString(), 120, 166, true, true);
+        image = new Image(powerBarWeakHand, 120, 166, true, true);
         imgPowerBar = new ImageView(image);
         powerBarArea.getChildren().add(imgPowerBar);
         imgPowerBar.setX(15);
@@ -783,7 +779,7 @@ public class GameController {
 
       } else if (powerBarValue == 2) {
         powerBarArea.getChildren().remove(imgPowerBar);
-        image = new Image(Paths.get(powerBarMediumWeakHand).toUri().toString(), 120, 166, true, true);
+        image = new Image(powerBarMediumWeakHand, 120, 166, true, true);
         imgPowerBar = new ImageView(image);
         powerBarArea.getChildren().add(imgPowerBar);
         imgPowerBar.setX(15);
@@ -792,7 +788,7 @@ public class GameController {
       } else if (powerBarValue == 3) {
         powerBarArea.getChildren().remove(imgPowerBar);
         image =
-            new Image(Paths.get(powerBarMediumStrongHand).toUri().toString(), 120, 166, true, true);
+            new Image(powerBarMediumStrongHand, 120, 166, true, true);
         imgPowerBar = new ImageView(image);
         powerBarArea.getChildren().add(imgPowerBar);
         imgPowerBar.setX(15);
@@ -800,7 +796,7 @@ public class GameController {
 
       } else if (powerBarValue == 4) {
         powerBarArea.getChildren().remove(imgPowerBar);
-        image = new Image(Paths.get(powerBarStrongHand).toUri().toString(), 120, 166, true, true);
+        image = new Image(powerBarStrongHand, 120, 166, true, true);
         imgPowerBar = new ImageView(image);
         powerBarArea.getChildren().add(imgPowerBar);
         imgPowerBar.setX(15);
@@ -1176,7 +1172,7 @@ public class GameController {
     Platform.runLater(() -> {
       paneRounds.getChildren().remove(imgRoundStatus);
       Image tempImage =
-          new Image(Paths.get(BASE_PATH + "images/" + roundStatus[round] + ".png").toUri().toString(),
+          new Image(BASE_PATH + "images/" + roundStatus[round] + ".png",
               175, 56, true, true);
       imgRoundStatus = new ImageView(tempImage);
       imgRoundStatus.setImage(tempImage);
