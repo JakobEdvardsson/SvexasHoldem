@@ -2,6 +2,7 @@ import org.junit.jupiter.api.*;
 import org.pokergame.controller.SPController;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class TestSPController {
 
@@ -28,10 +29,23 @@ public class TestSPController {
     }
 
     @Test
-    public void testUserNameNull() {}
+    public void testUserNameNull() {
+        SPController.setName(null);
+        assertEquals("", SPController.getName());
+    }
 
     @Test
     public void testUserNameTooLong() {
+        String tooLongUsername = "a".repeat(21);
+        boolean success = false;
 
+        try {
+            SPController.setName(tooLongUsername);
+            success = true;
+        } catch (IllegalArgumentException e) {
+            // Expected exception
+        }
+
+        assertFalse(success);
     }
 }
