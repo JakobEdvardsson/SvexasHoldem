@@ -621,20 +621,19 @@ public class GameController {
 
       // Loops through all cards and highlights the correct ones and places them on the table (UI)
       for (int i = 0; i < setOfCards.length; i++) {
-        String baseCard = "";
-        if (hand.getHighlightedCards().contains(Integer.toString(setOfCards[i].getCardValue()) + ","
-            + setOfCards[i].getCardSuit().charAt(0))) {
-          baseCard = BASE_PATH + "images/" + setOfCards[i].getCardValue()
-              + setOfCards[i].getCardSuit().charAt(0) + "O.png";
+        String baseCard;
+        if (hand.getHighlightedCards().contains(setOfCards[i].getCardValue() + "," + setOfCards[i].getCardSuit().charAt(0))){
+          baseCard = BASE_PATH + "images/" + setOfCards[i].getCardValue() + setOfCards[i].getCardSuit().charAt(0) + "O.png";
         } else {
-          baseCard = BASE_PATH + "images/" + setOfCards[i].getCardValue()
-              + setOfCards[i].getCardSuit().charAt(0) + ".png";
+          baseCard = BASE_PATH + "images/" + setOfCards[i].getCardValue() + setOfCards[i].getCardSuit().charAt(0) + ".png";
         }
+        
         if (i == 1) {
           xCord = 110; // First card
         } else if (i > 1) {
           xCord += 105;
         }
+
         Image imageTemp = new Image(baseCard, 114, 148, true, true);
 
         collectionOfCardsTable[i] = new ImageView(imageTemp);
@@ -1004,15 +1003,6 @@ public class GameController {
             + "Vedrana Zeba, Rikard Almgren, Amin Harirchian, Max Frennessen och Lykke Levin under "
             + "vårterminen 2017 som en del av kursen Systemutveckling och projekt 1.");
 
-  }
-
-  /**
-   * Method which returns if the UI is ready
-   * 
-   * @return isReady are we ready?
-   */
-  public boolean getIsReady() {
-    return isReady;
   }
 
   /**
