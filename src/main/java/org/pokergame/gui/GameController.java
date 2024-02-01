@@ -223,8 +223,7 @@ public class GameController {
     collectionOfLabelsAi[position][2].setVisible(true);
     collectionOfCardsAi[position].setVisible(true);
   }
-
-
+  
   /**
    * Used to change AI-label "name" based on position.
    * 
@@ -376,7 +375,7 @@ public class GameController {
    * @param action Call, Check, Raise or Fold
    */
   public void updatePlayerValues(String action) {
-    lbPotValue.setText("§" + Integer.toString(playerPot));
+    lbPotValue.setText("§" + playerPot);
     lbPlayerAction.setText(action);
     setSliderValues();
   }
