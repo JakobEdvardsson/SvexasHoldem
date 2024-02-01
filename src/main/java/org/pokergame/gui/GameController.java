@@ -223,7 +223,7 @@ public class GameController {
     collectionOfLabelsAi[position][2].setVisible(true);
     collectionOfCardsAi[position].setVisible(true);
   }
-  
+
   /**
    * Used to change AI-label "name" based on position.
    * 
