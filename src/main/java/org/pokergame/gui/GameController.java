@@ -9,14 +9,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Slider;
-import javafx.scene.control.TitledPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Objects;
@@ -48,8 +45,6 @@ public class GameController {
   @FXML
   private Pane powerBarArea;
   @FXML
-  private ImageView cardOne;
-  @FXML
   private Pane playerCardsArea;
   @FXML
   private Label adviceLabel;
@@ -61,8 +56,6 @@ public class GameController {
   private Label raiseLabel;
   @FXML
   private Pane tabelCardArea;
-  @FXML
-  private AnchorPane AnchorPaneAll;
 
   @FXML
   private ImageView imgRoundStatus;
@@ -135,8 +128,6 @@ public class GameController {
   @FXML
   private ImageView ivDealer;
   @FXML
-  private TitledPane tpHandRanking;
-  @FXML
   public ImageView ivSound;
   @FXML
   public MenuItem miNewGame;
@@ -146,11 +137,7 @@ public class GameController {
   public MenuItem miSettings;
   @FXML
   public MenuItem miAbout;
-  @FXML
-  public MenuItem miTutorial;
 
-  @FXML
-  public Pane panePot;
   @FXML
   public Label subPotOne;
   @FXML
@@ -167,11 +154,10 @@ public class GameController {
   public Label mainPot;
 
   private WinnerBox winnerBox;
-  private ConfirmBox confirmBox;
   private ChangeScene changeScene;
   private int powerBarValue = 0;
   private Image image;
-  private ArrayList<Card> cards = new ArrayList<Card>();
+  private ArrayList<Card> cards = new ArrayList<>();
   private Hand hand;
   private int tablePotValue = 2000;
   private int playerPot = 0;
@@ -200,10 +186,9 @@ public class GameController {
 
   /**
    * Method for initializing FXML
-   * 
-   * @throws Exception
+   *
    */
-  public void initialize() throws Exception {
+  public void initialize() {
     // Groups together labels for each AI-position.
     this.collectionOfLabelsAi =
         new Label[][] {{labelPlayerOneName, labelPlayerOnePot, labelPlayerOneAction},
@@ -212,20 +197,16 @@ public class GameController {
             {labelPlayerFourName, labelPlayerFourPot, labelPlayerFourAction},
             {labelPlayerFiveName, labelPlayerFivePot, labelPlayerFiveAction}};
 
-    // Placeholders for the AI (based on their position). Shows their
-    // cardbacks/no cards or
-    // highlighted cards (AI-frame).
+    // Placeholders for the AI (based on their position). Shows their cardbacks/no cards or highlighted cards (AI-frame).
     this.collectionOfPots = new Label[6];
     this.collectionOfCardsAi = new ImageView[] {imgPlayerOneCards, imgPlayerTwoCards,
         imgPlayerThreeCards, imgPlayerFourCards, imgPlayerFiveCards};
 
-    // Used to place AI-players into the right position depending on the
-    // chosen number of AI:s.
+    // Used to place AI-players into the right position depending on the chosen number of AI:s.
     this.aiPositions = new int[][] {{2}, {0, 2, 4}, {0, 1, 2, 3, 4, 5}};
 
     // Table cards placeholders.
-    this.collectionOfCardsTable =
-        new ImageView[] {imgCard3, imgCard4, imgCard5, imgCard6, imgCard7};
+    this.collectionOfCardsTable = new ImageView[] {imgCard3, imgCard4, imgCard5, imgCard6, imgCard7};
 
     // Used by method: inactivateAllAiCardGlows and aiAction.
     this.prevPlayerActive = -1;
@@ -242,7 +223,6 @@ public class GameController {
     collectionOfLabelsAi[position][2].setVisible(true);
     collectionOfCardsAi[position].setVisible(true);
   }
-
 
   /**
    * Used to change AI-label "name" based on position.
@@ -282,13 +262,9 @@ public class GameController {
    *        active (currently it's turn).
    */
   public void setUIAiStatus(int position, String state) {
-    String resource = BASE_PATH + "images/"; // 122, 158
-    Image hideCards = new Image("org/pokergame/images/aiBarWithoutCards.png",
-        122, 158, true, true);
-    Image showCards = new Image("org/pokergame/images/aiBarWithCards.png", 122,
-        158, true, true);
-    Image showActiveCards = new Image("org/pokergame/images/aiBarWithCardsCurrentPlayer.png",
-            122,158, true, true);
+    Image hideCards = new Image("org/pokergame/images/aiBarWithoutCards.png",122, 158, true, true);
+    Image showCards = new Image("org/pokergame/images/aiBarWithCards.png", 122,158, true, true);
+    Image showActiveCards = new Image("org/pokergame/images/aiBarWithCardsCurrentPlayer.png",122,158, true, true);
 
     if (Objects.equals(state, "inactive")) {
       collectionOfCardsAi[position].setImage(hideCards);
@@ -353,10 +329,10 @@ public class GameController {
 
     //Already paid + (Current maxbet - already paid) = WHAT THE PLAYER HAS ALREADY PAID
     this.alreadyPaid += (spController.getCurrentMaxBet() - alreadyPaid);
-    this.decision = "call," + Integer.toString(alreadyPaid);
+    this.decision = "call," + alreadyPaid;
     playerMadeDecision = true;
     sound.playSound("chipSingle");
-    updatePlayerValues("Call, §" + Integer.toString(alreadyPaid));
+    updatePlayerValues("Call, §" + alreadyPaid);
   }
 
   /**
@@ -365,10 +341,6 @@ public class GameController {
    */
   public void playerRaise() {
     disableButtons();
-
-    //If the player hasn't matched the current maxbet
-    if (spController.getCurrentMaxBet() != alreadyPaid) {
-    }
 
     int raisedBet = (int) (slider.getValue());
     this.playerPot -= raisedBet;
@@ -381,22 +353,19 @@ public class GameController {
 
     updatePlayerValues("Raise, §" + raisedBet);
 
-    try {
-      // Checks if the player has gone all in.
-      if (playerPot == 0) {
-        updatePlayerValues("All-In, §" + raisedBet);
-        this.decision = "allin," + (raisedBet) + "," + alreadyPaid;
-        this.alreadyPaid += raisedBet;
-        slider.setDisable(true);
-        showAllIn();
-        disableButtons();
-      } else {
-        updatePlayerValues("Raise, §" + raisedBet);
-        //Already paid + (raised amount + the amount the player has to match(if the player has to match)) =
-        //WHAT THE PLAYER HAS ALREADY PAID
-        this.alreadyPaid += raisedBet;
-      }
-    } catch (Exception e) {
+    // Checks if the player has gone all in.
+    if (playerPot == 0) {
+      updatePlayerValues("All-In, §" + raisedBet);
+      this.decision = "allin," + (raisedBet) + "," + alreadyPaid;
+      this.alreadyPaid += raisedBet;
+      slider.setDisable(true);
+      showAllIn();
+      disableButtons();
+    } else {
+      updatePlayerValues("Raise, §" + raisedBet);
+      //Already paid + (raised amount + the amount the player has to match(if the player has to match)) =
+      //WHAT THE PLAYER HAS ALREADY PAID
+      this.alreadyPaid += raisedBet;
     }
   }
 
@@ -406,7 +375,7 @@ public class GameController {
    * @param action Call, Check, Raise or Fold
    */
   public void updatePlayerValues(String action) {
-    lbPotValue.setText("§" + Integer.toString(playerPot));
+    lbPotValue.setText("§" + playerPot);
     lbPlayerAction.setText(action);
     setSliderValues();
   }
@@ -483,21 +452,10 @@ public class GameController {
 
   /**
    * Creates a new ruleController.
-   * 
-   * @throws IOException
    */
   public void rulesState() throws IOException {
     RuleController rc = new RuleController();
     rc.rules();
-  }
-
-  /**
-   * Method which returns the potValue for the table.
-   * 
-   * @return tablePotValue the potValue for the table.
-   */
-  public double getPotValue() {
-    return tablePotValue;
   }
 
   /**
@@ -568,10 +526,8 @@ public class GameController {
    */
   public void setStartingHand(Card card1, Card card2) {
     isReady = false;
-    Platform.runLater(() -> {
-      // Clears the table cards
-      clearFlopTurnRiver();
-    });
+    // Clears the table cards
+    Platform.runLater(this::clearFlopTurnRiver);
 
     Platform.runLater(() -> {
       // Resets AI labels and removes all previous glow-effects.
@@ -646,7 +602,7 @@ public class GameController {
    */
   public void setFlopTurnRiver(Card[] setOfCards) {
     // Clears the cards list
-    this.cards = new ArrayList<Card>();
+    this.cards = new ArrayList<>();
     cards.add(card1); // Adds card one and card two (player's cards in the hand)
     cards.add(card2);
 
@@ -664,20 +620,19 @@ public class GameController {
 
       // Loops through all cards and highlights the correct ones and places them on the table (UI)
       for (int i = 0; i < setOfCards.length; i++) {
-        String baseCard = "";
-        if (hand.getHighlightedCards().contains(Integer.toString(setOfCards[i].getCardValue()) + ","
-            + setOfCards[i].getCardSuit().charAt(0))) {
-          baseCard = BASE_PATH + "images/" + setOfCards[i].getCardValue()
-              + setOfCards[i].getCardSuit().charAt(0) + "O.png";
+        String baseCard;
+        if (hand.getHighlightedCards().contains(setOfCards[i].getCardValue() + "," + setOfCards[i].getCardSuit().charAt(0))){
+          baseCard = BASE_PATH + "images/" + setOfCards[i].getCardValue() + setOfCards[i].getCardSuit().charAt(0) + "O.png";
         } else {
-          baseCard = BASE_PATH + "images/" + setOfCards[i].getCardValue()
-              + setOfCards[i].getCardSuit().charAt(0) + ".png";
+          baseCard = BASE_PATH + "images/" + setOfCards[i].getCardValue() + setOfCards[i].getCardSuit().charAt(0) + ".png";
         }
+        
         if (i == 1) {
           xCord = 110; // First card
         } else if (i > 1) {
           xCord += 105;
         }
+
         Image imageTemp = new Image(baseCard, 114, 148, true, true);
 
         collectionOfCardsTable[i] = new ImageView(imageTemp);
@@ -738,10 +693,9 @@ public class GameController {
 
   /**
    * Method which sets the player as dealer
-   * 
-   * @param i not used.
+   *
    */
-  public void playerIsDealer(int i) {
+  public void playerIsDealer() {
     if ((int) ivBigBlind.getLayoutX() == 520 || (int) ivSmallBlind.getLayoutX() == 520) {
       ivDealer.setLayoutX(500);
       ivDealer.setLayoutY(425);
@@ -761,47 +715,26 @@ public class GameController {
     String powerBarStrongHand = BASE_PATH + "images/StrongHand.png";
 
     Platform.runLater(() -> {
-
       String helpText = hand.theHelp();
       helpLabel.setText("Du har: \n" + helpText);
       String adviceText = hand.theAdvice();
       adviceLabel.setText("Råd: \n" + adviceText);
 
       powerBarValue = hand.toPowerBar();
+      powerBarArea.getChildren().remove(imgPowerBar);
 
-      if (powerBarValue == 1) {
-        powerBarArea.getChildren().remove(imgPowerBar);
-        image = new Image(powerBarWeakHand, 120, 166, true, true);
-        imgPowerBar = new ImageView(image);
-        powerBarArea.getChildren().add(imgPowerBar);
-        imgPowerBar.setX(15);
-        imgPowerBar.setY(0);
-
-      } else if (powerBarValue == 2) {
-        powerBarArea.getChildren().remove(imgPowerBar);
-        image = new Image(powerBarMediumWeakHand, 120, 166, true, true);
-        imgPowerBar = new ImageView(image);
-        powerBarArea.getChildren().add(imgPowerBar);
-        imgPowerBar.setX(15);
-        imgPowerBar.setY(0);
-
-      } else if (powerBarValue == 3) {
-        powerBarArea.getChildren().remove(imgPowerBar);
-        image =
-            new Image(powerBarMediumStrongHand, 120, 166, true, true);
-        imgPowerBar = new ImageView(image);
-        powerBarArea.getChildren().add(imgPowerBar);
-        imgPowerBar.setX(15);
-        imgPowerBar.setY(0);
-
-      } else if (powerBarValue == 4) {
-        powerBarArea.getChildren().remove(imgPowerBar);
-        image = new Image(powerBarStrongHand, 120, 166, true, true);
-        imgPowerBar = new ImageView(image);
-        powerBarArea.getChildren().add(imgPowerBar);
-        imgPowerBar.setX(15);
-        imgPowerBar.setY(0);
+      switch (powerBarValue) {
+          case 1 -> image = new Image(powerBarWeakHand, 120, 166, true, true);
+          case 2 -> image = new Image(powerBarMediumWeakHand, 120, 166, true, true);
+          case 3 -> image = new Image(powerBarMediumStrongHand, 120, 166, true, true);
+          case 4 -> image = new Image(powerBarStrongHand, 120, 166, true, true);
       }
+
+      imgPowerBar = new ImageView(image);
+      powerBarArea.getChildren().add(imgPowerBar);
+      imgPowerBar.setX(15);
+      imgPowerBar.setY(0);
+
       this.handStrength = hand.getHandStrenght();
     });
   }
@@ -817,20 +750,17 @@ public class GameController {
 
   /**
    * Method which controls the players decision
-   * 
-   * @return The players decision
    */
-  public String askForPlayerDecision() {
+  public void askForPlayerDecision() {
     handleButtons();
     playerMadeDecision = false;
     while (!playerMadeDecision) {
       try {
         SPController.sleep(100);
       } catch (InterruptedException e) {
-        e.printStackTrace();
+          throw new RuntimeException(e);
       }
     }
-    return decision;
   }
 
   /**
@@ -841,7 +771,7 @@ public class GameController {
   public void playerReset(String resetDecision) {
     decision = resetDecision;
     alreadyPaid = 0;
-    cards = new ArrayList<Card>();
+    cards = new ArrayList<>();
   }
 
   /**
@@ -864,8 +794,7 @@ public class GameController {
       btRaise.setVisible(true);
       btFold.setVisible(true);
     } else {
-      if (alreadyPaid < spController.getCurrentMaxBet()
-          && (playerPot + alreadyPaid) >= spController.getCurrentMaxBet()) {
+      if (alreadyPaid < spController.getCurrentMaxBet() && (playerPot + alreadyPaid) >= spController.getCurrentMaxBet()) {
         // hide check, show call
         btCheck.setVisible(false);
         btCall.setVisible(true);
@@ -877,8 +806,7 @@ public class GameController {
         btFold.setVisible(true);
       }
 
-      if ((spController.getCurrentMaxBet() - alreadyPaid) + spController.getBigBlind() <= playerPot
-          && playerPot != 0) {
+      if ((spController.getCurrentMaxBet() - alreadyPaid) + spController.getBigBlind() <= playerPot && playerPot != 0) {
         // show raise
         btRaise.setVisible(true);
       } else {
@@ -918,19 +846,6 @@ public class GameController {
   }
 
   /**
-   * Method which dims an AI player
-   * 
-   * @param AI an AI player
-   */
-  public void removeAiPlayer(int AI) {
-    Platform.runLater(() -> {
-      collectionOfLabelsAi[AI][0].setVisible(false);
-      collectionOfLabelsAi[AI][1].setVisible(false);
-      collectionOfLabelsAi[AI][2].setVisible(false);
-    });
-  }
-
-  /**
    * Places the AI-players in the correct position depending on chosen number of players.
    * 
    * @param aiPlayers All the AI-players that are active.
@@ -954,7 +869,7 @@ public class GameController {
         setShowUIAiBar(3);
         setShowUIAiBar(4);
       }
-    } else if (notFirstRound) {
+    } else {
       endOfRound(deadAIIndex);
     }
   }
@@ -972,9 +887,7 @@ public class GameController {
     int setOfPlayers = 0;
 
     // Decides (based on chosen AI-players) which position to place the AI at
-    if (setAINr == 1) {
-      setOfPlayers = 0;
-    } else if (setAINr == 3) {
+    if (setAINr == 3) {
       setOfPlayers = 1;
     } else if (setAINr == 5) {
       setOfPlayers = 2;
@@ -982,7 +895,7 @@ public class GameController {
 
     int currentAIPosition = aiPositions[setOfPlayers][currentAI];
 
-    // If there does exists a previous active AI-player
+    // If there does exist a previous active AI-player
     if (prevPlayerActive != -1) {
       // Resets the previous player's image from glowing(active) to non-glowning(idle)
       setUIAiStatus(prevPlayerActive, "idle");
@@ -1075,7 +988,7 @@ public class GameController {
       changeScene.switchToMainMenu();
       changeScene.prepGame();
     } catch (IOException e) {
-      e.printStackTrace();
+        throw new RuntimeException(e);
     }
   }
 
@@ -1083,21 +996,12 @@ public class GameController {
    * Method which creates an "about" box.
    */
   public void aboutBox() {
-    confirmBox = new ConfirmBox();
+    ConfirmBox confirmBox = new ConfirmBox();
     confirmBox.display("Om projektet",
         "Detta projekt är format och skapat av "
             + "Vedrana Zeba, Rikard Almgren, Amin Harirchian, Max Frennessen och Lykke Levin under "
             + "vårterminen 2017 som en del av kursen Systemutveckling och projekt 1.");
 
-  }
-
-  /**
-   * Method which returns if the UI is ready
-   * 
-   * @return isReady are we ready?
-   */
-  public boolean getIsReady() {
-    return isReady;
   }
 
   /**
@@ -1115,7 +1019,7 @@ public class GameController {
 
         changeScene.switchToMainMenu();
       } catch (IOException | InstantiationException | IllegalAccessException e) {
-        e.printStackTrace();
+          throw new RuntimeException(e);
       }
     });
   }
@@ -1188,100 +1092,53 @@ public class GameController {
    * @param hand Int number from spController that represent the value of the winning hand. 
    */
   public void setWinnerLabel(String winner, int hand) {
-    String winnerOfRound = winner;
+    switch (hand) {
+      case 0 -> winnerHand = "högsta kort";
+      case 1 -> winnerHand = "ett par";
+      case 3 -> winnerHand = "två par";
+      case 4 -> winnerHand = "triss";
+      case 5 -> winnerHand = "straight";
+      case 6 -> winnerHand = "flush";
+      case 7 -> winnerHand = "full house";
+      case 8 -> winnerHand = "four of a kind";
+      case 9 -> winnerHand = "straight flush";
+      case 99 -> winnerHand = "Du vann när resten av spelarna foldade!";
+      case 98 -> winnerHand = "när resterande spelare foldade.";
+      case 97 -> winnerHand = "Du förlorade!";
+    }
 
-      switch (hand) {
-          case 0 -> winnerHand = "högsta kort";
-          case 1 -> winnerHand = "ett par";
-          case 3 -> winnerHand = "två par";
-          case 4 -> winnerHand = "triss";
-          case 5 -> winnerHand = "straight";
-          case 6 -> winnerHand = "flush";
-          case 7 -> winnerHand = "full house";
-          case 8 -> winnerHand = "four of a kind";
-          case 9 -> winnerHand = "straight flush";
-          case 99 -> winnerHand = "Du vann när resten av spelarna foldade!";
-          case 98 -> winnerHand = "när resterande spelare foldade.";
-          case 97 -> winnerHand = "Du förlorade!";
+    Platform.runLater(() -> {
+      winnerBox = new WinnerBox();
+
+      if(hand < 10){ //Should maybe be if(hand <= 10)
+        if(winner.equals(getUsername())){
+          sound.playSound("coinSound");
+          winnerBox.displayWinner("Rundans vinnare", winner, 1, winnerHand);
+        } else {
+          winnerBox.displayWinner("Rundans vinnare", winner, 2, winnerHand);
+        }
+      } else { //If hand is > 10
+        if(winner.equals(getUsername())){
+          sound.playSound("coinSound");
+          winnerBox.displayWinner("Rundans vinnare", winner, 3, winnerHand);
+        } else {
+          winnerBox.displayWinner("Rundans vinnare", winner, 4, winnerHand);
+        }
       }
-
-    /*if (hand == 0) {
-      winnerHand = "högsta kort";
-    }
-    if (hand == 1) {
-      winnerHand = "ett par";
-    }
-    if (hand == 2) {
-      winnerHand = "två par";
-    }
-    if (hand == 3) {
-      winnerHand = "triss";
-    }
-    if (hand == 4) {
-      winnerHand = "straight";
-    }
-    if (hand == 5) {
-      winnerHand = "flush";
-    }
-    if (hand == 6) {
-      winnerHand = "full house";
-    }
-    if (hand == 7) {
-      winnerHand = "four of a kind";
-    }
-    if (hand == 8) {
-      winnerHand = "straight flush";
-    }
-    if (hand == 99) {
-      winnerHand = "Du vann när resten av spelarna foldade!";
-    }
-    if (hand == 98) {
-      winnerHand = "när resterande spelare foldade.";
-    }
-    if (hand == 97) {
-      winnerHand = "Du förlorade!";
-    }*/
-
-    if (!winnerOfRound.equals(getUsername()) && (hand < 10)) {
-      Platform.runLater(() -> {
-        winnerBox = new WinnerBox();
-        winnerBox.displayWinner("Rundans vinnare", winnerOfRound, 2, winnerHand);
-      });
-
-    } else if (winnerOfRound.equals(getUsername()) && (hand < 10)) {
-      Platform.runLater(() -> {
-        sound.playSound("coinSound");
-        winnerBox = new WinnerBox();
-        winnerBox.displayWinner("Rundans vinnare", winnerOfRound, 1, winnerHand);
-      });
-
-    } else if (winnerOfRound.equals(getUsername()) && (hand > 10)) {
-      Platform.runLater(() -> {
-        sound.playSound("coinSound");
-        winnerBox = new WinnerBox();
-        winnerBox.displayWinner("Rundans vinnare", winnerOfRound, 3, winnerHand);
-      });
-
-    } else if (!winnerOfRound.equals(getUsername()) && (hand > 10)) {
-      Platform.runLater(() -> {
-        winnerBox = new WinnerBox();
-        winnerBox.displayWinner("Rundans vinnare", winnerOfRound, 4, winnerHand);
-      });
-    }
+    });
   }
 
   /**
    * Method which creates a new tutorial and shows it.
-   * 
-   * @throws IOException
+   *
    */
-  public void goToTutorial() throws IOException {
+  public void goToTutorial(){
     Platform.runLater(() -> {
       this.tutorialWindow = new TutorialController(this);
       try {
         tutorialWindow.setupUIinGame();
       } catch (IOException e) {
-        e.printStackTrace();
+          throw new RuntimeException(e);
       }
     });
   }
@@ -1322,8 +1179,7 @@ public class GameController {
       this.collectionOfPots = new Label[] {subPotOne, subPotTwo};
     }
     Platform.runLater(() -> {
-      String[] potOrder = {"Sub-Pot One: ", "Sub-Pot Two: ", "Sub-Pot Three: ", "Sub-Pot Four: ",
-          "Sub-Pot Five: ", "Sub-Pot Six: "};
+      String[] potOrder = {"Sub-Pot One: ", "Sub-Pot Two: ", "Sub-Pot Three: ", "Sub-Pot Four: ", "Sub-Pot Five: ", "Sub-Pot Six: "};
       for (int i = 0; i < collectionOfPots.length; i++) {
         if (potSplits[i][0] > 0) {
           collectionOfPots[i].setText(potOrder[i] + "§" + potSplits[i][0]);
