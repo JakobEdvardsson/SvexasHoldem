@@ -1,6 +1,7 @@
 package org.pokergame.deck;
 
 import javafx.scene.image.Image;
+import org.pokergame.utils.PathUtil;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -60,11 +61,9 @@ public class Deck {
 
     for (Suit suit : Suit.values()) {
       for (CardValue card : CardValue.values()) {
-        ImageIcon cardImageView = new ImageIcon(getClass().getResource(BASE_PATH + "images/" +
-                card.getCardValue() + suit.getSuitLetter() + ".png").toString());
+        ImageIcon cardImageView = new ImageIcon(new PathUtil().getImage(card.getCardValue() + "" + suit.getSuitLetter() + ".png"));
         deck.add(new Card(suit, card, cardImageView));
       }
-
     }
   }
 }
