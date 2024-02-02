@@ -15,7 +15,7 @@ import java.io.IOException;
 
 /**
  * Controller for FXML-doc GameSettingMenu.fxml
- * 
+ *
  * @author Lykke Levin
  * @version 1.0
  *
@@ -67,7 +67,7 @@ public class SettingsController {
 	private TutorialController tutorialWindow;
 
 	/**
-	 * Method for initializing FXML. 
+	 * Method for initializing FXML.
 	 * @throws Exception
 	 */
 	public void initialize() throws Exception {
@@ -78,7 +78,7 @@ public class SettingsController {
 	}
 
 	/**
-	 * Stores the name from the TextField that the user has inserted. 
+	 * Stores the name from the TextField that the user has inserted.
 	 */
 	public void tfNameInputChange() {
 		this.name = tfNameInput.getText();
@@ -94,7 +94,7 @@ public class SettingsController {
 	}
 
 	/**
-	 * Stores the value from the Slider that the user has chosen. 
+	 * Stores the value from the Slider that the user has chosen.
 	 */
 	public void aiSliderChange() {
 		Double val = aiSlider.getValue();
@@ -103,7 +103,7 @@ public class SettingsController {
 	}
 
 	/**
-	 * Stores the value from the Slider that the user has chosen. 
+	 * Stores the value from the Slider that the user has chosen.
 	 */
 	public void potSliderChange() {
 
@@ -113,7 +113,7 @@ public class SettingsController {
 	}
 
 	/**
-	 * If ComboBox is selected by the user, disable the button true. 
+	 * If ComboBox is selected by the user, disable the button true.
 	 */
 	public void cbOnClicked() {
 
@@ -127,7 +127,7 @@ public class SettingsController {
 	}
 
 	/**
-	 * If ComboBox is selected by the user, disable the button true. 
+	 * If ComboBox is selected by the user, disable the button true.
 	 */
 	public void cbOffClicked() {
 
@@ -141,7 +141,7 @@ public class SettingsController {
 	}
 
 	/**
-	 * Starts the game and checks so the Username it not empty and checks if the Tutorial should be playing at the beginning. 
+	 * Starts the game and checks so the Username it not empty and checks if the Tutorial should be playing at the beginning.
 	 * @throws IOException
 	 */
 	public void startGame() throws IOException {
@@ -183,9 +183,9 @@ public class SettingsController {
 		}
 
 	}
-	
+
 	/**
-	 * Creates the progressForm and the loadingbar. 
+	 * Creates the progressForm and the loadingbar.
 	 */
 	public void startGameWindow(){
 		ProgressForm pForm = new ProgressForm();
@@ -215,25 +215,18 @@ public class SettingsController {
 
 			try {
 				changeScene.switchScenetoGame();
-				ConfirmBox cfBox = new ConfirmBox();
-
-				if (cfBox.display("Snart börjar spelet", "Är du redo att spela poker?")) {
 					spController.startGame(aiValue, potValue, name);
 					Sound.mp.stop();
 					sound.playSound("shuffle");
-				} else {
-					changeScene.switchToMainMenu();
-				}
-			} catch (IOException | InstantiationException | IllegalAccessException e) {
-				// TODO Auto-generated catch block
+			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		});
 		System.out.println("Spel startas!");
 	}
-	
+
 	/**
-	 * Shows a label if question mark is hovered. 
+	 * Shows a label if question mark is hovered.
 	 */
 	public void ivQuestionAiHovered() {
 
@@ -243,7 +236,7 @@ public class SettingsController {
 	}
 
 	/**
-	 * Shows a label if question mark is hovered. 
+	 * Shows a label if question mark is hovered.
 	 */
 	public void ivQuestionPotHovered() {
 
@@ -253,7 +246,7 @@ public class SettingsController {
 	}
 
 	/**
-	 * Shows a label if question mark is hovered. 
+	 * Shows a label if question mark is hovered.
 	 */
 	public void ivQuestionTutorialHovered() {
 
@@ -262,7 +255,7 @@ public class SettingsController {
 	}
 
 	/**
-	 *  Tells class changeScene to perform the swithScene-action. 
+	 *  Tells class changeScene to perform the swithScene-action.
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
 	 */
@@ -278,7 +271,7 @@ public class SettingsController {
 
 	/**
 	 * Name of the user.
-	 * @return String name of the user. 
+	 * @return String name of the user.
 	 */
 	public String getName() {
 		return name;
