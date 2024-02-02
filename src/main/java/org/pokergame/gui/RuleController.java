@@ -7,37 +7,41 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+
+import org.pokergame.utils.PathUtil;
+
 /**
- * Controller for the FXML-doc Rules.fxml that handles the Rules-state. 
+ * Controller for the FXML-doc Rules.fxml that handles the Rules-state.
+ * 
  * @author Lykke
  *
  */
-public class RuleController{
+public class RuleController {
 
-	public Stage window = new Stage();
-	private static final String BASE_PATH = "/org/pokergame/";
-	
-	/**
-	 * Creates a window and sets the correct FXML as the scene. 
-	 * @throws IOException
-	 */
-	public void rules() throws IOException{
-		window.initModality(Modality.APPLICATION_MODAL);
-		window.setTitle("Regler");
-		window.setWidth(1100);
-		window.setHeight(633);
-		window.setOnCloseRequest(e -> closeProgram());
-		Pane mainPane = (Pane) FXMLLoader.load(getClass().getResource(BASE_PATH + "Rules.fxml"));
-		Scene scene = new Scene(mainPane);
-		window.setScene(scene);
-		window.show();
-	}
-	
-	/**
-	 * Closes the window.
-	 */
-	public void closeProgram() {
-		window.close();
-	}
+  public Stage window = new Stage();
+
+  /**
+   * Creates a window and sets the correct FXML as the scene.
+   * 
+   * @throws IOException
+   */
+  public void rules() throws IOException {
+    window.initModality(Modality.APPLICATION_MODAL);
+    window.setTitle("Regler");
+    window.setWidth(1100);
+    window.setHeight(633);
+    window.setOnCloseRequest(e -> closeProgram());
+    Pane mainPane = (Pane) FXMLLoader.load(new PathUtil().getFXML("Rules"));
+    Scene scene = new Scene(mainPane);
+    window.setScene(scene);
+    window.show();
+  }
+
+  /**
+   * Closes the window.
+   */
+  public void closeProgram() {
+    window.close();
+  }
 
 }
