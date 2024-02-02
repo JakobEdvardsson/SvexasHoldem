@@ -4,6 +4,7 @@ import org.pokergame.controller.SPController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
+import org.pokergame.utils.PathUtil;
 
 import java.io.IOException;
 
@@ -25,9 +26,7 @@ public class ChangeScene {
   private FMController fmController;
   private SettingsController settingsController;
   private GameController gameController;
-
-  private static final String BASE_PATH = "/org/pokergame/";
-
+  private final PathUtil pathUtil = new PathUtil();
   /**
    * Method which prepares the FXMLs and by extension the game itself.
    * 
@@ -39,17 +38,17 @@ public class ChangeScene {
     new Sound().playBackgroundMusic();
 
     // Updated FXMLLoader for FirstMenu.fxml
-    FXMLLoader loaderFM = new FXMLLoader(getClass().getResource("/org/pokergame/FirstMenu.fxml"));
+    FXMLLoader loaderFM = new FXMLLoader(pathUtil.getFXML("FirstMenu"));
     this.rootMenu = loaderFM.load();
     this.fmController = loaderFM.getController();
 
     // Updated FXMLLoader for GameSettingMenu.fxml
-    FXMLLoader loaderSS = new FXMLLoader(getClass().getResource("/org/pokergame/GameSettingMenu.fxml"));
+    FXMLLoader loaderSS = new FXMLLoader(pathUtil.getFXML("GameSettingMenu"));
     this.rootNewGame = loaderSS.load();
     this.settingsController = loaderSS.getController();
 
     // Updated FXMLLoader for GameState.fxml
-    FXMLLoader loaderGS = new FXMLLoader(getClass().getResource("/org/pokergame/GameState.fxml"));
+    FXMLLoader loaderGS = new FXMLLoader(pathUtil.getFXML("GameState"));
     this.root2 = loaderGS.load();
     this.gameController = loaderGS.getController();
 
