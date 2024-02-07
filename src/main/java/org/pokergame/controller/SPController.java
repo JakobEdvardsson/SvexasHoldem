@@ -29,11 +29,8 @@ public class SPController extends Thread {
   private int currentPotSize;
   private int currentMaxBet;
   private int blindCounter;
-  private Card card1;
-  private Card card2;
-  private Card turn;
-  private Card river;
-  private Card[] flop = new Card[3];
+  private Card playerCard1;
+  private Card playerCard2;
   private int noOfPlayers = 0;
   private boolean allCalledorFolded = false;
   private boolean winnerDeclared = false;
@@ -43,6 +40,11 @@ public class SPController extends Thread {
   private int[][] potSplits;
   private boolean doAllInCheck;
   private int psCounter = 0;
+  // private Card turn;
+  // private Card river;
+  // private Card[] flop = new Card[3];
+  // private Card[] turnCards = new Card[4];
+  private Card[] allPlayingCards = new Card[5];
 
   /**
    * Method which receives and sets a number of starting variables and for the game to be set up.
@@ -75,10 +77,53 @@ public class SPController extends Thread {
     potSplits = new int[noOfPlayers][1];
 
     try {
-      setupPhase();
+      roundSetupPhase();
     } catch (InstantiationException | IllegalAccessException e) {
       e.printStackTrace();
     }
+  }
+
+  /**
+   * Method which prepares a new gameround.
+   *
+   * @throws IllegalAccessException
+   * @throws InstantiationException
+   */
+  private void roundSetupPhase() throws InstantiationException, IllegalAccessException {
+
+    // Player can't afford big blind so they loose.
+    if (gController.getPlayerPot() < bigBlind) {
+      gController.playerLost();
+      return;
+    }
+
+    this.deck = generateNewDeck();
+
+    setPlayerCards(this.deck);
+
+    resetValues();
+
+    resetAI();
+
+    setBlinds(noOfPlayers);
+
+    allPlayingCards = generatePlayingCards(this.deck);
+
+    // If thread isn't active, start, else run it again.
+    if (!this.isAlive()) {
+      start();
+    } else {
+      run();
+    }
+  }
+
+  private Card[] setPlayerCards(Deck deck) {
+    playerCard1 = deck.getCard();
+    playerCard2 = deck.getCard();
+
+    gController.setStartingHand(playerCard1, playerCard2);
+
+    return new Card[] {playerCard1, playerCard2};
   }
 
   /**
@@ -111,64 +156,68 @@ public class SPController extends Thread {
   }
 
   /**
-   * Method which prepares a new gameround.
+   * Method which generates the flop, turn and river. Use getFlopCard(), getTurnCard() and
+   * getRiverCard() to get the cards.
    *
-   * @throws IllegalAccessException
-   * @throws InstantiationException
+   * @param deck The deck to get the cards from.
+   * @return The cards for the flop, turn and river.
    */
-  private void setupPhase() throws InstantiationException, IllegalAccessException {
+  private Card[] generatePlayingCards(Deck deck) {
+    Card[] playingCards = new Card[5];
 
-    // Check if the player lost last turn
-    if (gController.getPlayerPot() > bigBlind) {
-      /*
-       * if not, reset the all-in check and potsplit counter Create a new deck, shuffle it and deal
-       * cards
-       */
-      doAllInCheck = false;
-      psCounter = 0;
-      deck = new Deck();
-      deck.shuffle();
-      card1 = deck.getCard();
-      card2 = deck.getCard();
-      gController.setStartingHand(card1, card2);
-      this.currentPotSize = 0;
-      potSplits = new int[noOfPlayers][1];
-      gController.updatePots(potSplits, currentPotSize);
-      gController.playerReset("");
-      /*
-       * Reset the AI players unless they've lost
-       */
-      for (Ai ai : aiPlayers) {
-        System.out.println(ai.getName() + " : " + ai.getDecision() + (ai.aiPot() < bigBlind));
-        ai.setBigBlind(0, false);
-        ai.setSmallBlind(0, false);
-        ai.setPaidThisTurn(0);
-        ai.setAllInViability(99);
-        if (!ai.getDecision().contains("lost")) {
-          ai.setDecision("");
-          card1 = deck.getCard();
-          card2 = deck.getCard();
-          ai.setStartingHand(card1, card2);
-        }
-      }
-      // set the blinds
-      setBlinds(noOfPlayers);
-      // Generate a flop, turn and river.
-      for (int i = 0; i < flop.length; i++) {
-        flop[i] = deck.getCard();
-      }
-      turn = deck.getCard();
-      river = deck.getCard();
-      // If thread isn't active, start, else run it again.
-      if (!this.isAlive()) {
-        start();
-      } else {
-        run();
-      }
-      // If the player did lose, make sure he knows it.
-    } else {
-      gController.playerLost();
+    for (int i = 0; i < 5; i++) {
+      playingCards[i] = deck.getCard();
     }
+    return playingCards;
+  }
+
+  private Card[] getFlopCards(Card[] allPlayingCards) {
+    Card[] flop = new Card[3];
+    flop[0] = allPlayingCards[0];
+    flop[1] = allPlayingCards[1];
+    flop[2] = allPlayingCards[2];
+
+    return flop;
+  }
+
+  private Card getTurnCard(Card[] allPlayingCards) {
+    return allPlayingCards[3];
+  }
+
+  private Card getRiverCard(Card[] allPlayingCards) {
+    return allPlayingCards[4];
+  }
+
+  /** Method which resets the AI players unless they've lost. */
+  private void resetAI() {
+    for (Ai ai : aiPlayers) {
+      System.out.println(ai.getName() + " : " + ai.getDecision() + (ai.aiPot() < bigBlind));
+      ai.setBigBlind(0, false);
+      ai.setSmallBlind(0, false);
+      ai.setPaidThisTurn(0);
+      ai.setAllInViability(99);
+      if (!ai.getDecision().contains("lost")) {
+        ai.setDecision("");
+        playerCard1 = deck.getCard();
+        playerCard2 = deck.getCard();
+        ai.setStartingHand(playerCard1, playerCard2);
+      }
+    }
+  }
+
+  private void resetValues() {
+    psCounter = 0;
+    doAllInCheck = false;
+    potSplits = new int[noOfPlayers][1];
+    currentPotSize = 0;
+    gController.updatePots(potSplits, currentPotSize);
+    gController.playerReset("");
+  }
+
+  private Deck generateNewDeck() {
+    Deck deck = new Deck();
+    deck.shuffle();
+    return deck;
   }
 
   /** Method that runs the gameround itself */
@@ -178,8 +227,6 @@ public class SPController extends Thread {
     gController.activeSlider();
     String winner = "";
 
-    Card[] turnCards = {flop[0], flop[1], flop[2], turn};
-    Card[] riverCards = {flop[0], flop[1], flop[2], turn, river};
     while (playTurn < 4) {
       // ##########################
       gController.showRoundStatusInUI(playTurn);
@@ -187,7 +234,7 @@ public class SPController extends Thread {
       // set dealer, smallblind and bigBlind.
       displayDealerAndBlinds();
 
-      setCardsOnGameBoard(turnCards, riverCards);
+      setCardsOnGameBoard(allPlayingCards, playTurn);
 
       // ##########################
 
@@ -291,7 +338,7 @@ public class SPController extends Thread {
     dealer = (dealer + 1) % noOfPlayers;
 
     try {
-      setupPhase();
+      roundSetupPhase();
     } catch (InstantiationException e) {
       e.printStackTrace();
     } catch (IllegalAccessException e) {
@@ -299,16 +346,35 @@ public class SPController extends Thread {
     }
   }
 
-  private void setCardsOnGameBoard(Card[] turnCards, Card[] riverCards) {
-    if (playTurn == 1) {
-      gController.setFlopTurnRiver(flop);
+  /**
+   * Sets the cards on the gameboard. Sets the flop, turn and river.
+   *
+   * @param allPlayingCards
+   * @param playTurn
+   * @return The cards on the gameboard.
+   */
+  private Card[] setCardsOnGameBoard(Card[] allPlayingCards, int playTurn) {
+    switch (playTurn) {
+      case 1 -> {
+        Card[] flop = new Card[] {allPlayingCards[0], allPlayingCards[1], allPlayingCards[2]};
+        gController.setFlopTurnRiver(flop);
+        return flop;
+      }
+
+      case 2 -> {
+        Card[] turn =
+            new Card[] {
+              allPlayingCards[0], allPlayingCards[1], allPlayingCards[2], allPlayingCards[3]
+            };
+        gController.setFlopTurnRiver(turn);
+        return turn;
+      }
+      case 3 -> {
+        gController.setFlopTurnRiver(allPlayingCards);
+        return allPlayingCards;
+      }
     }
-    if (playTurn == 2) {
-      gController.setFlopTurnRiver(turnCards);
-    }
-    if (playTurn == 3) {
-      gController.setFlopTurnRiver(riverCards);
-    }
+    return null;
   }
 
   /** Method which displays the dealer and blinds. This runs in the beginning of each turn. */
@@ -709,15 +775,15 @@ public class SPController extends Thread {
       aiAction(currentPlayer);
       // Flop
     } else if (playTurn == 1) {
-      ai.makeDecision(currentMaxBet, flop);
+      ai.makeDecision(currentMaxBet, getFlopCards(allPlayingCards));
       aiAction(currentPlayer);
       // Turn
     } else if (playTurn == 2) {
-      ai.makeDecision(currentMaxBet, turn);
+      ai.makeDecision(currentMaxBet, getTurnCard(allPlayingCards));
       aiAction(currentPlayer);
       // River
     } else if (playTurn == 3) {
-      ai.makeDecision(currentMaxBet, river);
+      ai.makeDecision(currentMaxBet, getRiverCard(allPlayingCards));
       aiAction(currentPlayer);
     }
     // Check all call or fold
