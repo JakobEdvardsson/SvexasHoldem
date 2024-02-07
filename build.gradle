@@ -4,6 +4,15 @@ plugins {
     id 'org.openjfx.javafxplugin' version '0.1.0'
 }
 
+
+//För att kunna se nordiska tecken i spelplanen
+compileJava.options.encoding = 'UTF-8'
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+
 application {
     mainClass = 'org.pokergame.gui.Main'
 }
