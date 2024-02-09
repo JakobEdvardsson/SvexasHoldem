@@ -734,7 +734,7 @@ public class GameController {
     String powerBarWeakHand = pathUtil.getImage("weakHand.png");
     String powerBarMediumWeakHand = pathUtil.getImage("mediumWeakHand.png");
     String powerBarMediumStrongHand = pathUtil.getImage("mediumStrongHand.png");
-    String powerBarStrongHand = pathUtil.getImage("StrongHand.png");
+    String powerBarStrongHand = pathUtil.getImage("strongHand.png");
 
     Platform.runLater(() -> {
       String helpText = hand.theHelp();
@@ -1096,7 +1096,7 @@ public class GameController {
    * @param round int between 0-3 ("roundPreFlop", "roundFlop", "roundTurn",
    *              "roundRiver").
    */
-  public void roundStatus(int round) {
+  public void showRoundStatusInUI(int round) {
     String[] roundStatus = new String[] { "roundPreFlop", "roundFlop", "roundTurn", "roundRiver" };
 
     Platform.runLater(() -> {
