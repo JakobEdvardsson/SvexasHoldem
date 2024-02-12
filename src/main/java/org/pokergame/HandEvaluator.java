@@ -239,7 +239,7 @@ public class HandEvaluator {
      *
      * @return True if this hand contains One Pair.
      */
-    private boolean isOnePair() {
+    public boolean isOnePair() {
         if (noOfPairs == 1) {
             type = HandValueType.ONE_PAIR;
             rankings[0] = type.getValue();
@@ -273,7 +273,7 @@ public class HandEvaluator {
      *
      * @return True if this hand contains Two Pairs.
      */
-    private boolean isTwoPairs() {
+    public boolean isTwoPairs() {
         if (noOfPairs == 2) {
             type = HandValueType.TWO_PAIRS;
             rankings[0] = type.getValue();
@@ -304,7 +304,7 @@ public class HandEvaluator {
      *
      * @return True if this hand contains a Three of a Kind.
      */
-    private boolean isThreeOfAKind() {
+    public boolean isThreeOfAKind() {
         if (tripleRank != -1) {
             type = HandValueType.THREE_OF_A_KIND;
             rankings[0] = type.getValue();
@@ -335,7 +335,7 @@ public class HandEvaluator {
      *
      * @return True if this hand contains a Straight.
      */
-    private boolean isStraight() {
+    public boolean isStraight() {
         if (straightRank != -1) {
             type = HandValueType.STRAIGHT;
             rankings[0] = type.getValue();
@@ -354,7 +354,7 @@ public class HandEvaluator {
      * 
      * @return True if this hand contains a Flush.
      */
-    private boolean isFlush() {
+    public boolean isFlush() {
         if (flushSuit != -1) {
             type = HandValueType.FLUSH;
             rankings[0] = type.getValue();
@@ -386,7 +386,7 @@ public class HandEvaluator {
      *
      * @return True if this hand contains a Full House.
      */
-    private boolean isFullHouse() {
+    public boolean isFullHouse() {
         if ((tripleRank != -1) && (noOfPairs > 0)) {
             type = HandValueType.FULL_HOUSE;
             rankings[0] = type.getValue();
@@ -406,7 +406,7 @@ public class HandEvaluator {
      *
      * @return True if this hand contains a Four of a Kind.
      */
-    private boolean isFourOfAKind() {
+    public boolean isFourOfAKind() {
         if (quadRank != -1) {
             type = HandValueType.FOUR_OF_A_KIND;
             rankings[0] = type.getValue();
@@ -437,7 +437,7 @@ public class HandEvaluator {
      * 
      * @return True if this hand contains a Straight Flush.
      */
-    private boolean isStraightFlush() {
+    public boolean isStraightFlush() {
         if (straightRank != -1 && flushRank == straightRank) {
             // Flush and Straight (possibly separate); check for Straight Flush.
             int straightRank2 = -1;

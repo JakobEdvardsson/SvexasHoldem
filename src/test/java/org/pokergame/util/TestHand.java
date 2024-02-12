@@ -2,10 +2,11 @@ package org.pokergame.util;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
-import org.pokergame.Card;
-import org.pokergame.Hand;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.pokergame.Card;
+import org.pokergame.Hand;
 
 public class TestHand {
     Hand hand;
