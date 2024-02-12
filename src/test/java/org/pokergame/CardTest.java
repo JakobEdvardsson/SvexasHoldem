@@ -6,13 +6,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CardTest {
 
-    //char[] SUIT_SYMBOLS = { 'd', 'c', 'h', 's' };
-    //String[] RANK_SYMBOLS 2,3,4,5,6,7,8,9,T,J,Q,K,A
 
     @Test
     void getSuit() {
-
-        //BVA
 
         //High
         Card card = new Card(Card.QUEEN,Card.SPADES);
@@ -45,11 +41,7 @@ class CardTest {
         expected = 1;
         cardSuit = card.getSuit();
         assertEquals(expected,cardSuit);
-
-
     }
-
-
 
    /*Suit order:
     Spades
@@ -59,9 +51,6 @@ class CardTest {
     */
     @Test
     void getRank() {
-
-        //BVA
-
         //High
         Card card = new Card(Card.ACE, Card.HEARTS);
         int expected = 12;
@@ -83,21 +72,40 @@ class CardTest {
         }
     }
 
-
-    @Test
-    void testHashCode() {
-        Card Kh = new Card("Kh");
-        int result = 0;
-
-
-    }
-
     @Test
     void testEquals() {
-
+        //Equal
+        Card cardToTest = new Card(Card.ACE, Card.DIAMONDS);
+        Card card2 = new Card(Card.ACE, Card.DIAMONDS);
+        assertEquals(cardToTest,card2);
+       //Not equal
+        cardToTest = new Card(Card.QUEEN, Card.HEARTS);
+        card2 = new Card(Card.KING, Card.HEARTS);
+        assertNotEquals(cardToTest,card2);
     }
 
     @Test
     void compareTo() {
+        //LOW to HIGH
+        Card cardCompareTo = new Card(Card.ACE, Card.DIAMONDS);
+        Card comparesTo = new Card(Card.ACE, Card.SPADES);
+        int expected = -1;
+        int result = cardCompareTo.compareTo(new Card(Card.ACE, Card.DIAMONDS));
+        assertEquals(expected,result);
+
+        //JAG SLUTADE HÄR ---------------------------------------->
+
+        //HIGH to LOW
+        cardCompareTo = new Card(Card.JACK, Card.SPADES);
+        cardCompareTo.compareTo(new Card(Card.JACK, Card.DIAMONDS));
+        assertEquals(1,cardCompareTo.compareTo(new Card(Card.ACE, Card.HEARTS)));
+
+        //Invalid
+        try {
+            cardCompareTo.compareTo(null);
+            fail("No exception thrown");
+        } catch (NullPointerException e) {
+
+        }
     }
 }
