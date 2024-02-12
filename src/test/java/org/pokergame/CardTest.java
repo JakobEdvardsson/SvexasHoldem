@@ -26,17 +26,21 @@ class CardTest {
         cardSuit = card.getSuit();
         assertEquals(expected,cardSuit);
 
-        //Invalid, Behöver fixas
-        /*card = new Card(Card.JACK, 4);
-        String invalid = "Invalid suit";
-        cardSuit = card.getSuit();
-        assertNotEquals(invalid, cardSuit);*/
+        //Invalid
+        try {
+            new Card(0, -1);
+            fail("No exception thrown");
+        } catch (IllegalArgumentException e) {
 
+        }
+
+        //HEARTS
         card = new Card(Card.JACK,Card.HEARTS);
         expected = 2;
         cardSuit = card.getSuit();
         assertEquals(expected,cardSuit);
 
+        //CLUBS
         card = new Card(Card.FIVE,Card.CLUBS);
         expected = 1;
         cardSuit = card.getSuit();
@@ -63,6 +67,13 @@ class CardTest {
         assertEquals(expected,cardRank);
 
         //Invalid
+        try {
+           card =  new Card(-1, 0);
+            fail("No exception thrown");
+        } catch (IllegalArgumentException e) {
+
+        }
+
         /*card = new Card(13, 0);
         String invalid = "Invalid rank";
         cardRank = card.getRank();
