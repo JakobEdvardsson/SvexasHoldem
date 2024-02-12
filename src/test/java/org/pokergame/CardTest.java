@@ -49,6 +49,14 @@ class CardTest {
 
     }
 
+
+
+   /*Suit order:
+    Spades
+    Hearts
+    Diamonds
+    Clubs
+    */
     @Test
     void getRank() {
 
@@ -73,17 +81,12 @@ class CardTest {
         } catch (IllegalArgumentException e) {
 
         }
-
-        /*card = new Card(13, 0);
-        String invalid = "Invalid rank";
-        cardRank = card.getRank();
-        assertNotEquals(invalid, cardRank);*/
-
     }
+
 
     @Test
     void testHashCode() {
-        Card card1 = new Card(Card.ACE, Card.HEARTS);
+        Card Kh = new Card("Kh");
         int result = 0;
 
 
@@ -91,6 +94,7 @@ class CardTest {
 
     @Test
     void testEquals() {
+
     }
 
     @Test
