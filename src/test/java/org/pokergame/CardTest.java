@@ -84,21 +84,22 @@ class CardTest {
         assertNotEquals(cardToTest,card2);
     }
 
+
+    //Dessa tester behöver kollas över / FILIP
     @Test
     void compareTo() {
         //LOW to HIGH
         Card cardCompareTo = new Card(Card.ACE, Card.DIAMONDS);
         Card comparesTo = new Card(Card.ACE, Card.SPADES);
-        int expected = -1;
+        int expected = 0;
         int result = cardCompareTo.compareTo(new Card(Card.ACE, Card.DIAMONDS));
         assertEquals(expected,result);
 
-        //JAG SLUTADE HÄR ---------------------------------------->
 
         //HIGH to LOW
         cardCompareTo = new Card(Card.JACK, Card.SPADES);
         cardCompareTo.compareTo(new Card(Card.JACK, Card.DIAMONDS));
-        assertEquals(1,cardCompareTo.compareTo(new Card(Card.ACE, Card.HEARTS)));
+        assertEquals(-1,cardCompareTo.compareTo(new Card(Card.ACE, Card.HEARTS)));
 
         //Invalid
         try {
