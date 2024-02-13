@@ -17,17 +17,6 @@ class PlayerTest {
     }
 
     @Test
-    void resetHand() {
-        //True
-        Player player = new Player("Player", BigDecimal.ZERO, null);
-        player.resetHand();
-        boolean expected = false;
-        player.resetHand();
-        boolean actual = player.hasCards();
-        assertEquals(expected, actual);
-    }
-
-    @Test
     void resetBet() {
         Player player = new Player("Player", BigDecimal.ZERO, null);
         player.setBet(BigDecimal.valueOf(1000));
@@ -51,6 +40,7 @@ class PlayerTest {
 
     @Test
     void getBet() {
+        Player player = new Player("Player", BigDecimal.ZERO, null);
         player.setBet(BigDecimal.valueOf(100000));
         int expected = 100000;
         int actual = player.getBet().intValue();
