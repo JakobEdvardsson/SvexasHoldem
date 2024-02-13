@@ -2,12 +2,15 @@ package org.pokergame;
 
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class PlayerTest {
 
     @Test
     void getClient() {
+
     }
 
     @Test
@@ -20,15 +23,22 @@ class PlayerTest {
 
     @Test
     void setCards() {
-    }
 
-    @Test
-    void hasCards() {
     }
 
     @Test
     void getName() {
+
+        //Valid
+        String expected = "Player";
+        String actual = "Player";
+        assertEquals(expected, actual);
+        //Invalid
+        expected = "Player";
+        actual = null;
+        assertNotEquals(expected, actual);
     }
+
 
     @Test
     void getCash() {
@@ -36,11 +46,12 @@ class PlayerTest {
 
     @Test
     void getBet() {
+        Player player = new Player("Player", BigDecimal.ZERO, null);
+        player.setBet(BigDecimal.ZERO);
+        BigDecimal expected = BigDecimal.ZERO;
+        System.out.println(BigDecimal.ZERO);
     }
 
-    @Test
-    void setBet() {
-    }
 
     @Test
     void getAction() {
