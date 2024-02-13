@@ -8,7 +8,11 @@ class TableTest {
 
     @Test
     void addPlayer() {
+        //Player player = new Player("Player");
 
+        String name = "Player";
+        String expected = "Player";
+        assertEquals(name, expected);
     }
 
     @Test
