@@ -1,6 +1,7 @@
 package org.pokergame;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import java.math.BigDecimal;
 
@@ -9,26 +10,35 @@ import static org.junit.jupiter.api.Assertions.*;
 class PlayerTest {
 
     @Test
-    void getClient() {
+    void playerAct() {
+        Player player = new Player("Player", BigDecimal.ZERO, null);
+        player.setBet(BigDecimal.ZERO);
 
     }
 
     @Test
     void resetHand() {
+        //True
+        Player player = new Player("Player", BigDecimal.ZERO, null);
+        player.resetHand();
+        boolean expected = false;
+        player.resetHand();
+        boolean actual = player.hasCards();
+        assertEquals(expected, actual);
     }
 
     @Test
     void resetBet() {
-    }
-
-    @Test
-    void setCards() {
-
+        Player player = new Player("Player", BigDecimal.ZERO, null);
+        player.setBet(BigDecimal.valueOf(1000));
+        int expected = 0;
+        player.resetBet();
+        int actual = player.getBet().intValue();
+        assertEquals(expected, actual);
     }
 
     @Test
     void getName() {
-
         //Valid
         String expected = "Player";
         String actual = "Player";
@@ -39,27 +49,18 @@ class PlayerTest {
         assertNotEquals(expected, actual);
     }
 
-
-    @Test
-    void getCash() {
-    }
-
     @Test
     void getBet() {
-        Player player = new Player("Player", BigDecimal.ZERO, null);
-        player.setBet(BigDecimal.ZERO);
-        BigDecimal expected = BigDecimal.ZERO;
-        System.out.println(BigDecimal.ZERO);
+        player.setBet(BigDecimal.valueOf(100000));
+        int expected = 100000;
+        int actual = player.getBet().intValue();
+        assertEquals(expected, actual);
     }
-
 
     @Test
     void getAction() {
     }
 
-    @Test
-    void setAction() {
-    }
 
     @Test
     void isAllIn() {
@@ -67,6 +68,17 @@ class PlayerTest {
 
     @Test
     void getCards() {
+
+
+    }
+
+    @Test
+    void hasCards() {
+        Hand hand = Mockito.mock(Hand.class);
+        hand.addCard(new Card(8, 2));
+        Player player = new Player("Player", BigDecimal.ZERO, null);
+        boolean cardsOnHand = player.hasCards();
+        assertTrue(cardsOnHand);
     }
 
     @Test
