@@ -80,12 +80,13 @@ public class Main extends JFrame implements Client {
         setLayout(new GridBagLayout());
 
         gc = new GridBagConstraints();
-        
+
         controlPanel = new ControlPanel(TABLE_TYPE);
-        
-        boardPanel = new BoardPanel(controlPanel);        
+
+        boardPanel = new BoardPanel(controlPanel);
         addComponent(boardPanel, 1, 1, 1, 1);
-        
+
+
         /* The players at the table. */
         Map<String, Player> players = new LinkedHashMap<>();
         humanPlayer = new Player("Player", STARTING_CASH, this);
@@ -95,10 +96,12 @@ public class Main extends JFrame implements Client {
         players.put("Eddie", new Player("Eddie", STARTING_CASH, new BasicBot(50, 25)));
 
         /* The table. */
+
         Table table = new Table(TABLE_TYPE, BIG_BLIND);
         for (Player player : players.values()) {
             table.addPlayer(player);
         }
+
 
         playerPanels = new HashMap<>();
         int i = 0;
@@ -126,7 +129,8 @@ public class Main extends JFrame implements Client {
                     // Do nothing.
             }
         }
-        
+
+
         // Show the frame.
         pack();
         setResizable(false);
@@ -134,7 +138,7 @@ public class Main extends JFrame implements Client {
         setVisible(true);
 
         // Start the game.
-        table.run();
+        //table.run();
     }
     
     /**

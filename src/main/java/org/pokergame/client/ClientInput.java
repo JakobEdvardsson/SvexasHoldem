@@ -20,15 +20,16 @@ public class ClientInput extends Thread {
     @Override
     public void run() {
         try {
-            in = new ObjectInputStream(socket.getInputStream());
 
             while (true) {
+                System.out.println("ClientInput running");
                 Object incomingMessage = recieveMessage();
 
                 if (incomingMessage instanceof String) {
                     System.out.println(incomingMessage);
 
                 }
+                in = new ObjectInputStream(socket.getInputStream());
             }
 
         } catch (IOException e) {
@@ -36,11 +37,17 @@ public class ClientInput extends Thread {
         }
     }
     public synchronized Object recieveMessage(){
+        Object incomingObject = null;
         try {
-            return in.readObject();
+            incomingObject =  in.readObject();
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
+
+        // Todo - might need to make this async
+        clientController.inputObject(incomingObject);
+
+        return incomingObject;
     }
 
 
