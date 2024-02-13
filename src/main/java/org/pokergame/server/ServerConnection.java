@@ -10,10 +10,8 @@ public class ServerConnection extends Thread {
 
 
     public ServerConnection(int port, ServerController serverController) {
-
         this.port = port;
         this.serverController = serverController;
-        start();
     }
 
     @Override
@@ -23,7 +21,7 @@ public class ServerConnection extends Thread {
             while (true) {
                 try {
                     Socket socket = serverSocket.accept();
-                    new ClientHandler(socket, this, serverController).start();
+                    new ClientHandler(socket, serverController).start();
                     System.out.println("Someone connected to the server");
                 } catch (IOException e) {
                     e.printStackTrace();

@@ -1,53 +1,33 @@
 package org.pokergame.server;
 
 
-
-import org.pokergame.Message;
-
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.sql.SQLOutput;
-import java.time.LocalDateTime;
+import java.util.Scanner;
 
 public class ClientHandler extends Thread {
     private Socket socket;
-    private ObjectOutputStream objectOutputStream;
-    private ObjectInputStream objectInputStream;
-    private ServerConnection serverConnection;
+    private ServerInput serverInput;
+    private ServerOutput serverOutput;
     private ServerController serverController;
 
-    public ClientHandler(Socket socket, ServerConnection serverConnection, ServerController serverController) {
+    public ClientHandler(Socket socket, ServerController serverController) {
         System.out.println("Client Handler created");
         this.socket = socket;
-        this.serverConnection = serverConnection;
         this.serverController = serverController;
-        // start();
     }
 
     @Override
     public void run() {
-        try {
-            // Client handshake
-            objectInputStream = new ObjectInputStream(socket.getInputStream());
-            //objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+        serverInput = new ServerInput(socket, this);
+        serverInput.start();
+        serverOutput = new ServerOutput(socket);
+        serverOutput.start();
 
-            // Asking for User object
-            //objectOutputStream.writeObject("Request User Object");
-            //objectOutputStream.flush();
-
-
-            // Listening for messages
-            System.out.println("Client Handler is running");
-            while (true) {
-                Message message;
-                message = ((Message) this.objectInputStream.readObject());
-                System.out.println(message.getMessage());
-            }
-
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+        while (true) {
+            System.out.print("Enter message to send to client: ");
+            Scanner scanner = new Scanner(System.in);
+            String message = scanner.nextLine();
+            serverOutput.sendMessage(message);
         }
     }
 }
