@@ -10,7 +10,7 @@ class PlayerTest {
 
     @Test
     void getClient() {
-
+Client cLient = new Client();
     }
 
     @Test
