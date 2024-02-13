@@ -20,8 +20,10 @@ public class ClientController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //clientInput = new ClientInput(socket, this);
-        //clientInput.start();
+
+        clientInput = new ClientInput(socket, this);
+        clientInput.start();
+
         clientOutput = new ClientOutput(socket, this);
         clientOutput.start();
         Message message = new Message();

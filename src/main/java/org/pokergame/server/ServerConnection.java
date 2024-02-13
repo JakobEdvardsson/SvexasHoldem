@@ -21,11 +21,10 @@ public class ServerConnection extends Thread {
 
         try (ServerSocket serverSocket = new ServerSocket(port)){
             while (true) {
-                try  (Socket socket = serverSocket.accept()){
-                    //Socket socket = serverSocket.accept();
-                    new ClientHandler(socket, this, serverController);
+                try {
+                    Socket socket = serverSocket.accept();
+                    new ClientHandler(socket, this, serverController).start();
                     System.out.println("Someone connected to the server");
-
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

@@ -23,7 +23,7 @@ public class ClientHandler extends Thread {
         this.socket = socket;
         this.serverConnection = serverConnection;
         this.serverController = serverController;
-        start();
+        // start();
     }
 
     @Override
