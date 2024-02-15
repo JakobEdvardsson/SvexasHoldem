@@ -18,7 +18,6 @@
 package org.pokergame;
 
 import org.pokergame.actions.PlayerAction;
-import org.pokergame.server.ClientHandler;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -37,6 +36,9 @@ public class Player {
     /** Name. */
     private final String name;
 
+    /** Client application responsible for the actual behavior. */
+    private final Client client;
+
     /** Hand of cards. */
     private final Hand hand;
 
@@ -52,9 +54,6 @@ public class Player {
     /** Last action performed. */
     private PlayerAction action;
 
-    /** Used to communicate to the client. */
-    private ClientHandler clientHandler;
-
     /**
      * Constructor.
      * 
@@ -62,17 +61,26 @@ public class Player {
      *            The player's name.
      * @param cash
      *            The player's starting amount of cash.
-     * @param clientHandler
+     * @param client
      *            The client application.
      */
-    public Player(String name, BigDecimal cash, ClientHandler clientHandler) {
+    public Player(String name, BigDecimal cash, Client client) {
         this.name = name;
         this.cash = cash;
-        this.clientHandler = clientHandler;
+        this.client = client;
 
         hand = new Hand();
 
         resetHand();
+    }
+
+    /**
+     * Returns the client.
+     * 
+     * @return The client.
+     */
+    public Client getClient() {
+        return client;
     }
 
     /**
@@ -249,16 +257,6 @@ public class Player {
         clone.bet = bet;
         clone.action = action;
         return clone;
-    }
-
-
-
-    public ClientHandler getClientHandler() {
-        return clientHandler;
-    }
-
-    public void setClientHandler(ClientHandler clientHandler) {
-        this.clientHandler = clientHandler;
     }
 
     /** {@inheritDoc} */

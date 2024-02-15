@@ -6,7 +6,7 @@ public class ClientStart {
     }
 
     public static void startClient() {
-        ClientController clientcontroller = new ClientController("localhost",1337);
+        new ClientController().connect("localhost",1337);
     }
 
 }

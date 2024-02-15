@@ -56,15 +56,12 @@ public class Table {
     
     /** Whether players will always call the showdown, or fold when no chance. */
     private static final boolean ALWAYS_CALL_SHOWDOWN = false;
-
+    
     /** Table type (poker variant). */
-    private static final TableType tableType = TableType.NO_LIMIT;
-    //private final TableType tableType;
-
+    private final TableType tableType;
     
     /** The size of the big blind. */
-    private static final BigDecimal bigBlind = BigDecimal.valueOf(10);
-    //private final BigDecimal bigBlind;
+    private final BigDecimal bigBlind;
 
     /** The players at the table. */
     private final List<Player> players;
@@ -108,9 +105,12 @@ public class Table {
     /**
      * Constructor.
      * 
+     * @param bigBlind
      *            The size of the big blind.
      */
-    public Table() {
+    public Table(TableType type, BigDecimal bigBlind) {
+        this.tableType = type;
+        this.bigBlind = bigBlind;
         players = new ArrayList<>();
         activePlayers = new ArrayList<>();
         deck = new Deck();
@@ -133,7 +133,7 @@ public class Table {
      */
     public void run() {
         for (Player player : players) {
-            player.getClientHandler().joinedTable(tableType, bigBlind, players);
+            player.getClient().joinedTable(tableType, bigBlind, players);
         }
         dealerPosition = -1;
         actorPosition = -1;
@@ -248,7 +248,7 @@ public class Table {
         
         // Notify all clients a new hand has started.
         for (Player player : players) {
-            player.getClientHandler().handStarted(dealer);
+            player.getClient().handStarted(dealer);
         }
         notifyPlayersUpdated(false);
         notifyMessage("New hand, %s is the dealer.", dealer);
@@ -261,7 +261,7 @@ public class Table {
         actorPosition = (actorPosition + 1) % activePlayers.size();
         actor = activePlayers.get(actorPosition);
         for (Player player : players) {
-            player.getClientHandler().actorRotated(actor);
+            player.getClient().actorRotated(actor);
         }
     }
     
@@ -349,7 +349,7 @@ public class Table {
             } else {
                 // Otherwise allow client to act.
                 Set<PlayerAction> allowedActions = getAllowedActions(actor);
-                action = actor.getClientHandler().act(minBet, bet, allowedActions);
+                action = actor.getClient().act(minBet, bet, allowedActions);
                 // Verify chosen action to guard against broken clients (accidental or on purpose).
                 if (!allowedActions.contains(action)) {
                     if (action instanceof BetAction && !allowedActions.contains(PlayerAction.BET)) {
@@ -571,7 +571,7 @@ public class Table {
             if (doShow) {
                 // Show hand.
                 for (Player player : players) {
-                    player.getClientHandler().playerUpdated(playerToShow);
+                    player.getClient().playerUpdated(playerToShow);
                 }
                 notifyMessage("%s has %s.", playerToShow, handValue.getDescription());
             } else {
@@ -580,10 +580,10 @@ public class Table {
                 activePlayers.remove(playerToShow);
                 for (Player player : players) {
                     if (player.equals(playerToShow)) {
-                        player.getClientHandler().playerUpdated(playerToShow);
+                        player.getClient().playerUpdated(playerToShow);
                     } else {
                         // Hide secret information to other players.
-                        player.getClientHandler().playerUpdated(playerToShow.publicClone());
+                        player.getClient().playerUpdated(playerToShow.publicClone());
                     }
                 }
                 notifyMessage("%s folds.", playerToShow);
@@ -689,7 +689,7 @@ public class Table {
     private void notifyMessage(String message, Object... args) {
         message = String.format(message, args);
         for (Player player : players) {
-            player.getClientHandler().messageReceived(message);
+            player.getClient().messageReceived(message);
         }
     }
     
@@ -699,7 +699,7 @@ public class Table {
     private void notifyBoardUpdated() {
         BigDecimal pot = getTotalPot();
         for (Player player : players) {
-            player.getClientHandler().boardUpdated(board, bet, pot);
+            player.getClient().boardUpdated(board, bet, pot);
         }
     }
     
@@ -733,7 +733,7 @@ public class Table {
                     // Hide secret information to other players.
                     player = player.publicClone();
                 }
-                playerToNotify.getClientHandler().playerUpdated(player);
+                playerToNotify.getClient().playerUpdated(player);
             }
         }
     }
@@ -744,7 +744,7 @@ public class Table {
     private void notifyPlayerActed() {
         for (Player p : players) {
             Player playerInfo = p.equals(actor) ? actor : actor.publicClone();
-            p.getClientHandler().playerActed(playerInfo);
+            p.getClient().playerActed(playerInfo);
         }
     }
     

@@ -80,15 +80,13 @@ public class Main extends JFrame implements Client {
         setLayout(new GridBagLayout());
 
         gc = new GridBagConstraints();
-
+        
         controlPanel = new ControlPanel(TABLE_TYPE);
-
-        boardPanel = new BoardPanel(controlPanel);
+        
+        boardPanel = new BoardPanel(controlPanel);        
         addComponent(boardPanel, 1, 1, 1, 1);
-
-
+        
         /* The players at the table. */
-        /*
         Map<String, Player> players = new LinkedHashMap<>();
         humanPlayer = new Player("Player", STARTING_CASH, this);
         players.put("Player", humanPlayer);
@@ -96,21 +94,12 @@ public class Main extends JFrame implements Client {
         players.put("Mike", new Player("Mike", STARTING_CASH, new BasicBot(25, 50)));
         players.put("Eddie", new Player("Eddie", STARTING_CASH, new BasicBot(50, 25)));
 
-
-         */
         /* The table. */
-
-        /*
-        Table table = new Table();
+        Table table = new Table(TABLE_TYPE, BIG_BLIND);
         for (Player player : players.values()) {
             table.addPlayer(player);
         }
 
-         */
-
-
-        // Create the player panels.
-        // Todo - get players from lobby/table or somewhere else
         playerPanels = new HashMap<>();
         int i = 0;
         for (Player player : players.values()) {
@@ -137,8 +126,7 @@ public class Main extends JFrame implements Client {
                     // Do nothing.
             }
         }
-
-
+        
         // Show the frame.
         pack();
         setResizable(false);
@@ -146,7 +134,7 @@ public class Main extends JFrame implements Client {
         setVisible(true);
 
         // Start the game.
-        //table.run();
+        table.run();
     }
     
     /**
@@ -211,8 +199,7 @@ public class Main extends JFrame implements Client {
             PlayerAction action = player.getAction();
             if (action != null) {
                 boardPanel.setMessage(String.format("%s %s.", name, action.getVerb()));
-                //todo - get this to work.
-                if (player.getClienth() != this) {
+                if (player.getClient() != this) {
                     boardPanel.waitForUserInput();
                 }
             }
