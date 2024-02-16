@@ -144,6 +144,7 @@ public class Main extends JFrame implements Client {
      *            The command line arguments.
      */
     public static void main(String[] args) {
+        StartMenu startMenu = new StartMenu(); //Creates new start menu
         new Main();
     }
 
