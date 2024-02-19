@@ -94,7 +94,7 @@ public class HandEvaluator {
         
         // Find special values.
         boolean isSpecialValue =
-                (isStraightFlush() ||
+                (!isStraightFlush().equals("Not a Straight Flush") ||
                  isFourOfAKind()   ||
                  isFullHouse()     ||
                  isFlush()         ||
@@ -437,8 +437,12 @@ public class HandEvaluator {
      * 
      * @return True if this hand contains a Straight Flush.
      */
-    public boolean isStraightFlush() {
+    public String isStraightFlush() {
+
+        String message = "";
+
         if (straightRank != -1 && flushRank == straightRank) {
+
             // Flush and Straight (possibly separate); check for Straight Flush.
             int straightRank2 = -1;
             int lastSuit = -1;
@@ -477,32 +481,34 @@ public class HandEvaluator {
                 lastRank = rank;
                 lastSuit = suit;
             }
-            
+
             if (inStraight >= 5 && inFlush >= 5) {
                 if (straightRank == Card.ACE) {
                     // Royal Flush.
                     type = HandValueType.ROYAL_FLUSH;
                     rankings[0] = type.getValue();
-                    return true;
+                    message = "Royal straight flush";
+                    return message;
                 } else {
                     // Straight Flush.
                     type = HandValueType.STRAIGHT_FLUSH;
                     rankings[0] = type.getValue();
                     rankings[1] = straightRank2;
-                    return true;
+                    message = "Straight flush";
+                    return message;
                 }
             } else if (wheelingAce && inStraight >= 4 && inFlush >= 4) {
                 // Steel Wheel (Straight Flush with wheeling Ace).
                 type = HandValueType.STRAIGHT_FLUSH;
                 rankings[0] = type.getValue();
                 rankings[1] = straightRank2;
-                return true;
-            } else {
-                return false;
+                message = "Straight flush with wheeling ace";
+                return message;
             }
-        } else {
-            return false;
         }
+
+        message = "Not a Straight Flush";
+        return message;
+
     }
-    
 }
