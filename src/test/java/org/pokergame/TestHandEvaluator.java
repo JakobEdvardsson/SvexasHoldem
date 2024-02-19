@@ -1,5 +1,6 @@
 package org.pokergame;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -30,6 +31,25 @@ public class TestHandEvaluator {
         hand = new Hand(cards);
         evaluator = new HandEvaluator(hand);
         assertEquals(false, evaluator.isOnePair());
+    }
+
+    @Test
+    @DisplayName("Steel Wheel testing")
+    void testSteelWheel() {
+        cards = new Card[] {
+                new Card(12, 0),
+                new Card(0, 0),
+                new Card(1, 0),
+                new Card(2, 0),
+                new Card(3, 0),
+                new Card(7, 2),
+                new Card(7, 3)
+        };
+
+        hand = new Hand(cards);
+        evaluator = new HandEvaluator(hand);
+
+        assertEquals("Straight flush with wheeling ace", evaluator.isStraightFlush());
     }
 
     @Test
@@ -135,20 +155,61 @@ public class TestHandEvaluator {
     }
 
     @Test
+    @DisplayName("Valid: Straight flush (no wheeling ace")
     void testIsStraightFlush() {
         //Test for straight flush.
         cards = new Card[] {new Card("4c"), new Card("5c"), new Card("6c"),
                 new Card("7c"), new Card("8c")};
         hand = new Hand(cards);
         evaluator = new HandEvaluator(hand);
-        assertEquals(true, evaluator.isStraightFlush());
+        assertEquals("Straight flush", evaluator.isStraightFlush());
+    }
 
-        //Test for straight flush when hand does not contain a straight flush.
+    @Test
+    @DisplayName("Invalid: Straight flush")
+    void testInvalidStraightFlush() {
         cards = new Card[] {new Card("4c"), new Card("4h"), new Card("6d"),
                 new Card("7h"), new Card("Jc")};
         hand = new Hand(cards);
         evaluator = new HandEvaluator(hand);
-        assertEquals(false, evaluator.isStraightFlush());
+        assertEquals("Not a Straight Flush", evaluator.isStraightFlush());
     }
 
+    @Test
+    @DisplayName("Valid: Royal straight flush")
+    void testIsRoyalFlush() {
+        cards = new Card[] {
+                new Card(12, 0),
+                new Card(11, 0),
+                new Card(10, 0),
+                new Card(9, 0),
+                new Card(8, 0),
+                new Card(6, 2),
+                new Card(3, 1)
+        };
+
+        Hand hand = new Hand(cards);
+        evaluator = new HandEvaluator(hand);
+
+        assertEquals("Royal straight flush", evaluator.isStraightFlush());
+    }
+
+    @Test
+    @DisplayName("Invalid: Royal straight flush")
+    void testIsNotRoyalFlush() {
+        cards = new Card[] {
+                new Card(12, 0),
+                new Card(11, 0),
+                new Card(10, 0),
+                new Card(4, 0),
+                new Card(8, 0),
+                new Card(6, 2),
+                new Card(3, 1)
+        };
+
+        Hand hand = new Hand(cards);
+        evaluator = new HandEvaluator(hand);
+
+        assertEquals("Not a Straight Flush", evaluator.isStraightFlush());
+    }
 }
