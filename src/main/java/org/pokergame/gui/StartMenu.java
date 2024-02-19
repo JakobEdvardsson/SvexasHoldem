@@ -7,8 +7,15 @@ public class StartMenu extends JFrame {
 
     public static final Color POKER_GREEN = new Color(0, 153, 0);
     JFrame frame;
-    JButton button, button1, button2;
+    JButton button, button1, button2, button3;
     JLabel label;
+    LanguageState state = LanguageState.ENGLISH;
+
+    public enum LanguageState {
+        ENGLISH,
+        SWEDISH
+    }
+
     ImageIcon[] slides = {
             new ImageIcon("src/main/resources/images/tutorial1.png"),
             new ImageIcon("src/main/resources/images/tutorial2.png"),
@@ -55,11 +62,38 @@ public class StartMenu extends JFrame {
         button2.addActionListener(e -> showTutorial(slides));
         frame.add(button2);
 
+        button3 = new JButton("Change language to Swedish");
+        button3.setBounds(220, 400, 250, 50);
+        button3.addActionListener(e -> changeLanguage());
+        frame.add(button3);
+
         frame.getContentPane().setBackground(POKER_GREEN);
         frame.setSize(700, 500);
         frame.setLayout(null);
         frame.setResizable(false);
         frame.setVisible(true);
+    }
+
+    private void changeLanguage() {
+        switch (state) {
+            case ENGLISH:
+                label.setText("LärMigPoker");
+                button.setText("Nytt spel");
+                button1.setText("Spela online");
+                button2.setText("Instruktioner");
+                button3.setText("Ändra språk till Engelska");
+                state = LanguageState.SWEDISH;
+                break;
+            case SWEDISH:
+                label.setText("TeachMePoker");
+                button.setText("New Game");
+                button1.setText("Play Online");
+                button2.setText("Tutorial");
+                button3.setText("Change language to Swedish");
+                state = LanguageState.ENGLISH;
+                break;
+        }
+
     }
 
     private void showTutorial(ImageIcon[] slides) {
