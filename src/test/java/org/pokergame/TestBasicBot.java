@@ -5,8 +5,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import org.pokergame.bots.BasicBot;
+import org.pokergame.util.PokerUtils;
 
 import java.lang.IllegalArgumentException;
+import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -105,6 +107,74 @@ public class TestBasicBot {
         String output = exception.getMessage();
 
         assertEquals(output, expectedMessage);
+    }
+
+    @Test
+    @DisplayName("CalculateBetAmount: zero aggression fixed limit")
+    public void calculateBetAmountZeroAggression() {
+        BasicBot bot = new BasicBot(50, 0);
+        bot.setTableType(TableType.FIXED_LIMIT);
+        BigDecimal bet = bot.calculateBetAmount(new BigDecimal(10));
+        assertEquals(new BigDecimal(10), bet);
+    }
+
+    @Test
+    @DisplayName("CalculateBetAmount: max aggression fixed limit")
+    public void calculateBetAmountMaxAggression() {
+        BasicBot bot = new BasicBot(50, 100);
+        bot.setTableType(TableType.FIXED_LIMIT);
+        BigDecimal bet = bot.calculateBetAmount(new BigDecimal(10));
+        assertEquals(new BigDecimal(10), bet);
+    }
+
+    @Test
+    @DisplayName("CalculateBetAmount: zero aggression no limit")
+    public void calculateBetAmountZeroAggressionNoLimit() {
+        BasicBot bot = new BasicBot(50, 0);
+        bot.setTableType(TableType.NO_LIMIT);
+        BigDecimal bet = bot.calculateBetAmount(new BigDecimal(10));
+        assertEquals(new BigDecimal(10), bet);
+    }
+
+    @Test
+    @DisplayName("CalculateBetAmount: max aggression fixed limit")
+    public void calculateBetAmountMaxAggressionNoLimit() {
+        BasicBot bot = new BasicBot(50, 100);
+        bot.setTableType(TableType.NO_LIMIT);
+        BigDecimal bet = bot.calculateBetAmount(new BigDecimal(10));
+        assertEquals(new BigDecimal(320), bet);
+    }
+
+    @Test
+    @DisplayName("ChenScore: Non-play - lower bound")
+    public void chenActionNonPlayFalse() {
+        Card[] cards = new Card[] {
+                new Card(12, 0), // ace of diamond
+                new Card(12, 1)  // ace of clubs
+        };
+
+        assert(PokerUtils.getChenScore(cards) == 20);
+
+        BasicBot bot = new BasicBot(95, 0); // 19
+        boolean play = bot.isChenActionNonPlay(cards);
+
+        assertFalse(play);
+    }
+
+    @Test
+    @DisplayName("ChenScore: Non-play - upper bound")
+    public void chenActionNonPlayTrue() {
+        Card[] cards = new Card[] {
+                new Card(12, 0), // ace of diamond
+                new Card(11, 1)  // king of clubs
+        };
+
+        assert(PokerUtils.getChenScore(cards) == 10);
+
+        BasicBot bot = new BasicBot(55, 0); // 11
+        boolean play = bot.isChenActionNonPlay(cards);
+
+        assertTrue(play);
     }
 
 
