@@ -26,7 +26,7 @@ public class ServerController {
     public Lobby joinLobby(ClientHandler clientHandler, int lobbyIndex) {
         Lobby lobby = lobbies.get(lobbyIndex);
         if (lobby.getAvailable()) {
-            lobby.addPlayer(clientHandler);
+           // lobby.addPlayer(clientHandler);
             return lobby;
         }
         return null;

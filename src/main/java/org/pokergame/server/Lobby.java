@@ -2,6 +2,7 @@ package org.pokergame.server;
 
 import org.pokergame.Player;
 import org.pokergame.Table;
+import org.pokergame.TableType;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -20,16 +21,16 @@ public class Lobby{
     private ArrayList<Player> players;
 
     public Lobby() {
-        table = new Table();
+        table = new Table(TableType.FIXED_LIMIT, new BigDecimal(100));
         players = new ArrayList<Player>();
     }
 
-    public Player addPlayer(ClientHandler clientHandler) {
+   /** public Player addPlayer(ClientHandler clientHandler) {
         //TODO: Implement name
         Player player = new Player("Implement_Name",startingCash, clientHandler);
         players.add(player);
         return player;
-    }
+    } */
 
 
 
