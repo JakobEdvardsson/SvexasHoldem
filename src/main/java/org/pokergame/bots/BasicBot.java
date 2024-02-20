@@ -131,10 +131,9 @@ public class BasicBot extends Bot {
     /**
      * Uses the check score of the cards and the tightness value of the bot
      * to determine if the bot should play or not.
-     * @param allowedActions The set of allowed actions available to the bot.
      * @return True if the bot should play, false otherwise.
      */
-    public boolean isChenActionNonPlay(Set<PlayerAction> allowedActions) {
+    public boolean isChenActionNonPlay(Card[] cards) {
         double chenScore = PokerUtils.getChenScore(cards);
         double chenScoreToPlay = tightness * 0.2;
 
@@ -142,6 +141,11 @@ public class BasicBot extends Bot {
         return chenScore < chenScoreToPlay;
     }
 
+    /**
+     * Calculates the bet amount for the bot.
+     * @param minBet minimum bet amount for the table.
+     * @return amount to bet.
+     */
     public BigDecimal calculateBetAmount(BigDecimal minBet) {
         BigDecimal bet = minBet;
 
@@ -185,7 +189,7 @@ public class BasicBot extends Bot {
         if (allowedActions.size() == 1) return PlayerAction.CHECK;
 
         // If chen formula is non-play, Check if available, otherwise Fold.
-        if (isChenActionNonPlay(allowedActions)) {
+        if (isChenActionNonPlay(cards)) {
             if (allowedActions.contains(PlayerAction.CHECK)) return PlayerAction.CHECK;
             else return PlayerAction.FOLD;
         }
@@ -199,6 +203,10 @@ public class BasicBot extends Bot {
 
     public int getAggression() {
         return aggression;
+    }
+
+    public void setTableType(TableType tableType) {
+        this.tableType = tableType;
     }
 
 }
