@@ -1,0 +1,26 @@
+{
+  "version": "2.2.0",
+  "summary": {
+    "title": "New Threat Model",
+    "owner": "SHasd, asd ajndnasjk aso, asds d",
+    "description": "Distributed API-service that connects a database of unicorns\n                with ChatGPT and Spotify to generate a fable with a paired music track from \n                Spotify. A Unicorn contains data like name, description, finder and location.\n                This together with \"happy\" or \"scary\" input gets us the fable, while the name of the\n                unicorn generates the song.\n\n                The fable is shown in the web application and all of the input comes from here.",
+    "id": 0
+  },
+  "detail": {
+    "contributors": [],
+    "diagrams": [
+      {
+        "id": 0,
+        "title": "New STRIDE diagram",
+        "diagramType": "STRIDE",
+        "placeholder": "New STRIDE diagram description",
+        "thumbnail": "./public/content/images/thumbnail.stride.jpg",
+        "version": "2.2.0",
+        "cells": []
+      }
+    ],
+    "diagramTop": 1,
+    "reviewer": "basse",
+    "threatTop": 0
+  }
+}
