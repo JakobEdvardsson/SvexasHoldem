@@ -84,6 +84,7 @@ public class StartMenu extends JFrame {
         frame.getContentPane().setBackground(POKER_GREEN);
         frame.setSize(700, 500);
         frame.setLayout(null);
+        frame.setLocationRelativeTo(null);
         frame.setResizable(false);
         frame.setVisible(true);
     }
