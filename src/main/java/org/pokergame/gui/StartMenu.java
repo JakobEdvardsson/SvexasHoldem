@@ -10,7 +10,7 @@ public class StartMenu extends JFrame {
     private JLabel usernameLabel;
     private JTextField username;
     private  JButton button, button1, button2, button3;
-    private JLabel label;
+    private JLabel label, label1;
     LanguageState state = LanguageState.ENGLISH;
   
     public enum LanguageState {
@@ -42,7 +42,7 @@ public class StartMenu extends JFrame {
         setTitle("Start Menu");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        Label label = new Label("TeachMe poker");
+        label = new JLabel("TeachMe poker");
         label.setBounds(260, 55, 220, 80);
         label.setFont(new Font("Arial", Font.BOLD, 30));
 
