@@ -111,10 +111,17 @@ public class Card implements Comparable<Card> {
         if (s.length() != 2) {
             throw new IllegalArgumentException("Empty string or invalid length");
         }
-        
+
+        this.rank = parseRank(s);
+        this.suit = parseSuit(s);
+
+    }
+
+    public int parseRank(String s) {
+
         // Parse the rank character.
         String rankSymbol = s.substring(0, 1);
-        char suitSymbol = s.charAt(1);
+
         int rank = -1;
         for (int i = 0; i < Card.NO_OF_RANKS; i++) {
             if (rankSymbol.equals(RANK_SYMBOLS[i])) {
@@ -125,7 +132,13 @@ public class Card implements Comparable<Card> {
         if (rank == -1) {
             throw new IllegalArgumentException("Unknown rank: " + rankSymbol);
         }
+        return rank;
+    }
+
+    public int parseSuit(String s){
+
         // Parse the suit character.
+        char suitSymbol = s.charAt(1);
         int suit = -1;
         for (int i = 0; i < Card.NO_OF_SUITS; i++) {
             if (suitSymbol == SUIT_SYMBOLS[i]) {
@@ -136,8 +149,7 @@ public class Card implements Comparable<Card> {
         if (suit == -1) {
             throw new IllegalArgumentException("Unknown suit: " + suitSymbol);
         }
-        this.rank = rank;
-        this.suit = suit;
+        return suit;
     }
     
     /**
