@@ -16,12 +16,15 @@ public class ServerConnection extends Thread {
 
     @Override
     public void run() {
+        Socket socket = null;
 
-        try (ServerSocket serverSocket = new ServerSocket(port)){
+        try (ServerSocket serverSocket = new ServerSocket(this.port)){
             while (true) {
                 try {
-                    Socket socket = serverSocket.accept();
-                    new ClientHandler(socket, serverController).start();
+                    System.out.println("serverconnection try sats");
+                    socket = serverSocket.accept();
+                    ClientHandler clintan = new ClientHandler(socket, serverController);
+                    clintan.start();
                     System.out.println("Someone connected to the server");
                 } catch (IOException e) {
                     e.printStackTrace();

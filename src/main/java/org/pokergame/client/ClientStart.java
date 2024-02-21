@@ -1,11 +1,9 @@
 package org.pokergame.client;
 
-public class ClientStart {
-    public static void main(String[] args) {
-        startClient();
-    }
+import java.io.IOException;
 
-    public static void startClient() {
+public class ClientStart {
+    public static void main(String[] args) throws IOException {
         ClientController clientcontroller = new ClientController("localhost",1337);
     }
 

@@ -4,22 +4,22 @@ import org.pokergame.gui.Main;
 import org.pokergame.toClientCommands.*;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 public class ClientController {
+    private int port;
+    private String ip;
     private Socket socket;
-    private ClientOutput clientOutput;
-    private ClientInput clientInput;
     private Main ClientGUI;
+    private ClientOutput cOut;
+    private ClientInput cIn;
 
-    public ClientController(String ip, int port) {
-        try {
-            //change ip and port to instance variables later on...
-            socket = new Socket(ip, port);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+    public ClientController(String ip, int port) throws IOException {
+        this.ip=ip;
+        this.port=port;
+        socket = new Socket(ip, port);
 
         //create the GUI
         ClientGUI = new Main();
@@ -27,11 +27,64 @@ public class ClientController {
 
 
         // create the input and output streams
-        clientInput = new ClientInput(socket, this);
-        clientInput.start();
+        cOut = new ClientOutput(socket);
+        cOut.start();
+        cIn = new ClientInput(socket);
+        cIn.start();
+    }
 
-        clientOutput = new ClientOutput(socket);
-        clientOutput.start();
+    private class ClientOutput extends Thread {
+        Socket socket;
+        private ObjectOutputStream oos;
+
+
+
+        public ClientOutput(Socket socket) throws IOException {
+            this.socket = socket;
+            oos = new ObjectOutputStream(socket.getOutputStream());
+
+        }
+
+        @Override
+        public void run() {
+            try {
+
+                String message = "Hejsandejsansvejsan";
+                oos.writeObject(message);
+                oos.flush();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+        }
+    }
+
+    private class ClientInput extends Thread{
+        Socket socket;
+        private ObjectInputStream ois;
+
+        public ClientInput(Socket socket){
+            this.socket = socket;
+        }
+
+        @Override
+        public void run() {
+            try {
+                socket = new Socket(ip, port);
+                ois = new ObjectInputStream(socket.getInputStream());
+                Object object = ois.readObject();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            } finally {
+                try {
+                    ois.close();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
     }
 
 
