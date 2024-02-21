@@ -10,6 +10,7 @@ import org.pokergame.util.PokerUtils;
 
 import java.lang.IllegalArgumentException;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -115,7 +116,7 @@ public class TestBasicBot {
     @DisplayName("CalculateBetAmount: zero aggression fixed limit")
     public void calculateBetAmountZeroAggression() {
         BasicBot bot = new BasicBot(50, 0);
-        bot.setTableType(TableType.FIXED_LIMIT);
+        bot.joinedTable(TableType.FIXED_LIMIT, new BigDecimal(10), null);
         BigDecimal bet = bot.calculateBetAmount(new BigDecimal(10));
         assertEquals(new BigDecimal(10), bet);
     }
@@ -124,7 +125,7 @@ public class TestBasicBot {
     @DisplayName("CalculateBetAmount: max aggression fixed limit")
     public void calculateBetAmountMaxAggression() {
         BasicBot bot = new BasicBot(50, 100);
-        bot.setTableType(TableType.FIXED_LIMIT);
+        bot.joinedTable(TableType.FIXED_LIMIT, new BigDecimal(10), null);
         BigDecimal bet = bot.calculateBetAmount(new BigDecimal(10));
         assertEquals(new BigDecimal(10), bet);
     }
@@ -133,7 +134,7 @@ public class TestBasicBot {
     @DisplayName("CalculateBetAmount: zero aggression no limit")
     public void calculateBetAmountZeroAggressionNoLimit() {
         BasicBot bot = new BasicBot(50, 0);
-        bot.setTableType(TableType.NO_LIMIT);
+        bot.joinedTable(TableType.NO_LIMIT, new BigDecimal(10), null);
         BigDecimal bet = bot.calculateBetAmount(new BigDecimal(10));
         assertEquals(new BigDecimal(10), bet);
     }
@@ -142,7 +143,7 @@ public class TestBasicBot {
     @DisplayName("CalculateBetAmount: max aggression fixed limit")
     public void calculateBetAmountMaxAggressionNoLimit() {
         BasicBot bot = new BasicBot(50, 100);
-        bot.setTableType(TableType.NO_LIMIT);
+        bot.joinedTable(TableType.NO_LIMIT, new BigDecimal(10), null);
         BigDecimal bet = bot.calculateBetAmount(new BigDecimal(10));
         assertEquals(new BigDecimal(320), bet);
     }
@@ -150,15 +151,17 @@ public class TestBasicBot {
     @Test
     @DisplayName("ChenScore: Non-play - lower bound")
     public void chenActionNonPlayFalse() {
-        Card[] cards = new Card[] {
+        List<Card> cards = List.of(
                 new Card(12, 0), // ace of diamond
                 new Card(12, 1)  // ace of clubs
-        };
-
-        assert(PokerUtils.getChenScore(cards) == 20);
+        );
 
         BasicBot bot = new BasicBot(95, 0); // 19
-        boolean play = bot.isChenActionNonPlay(cards);
+        Player testPlayer = new Player("test", new BigDecimal(1000), null);
+        testPlayer.setCards(cards);
+        bot.playerUpdated(testPlayer);
+
+        boolean play = bot.isChenActionNonPlay();
 
         assertFalse(play);
     }
@@ -166,15 +169,18 @@ public class TestBasicBot {
     @Test
     @DisplayName("ChenScore: Non-play - upper bound")
     public void chenActionNonPlayTrue() {
-        Card[] cards = new Card[] {
+
+        List<Card> cards = List.of(
                 new Card(12, 0), // ace of diamond
                 new Card(11, 1)  // king of clubs
-        };
-
-        assert(PokerUtils.getChenScore(cards) == 10);
+        );
 
         BasicBot bot = new BasicBot(55, 0); // 11
-        boolean play = bot.isChenActionNonPlay(cards);
+        Player testPlayer = new Player("test", new BigDecimal(1000), null);
+        testPlayer.setCards(cards);
+        bot.playerUpdated(testPlayer);
+
+        boolean play = bot.isChenActionNonPlay();
 
         assertTrue(play);
     }
@@ -189,13 +195,17 @@ public class TestBasicBot {
                 PlayerAction.CHECK
         );
 
-        Card[] cards = new Card[] { // Chen: 20
+        List<Card> cards = List.of(
                 new Card(12, 0), // ace of diamond
                 new Card(12, 1)  // ace of clubs
-        };
+        );
 
         BasicBot bot = new BasicBot(100, 50);
-        PlayerAction action = bot.getChenActionPlay(allowedActions, cards, new BigDecimal(100));
+        Player testPlayer = new Player("test", new BigDecimal(1000), null);
+        testPlayer.setCards(cards);
+        bot.playerUpdated(testPlayer);
+
+        PlayerAction action = bot.getChenActionPlay(allowedActions, new BigDecimal(100));
 
         assertInstanceOf(BetAction.class, action);
     }
@@ -210,13 +220,18 @@ public class TestBasicBot {
                 PlayerAction.CHECK
         );
 
-        Card[] cards = new Card[] { // Chen: 20
+
+        List<Card> cards = List.of(
                 new Card(12, 0), // ace of diamond
                 new Card(12, 1)  // ace of clubs
-        };
+        );
 
         BasicBot bot = new BasicBot(100, 50);
-        PlayerAction action = bot.getChenActionPlay(allowedActions, cards, new BigDecimal(100));
+        Player testPlayer = new Player("test", new BigDecimal(1000), null);
+        testPlayer.setCards(cards);
+        bot.playerUpdated(testPlayer);
+
+        PlayerAction action = bot.getChenActionPlay(allowedActions, new BigDecimal(100));
 
         assertInstanceOf(RaiseAction.class, action);
     }
@@ -231,13 +246,18 @@ public class TestBasicBot {
                 PlayerAction.CHECK
         );
 
-        Card[] cards = new Card[] { // Chen: 20
+
+        List<Card> cards = List.of(
                 new Card(12, 0), // ace of diamond
                 new Card(12, 1)  // ace of clubs
-        };
+        );
 
         BasicBot bot = new BasicBot(100, 50);
-        PlayerAction action = bot.getChenActionPlay(allowedActions, cards, new BigDecimal(100));
+        Player testPlayer = new Player("test", new BigDecimal(1000), null);
+        testPlayer.setCards(cards);
+        bot.playerUpdated(testPlayer);
+
+        PlayerAction action = bot.getChenActionPlay(allowedActions, new BigDecimal(100));
 
         assertInstanceOf(CallAction.class, action);
     }
@@ -252,13 +272,17 @@ public class TestBasicBot {
                 PlayerAction.CHECK
         );
 
-        Card[] cards = new Card[] { // Chen: 20
+        List<Card> cards = List.of(
                 new Card(12, 0), // ace of diamond
                 new Card(12, 1)  // ace of clubs
-        };
+        );
 
         BasicBot bot = new BasicBot(100, 50);
-        PlayerAction action = bot.getChenActionPlay(allowedActions, cards, new BigDecimal(100));
+        Player testPlayer = new Player("test", new BigDecimal(1000), null);
+        testPlayer.setCards(cards);
+        bot.playerUpdated(testPlayer);
+
+        PlayerAction action = bot.getChenActionPlay(allowedActions, new BigDecimal(100));
 
         assertInstanceOf(CheckAction.class, action);
     }
@@ -273,20 +297,25 @@ public class TestBasicBot {
                 // PlayerAction.CHECK
         );
 
-        Card[] cards = new Card[] { // Chen: 20
-                new Card(5, 0), // ace of diamond
-                new Card(5, 1)  // ace of clubs
-        };
+        List<Card> cards = List.of(
+              new Card(5, 0), // ace of diamond
+              new Card(5, 1)  // ace of clubs
+        );
 
         BasicBot bot = new BasicBot(50, 50);
-        PlayerAction action = bot.getChenActionPlay(allowedActions, cards, new BigDecimal(100));
+        Player testPlayer = new Player("test", new BigDecimal(1000), null);
+        testPlayer.setCards(cards);
+        bot.playerUpdated(testPlayer);
 
+        PlayerAction action = bot.getChenActionPlay(allowedActions, new BigDecimal(100));
         assertInstanceOf(CallAction.class, action);
     }
 
     @Test
     @DisplayName("ChenScore: Non-Play Check (Tightness)")
     public void chenActionNonPlayCheck() {
+        BasicBot bot = new BasicBot(50, 50);
+
         Set<PlayerAction> allowedActions = Set.of(
                 // PlayerAction.BET,
                 // PlayerAction.RAISE,
@@ -294,17 +323,134 @@ public class TestBasicBot {
                 PlayerAction.CHECK
         );
 
-        Card[] cards = new Card[] { // Chen: 20
+        List<Card> cards = List.of(
                 new Card(5, 0), // ace of diamond
                 new Card(5, 1)  // ace of clubs
-        };
+        );
 
-        BasicBot bot = new BasicBot(50, 50);
-        PlayerAction action = bot.getChenActionPlay(allowedActions, cards, new BigDecimal(100));
+        Player testPlayer = new Player("test", new BigDecimal(1000), null);
+        testPlayer.setCards(cards);
+        bot.playerUpdated(testPlayer);
 
+        PlayerAction action = bot.getChenActionPlay(allowedActions, new BigDecimal(100));
         assertInstanceOf(CheckAction.class, action);
     }
 
+    @Test
+    @DisplayName("Act: allowedActions[1] (valid)")
+    public void actOneActionValid() {
+        BasicBot bot = new BasicBot(50, 50);
 
+        BigDecimal minBet = new BigDecimal(10);
+        BigDecimal currentBet = new BigDecimal(10);
 
+        Set<PlayerAction> allowedActions = Set.of(
+                PlayerAction.CHECK
+        );
+
+        PlayerAction action = bot.act(minBet, currentBet, allowedActions);
+        assertInstanceOf(CheckAction.class, action);
+    }
+
+    @Test
+    @DisplayName("Act: allowedActions[1] (invalid)")
+    public void actOneActionInvalid() {
+        BasicBot bot = new BasicBot(50, 50);
+
+        BigDecimal minBet = new BigDecimal(10);
+        BigDecimal currentBet = new BigDecimal(10);
+
+        Set<PlayerAction> allowedActions = Set.of(
+                PlayerAction.CALL
+        );
+
+        IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            bot.act(minBet, currentBet, allowedActions);
+        });
+
+        String message = exception.getMessage();
+        String expected = "Check not available, broken state";
+
+        assertEquals(expected, message);
+    }
+
+    @Test
+    @DisplayName("Act: Chen Action, Non-play (Check)")
+    public void actChenActionNonPlayCheck() {
+        BasicBot bot = new BasicBot(50, 50);
+
+        BigDecimal minBet = new BigDecimal(10);
+        BigDecimal currentBet = new BigDecimal(10);
+
+        Set<PlayerAction> allowedActions = Set.of(
+                PlayerAction.CHECK,
+                PlayerAction.FOLD
+        );
+
+        List<Card> cards = List.of(
+                new Card(3, 0),
+                new Card(5, 1)
+        );
+
+        Player testPlayer = new Player("test", new BigDecimal(1000), null);
+        testPlayer.setCards(cards);
+        bot.playerUpdated(testPlayer);
+
+        PlayerAction action = bot.act(minBet, currentBet, allowedActions);
+        assertInstanceOf(CheckAction.class, action);
+    }
+
+    @Test
+    @DisplayName("Act: Chen Action, Non-play (Fold)")
+    public void actChenActionNonPlayFold() {
+        BasicBot bot = new BasicBot(50, 50);
+
+        BigDecimal minBet = new BigDecimal(10);
+        BigDecimal currentBet = new BigDecimal(10);
+
+        Set<PlayerAction> allowedActions = Set.of(
+                PlayerAction.RAISE, // Need to have at least 2 actions if one is not check.
+                // PlayerAction.CHECK,
+                PlayerAction.FOLD
+        );
+
+        List<Card> cards = List.of(
+                new Card(3, 0),
+                new Card(5, 1)
+        );
+
+        Player testPlayer = new Player("test", new BigDecimal(1000), null);
+        testPlayer.setCards(cards);
+        bot.playerUpdated(testPlayer);
+
+        PlayerAction action = bot.act(minBet, currentBet, allowedActions);
+        assertInstanceOf(FoldAction.class, action);
+    }
+
+    @Test
+    @DisplayName("Act: Chen Action Play")
+    public void actChenActionPlay() {
+        BasicBot bot = new BasicBot(50, 50);
+
+        BigDecimal minBet = new BigDecimal(10);
+        BigDecimal currentBet = new BigDecimal(10);
+
+        Set<PlayerAction> allowedActions = Set.of(
+                PlayerAction.RAISE, // Need to have at least 2 actions if one is not check.
+                // PlayerAction.CHECK,
+                PlayerAction.FOLD
+        );
+
+        List<Card> cards = List.of(
+                new Card(12, 0),
+                new Card(12, 1)
+        );
+
+        Player testPlayer = new Player("test", new BigDecimal(1000), null);
+        testPlayer.setCards(cards);
+        bot.playerUpdated(testPlayer);
+
+        PlayerAction action = bot.act(minBet, currentBet, allowedActions);
+        assertInstanceOf(RaiseAction.class, action);
+    }
 }

@@ -133,7 +133,7 @@ public class BasicBot extends Bot {
      * to determine if the bot should play or not.
      * @return True if the bot should play, false otherwise.
      */
-    public boolean isChenActionNonPlay(Card[] cards) {
+    public boolean isChenActionNonPlay() {
         double chenScore = PokerUtils.getChenScore(cards);
         double chenScoreToPlay = tightness * 0.2;
 
@@ -165,7 +165,7 @@ public class BasicBot extends Bot {
      * @param minBet The minimum bet amount for the table.
      * @return
      */
-    public PlayerAction getChenActionPlay(Set<PlayerAction> allowedActions, Card[] cards, BigDecimal minBet) {
+    public PlayerAction getChenActionPlay(Set<PlayerAction> allowedActions, BigDecimal minBet) {
         double chenScore = PokerUtils.getChenScore(cards);
         double chenScoreToPlay = tightness * 0.2;
 
@@ -187,15 +187,21 @@ public class BasicBot extends Bot {
     public PlayerAction act(BigDecimal minBet, BigDecimal currentBet, Set<PlayerAction> allowedActions) {
 
         // If only check is available.
-        if (allowedActions.size() == 1) return PlayerAction.CHECK;
+        if (allowedActions.size() == 1) {
+            if (!allowedActions.contains(PlayerAction.CHECK)) {
+                throw new IllegalArgumentException("Check not available, broken state");
+            }
+
+            return PlayerAction.CHECK;
+        }
 
         // If chen formula is non-play, Check if available, otherwise Fold.
-        if (isChenActionNonPlay(cards)) {
+        if (isChenActionNonPlay()) {
             if (allowedActions.contains(PlayerAction.CHECK)) return PlayerAction.CHECK;
             else return PlayerAction.FOLD;
         }
 
-        return getChenActionPlay(allowedActions, cards, minBet);
+        return getChenActionPlay(allowedActions, minBet);
     }
 
     public int getTightness() {
@@ -205,9 +211,4 @@ public class BasicBot extends Bot {
     public int getAggression() {
         return aggression;
     }
-
-    public void setTableType(TableType tableType) {
-        this.tableType = tableType;
-    }
-
 }
