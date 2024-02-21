@@ -128,85 +128,87 @@ public class BasicBot extends Bot {
         // Not implemented.
     }
 
+    /**
+     * Uses the check score of the cards and the tightness value of the bot
+     * to determine if the bot should play or not.
+     * @return True if the bot should play, false otherwise.
+     */
+    public boolean isChenActionNonPlay() {
+        double chenScore = PokerUtils.getChenScore(cards);
+        double chenScoreToPlay = tightness * 0.2;
+
+        // Check if chenScore is high enough to play.
+        return chenScore < chenScoreToPlay;
+    }
+
+    /**
+     * Calculates the bet amount for the bot.
+     * @param minBet minimum bet amount for the table.
+     * @return amount to bet.
+     */
+    public BigDecimal calculateBetAmount(BigDecimal minBet) {
+        BigDecimal bet = minBet;
+
+        if (tableType == TableType.NO_LIMIT) {
+            int betLevel = aggression / 20;
+            for (int i = 0; i < betLevel; i++) {
+                bet = bet.add(bet);
+            }
+        }
+
+        return bet;
+    }
+
+    /**
+     * Depending on the chen formula, determine the action to take.
+     * @param allowedActions The set of allowed actions available to the bot.
+     * @param minBet The minimum bet amount for the table.
+     * @return
+     */
+    public PlayerAction getChenActionPlay(Set<PlayerAction> allowedActions, BigDecimal minBet) {
+        double chenScore = PokerUtils.getChenScore(cards);
+        double chenScoreToPlay = tightness * 0.2;
+
+        if ((chenScore - chenScoreToPlay) >= ((20.0 - chenScoreToPlay) / 2.0)) {
+            BigDecimal amount = calculateBetAmount(minBet);
+            if (allowedActions.contains(PlayerAction.BET)) return new BetAction(amount);
+            if (allowedActions.contains(PlayerAction.RAISE)) return new RaiseAction(amount);
+            if (allowedActions.contains(PlayerAction.CALL)) return PlayerAction.CALL;
+            if (allowedActions.contains(PlayerAction.CHECK)) return PlayerAction.CHECK;
+        }
+
+        // tightness too low for hand, check / call
+        if (allowedActions.contains(PlayerAction.CHECK)) return PlayerAction.CHECK;
+        else return PlayerAction.CALL;
+    }
+
     /** {@inheritDoc} */
     @Override
     public PlayerAction act(BigDecimal minBet, BigDecimal currentBet, Set<PlayerAction> allowedActions) {
-        PlayerAction action;
+
+        // If only check is available.
         if (allowedActions.size() == 1) {
-            // No choice, must check.
-            action = PlayerAction.CHECK;
-        } else {
-            double chenScore = PokerUtils.getChenScore(cards);
-            double chenScoreToPlay = tightness * 0.2;
-            if ((chenScore < chenScoreToPlay)) {
-                if (allowedActions.contains(PlayerAction.CHECK)) {
-                    // Always check for free if possible.
-                    action = PlayerAction.CHECK;
-                } else {
-                    // Bad hole cards; play tight.
-                    action = PlayerAction.FOLD;
-                }
-            } else {
-                // Good enough hole cards, play hand.
-                if ((chenScore - chenScoreToPlay) >= ((20.0 - chenScoreToPlay) / 2.0)) {
-                    // Very good hole cards; bet or raise!
-                    if (aggression == 0) {
-                        // Never bet.
-                        if (allowedActions.contains(PlayerAction.CALL)) {
-                            action = PlayerAction.CALL;
-                        } else {
-                            action = PlayerAction.CHECK;
-                        }
-                    } else if (aggression == 100) {
-                        // Always go all-in!
-                        //FIXME: Check and bet/raise player's remaining cash.
-                        BigDecimal amount = (tableType == TableType.FIXED_LIMIT) ? minBet : minBet.multiply(BigDecimal.TEN.multiply(BigDecimal.TEN));
-                        if (allowedActions.contains(PlayerAction.BET)) {
-                            action = new BetAction(amount);
-                        } else if (allowedActions.contains(PlayerAction.RAISE)) {
-                            action = new RaiseAction(amount);
-                        } else if (allowedActions.contains(PlayerAction.CALL)) {
-                            action = PlayerAction.CALL;
-                        } else {
-                            action = PlayerAction.CHECK;
-                        }
-                    } else {
-                        BigDecimal amount = minBet;
-                        if (tableType == TableType.NO_LIMIT) {
-                            int betLevel = aggression / 20;
-                            for (int i = 0; i < betLevel; i++) {
-                                amount = amount.add(amount);
-                            }
-                        }
-                        if (currentBet.compareTo(amount) < 0) {
-                            if (allowedActions.contains(PlayerAction.BET)) {
-                                action = new BetAction(amount);
-                            } else if (allowedActions.contains(PlayerAction.RAISE)) {
-                                action = new RaiseAction(amount);
-                            } else if (allowedActions.contains(PlayerAction.CALL)) {
-                                action = PlayerAction.CALL;
-                            } else {
-                                action = PlayerAction.CHECK;
-                            }
-                        } else {
-                            if (allowedActions.contains(PlayerAction.CALL)) {
-                                action = PlayerAction.CALL;
-                            } else {
-                                action = PlayerAction.CHECK;
-                            }
-                        }
-                    }
-                } else {
-                    // Decent hole cards; check or call.
-                    if (allowedActions.contains(PlayerAction.CHECK)) {
-                        action = PlayerAction.CHECK;
-                    } else {
-                        action = PlayerAction.CALL;
-                    }
-                }
+            if (!allowedActions.contains(PlayerAction.CHECK)) {
+                throw new IllegalArgumentException("Check not available, broken state");
             }
+
+            return PlayerAction.CHECK;
         }
-        return action;
+
+        // If chen formula is non-play, Check if available, otherwise Fold.
+        if (isChenActionNonPlay()) {
+            if (allowedActions.contains(PlayerAction.CHECK)) return PlayerAction.CHECK;
+            else return PlayerAction.FOLD;
+        }
+
+        return getChenActionPlay(allowedActions, minBet);
     }
-    
+
+    public int getTightness() {
+        return tightness;
+    }
+
+    public int getAggression() {
+        return aggression;
+    }
 }
