@@ -165,7 +165,7 @@ public class BasicBot extends Bot {
      * @param minBet The minimum bet amount for the table.
      * @return
      */
-    public PlayerAction getChenActionPlay(Set<PlayerAction> allowedActions, BigDecimal minBet) {
+    public PlayerAction getChenActionPlay(Set<PlayerAction> allowedActions, Card[] cards, BigDecimal minBet) {
         double chenScore = PokerUtils.getChenScore(cards);
         double chenScoreToPlay = tightness * 0.2;
 
@@ -177,8 +177,9 @@ public class BasicBot extends Bot {
             if (allowedActions.contains(PlayerAction.CHECK)) return PlayerAction.CHECK;
         }
 
+        // tightness too low for hand, check / call
         if (allowedActions.contains(PlayerAction.CHECK)) return PlayerAction.CHECK;
-        return PlayerAction.CALL;
+        else return PlayerAction.CALL;
     }
 
     /** {@inheritDoc} */
@@ -194,7 +195,7 @@ public class BasicBot extends Bot {
             else return PlayerAction.FOLD;
         }
 
-        return getChenActionPlay(allowedActions, minBet);
+        return getChenActionPlay(allowedActions, cards, minBet);
     }
 
     public int getTightness() {
