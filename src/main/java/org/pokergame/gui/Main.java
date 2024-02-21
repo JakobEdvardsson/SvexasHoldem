@@ -211,7 +211,7 @@ public class Main extends JFrame implements Client {
     }
 
     @Override
-    public PlayerAction act(BigDecimal minBet, BigDecimal currentBet, Set<PlayerAction> allowedActions, Card[] cards) {
+    public PlayerAction act(BigDecimal minBet, BigDecimal currentBet, Set<PlayerAction> allowedActions) {
         boardPanel.setMessage("Please select an action:");
         return controlPanel.getUserInput(minBet, humanPlayer.getCash(), allowedActions);
     }
