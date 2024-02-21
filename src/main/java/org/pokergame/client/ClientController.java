@@ -7,83 +7,42 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Scanner;
 
 public class ClientController {
     private int port;
     private String ip;
     private Socket socket;
     private Main ClientGUI;
-    private ClientOutput cOut;
-    private ClientInput cIn;
+
+    private ClientOutputX clientOutput;
+    private ClientInputX clientInput;
+
 
     public ClientController(String ip, int port) throws IOException {
         this.ip=ip;
         this.port=port;
         socket = new Socket(ip, port);
 
+
         //create the GUI
-        ClientGUI = new Main();
+        //ClientGUI = new Main();
         /* The table. */
 
 
         // create the input and output streams
-        cOut = new ClientOutput(socket);
-        cOut.start();
-        cIn = new ClientInput(socket);
-        cIn.start();
-    }
+        clientInput = new ClientInputX(socket, this);
+        clientInput.start();
 
-    private class ClientOutput extends Thread {
-        Socket socket;
-        private ObjectOutputStream oos;
+        clientOutput = new ClientOutputX(socket);
+        clientOutput.start();
 
 
-
-        public ClientOutput(Socket socket) throws IOException {
-            this.socket = socket;
-            oos = new ObjectOutputStream(socket.getOutputStream());
-
-        }
-
-        @Override
-        public void run() {
-            try {
-
-                String message = "Hejsandejsansvejsan";
-                oos.writeObject(message);
-                oos.flush();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-
-        }
-    }
-
-    private class ClientInput extends Thread{
-        Socket socket;
-        private ObjectInputStream ois;
-
-        public ClientInput(Socket socket){
-            this.socket = socket;
-        }
-
-        @Override
-        public void run() {
-            try {
-                socket = new Socket(ip, port);
-                ois = new ObjectInputStream(socket.getInputStream());
-                Object object = ois.readObject();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            } catch (ClassNotFoundException e) {
-                throw new RuntimeException(e);
-            } finally {
-                try {
-                    ois.close();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
+        while (true) {
+            System.out.print("Enter message to send to client: ");
+            Scanner scanner = new Scanner(System.in);
+            String message = scanner.nextLine();
+            clientOutput.sendMessage(message);
         }
     }
 
@@ -91,6 +50,7 @@ public class ClientController {
     /**
      * Command from the server to the client
      * Acts as interface between the server and the client
+     * ClientInput lyssnar på objekt -> som i sin tur kallar på denna metoden
      *
      * @param message
      */

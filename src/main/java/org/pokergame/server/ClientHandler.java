@@ -19,26 +19,28 @@ public class ClientHandler extends Thread {
     private ServerController serverController;
     private ObjectInputStream ois;
 
+    private ServerInput serverInput;
+    private ServerOutput serverOutput;
 
-    public ClientHandler(Socket socket, ServerController serverController) throws IOException {
+
+    public ClientHandler(Socket socket, ServerController serverController){
         System.out.println("Client Handler created");
         this.socket = socket;
         this.serverController = serverController;
-        //ois = new ObjectInputStream(socket.getInputStream());
-
     }
 
     @Override
     public void run() {
-        try {
-            ois = new ObjectInputStream(socket.getInputStream());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("Thread in clienthandler? ");
+        serverInput = new ServerInput(socket, this);
+        serverInput.start();
+        serverOutput = new ServerOutput(socket);
+        serverOutput.start();
+
         while (true) {
             System.out.print("Enter message to send to client: ");
             Scanner scanner = new Scanner(System.in);
+            String message = scanner.nextLine();
+            serverOutput.sendMessage(message);
         }
 
         /*TODO:
