@@ -195,7 +195,7 @@ public class AmountPanel extends JPanel implements ChangeListener, ActionListene
     public void stateChanged(ChangeEvent e) {
         int index = amountSlider.getValue();
       BigDecimal amount = sliderAmounts.get(index);
-      amountLabel.setText(String.format("$ %f", amount.doubleValue()));
+      amountLabel.setText(String.format("$ %.2f", amount.doubleValue()));
     }
 
     /** {@inheritDoc} */

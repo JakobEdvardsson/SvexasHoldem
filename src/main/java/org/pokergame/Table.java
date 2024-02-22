@@ -416,7 +416,7 @@ public class Table {
                         BigDecimal amount = getTotalPot();
                         winner.win(amount);
                         notifyBoardUpdated();
-                        notifyMessage("%s wins $ %d.", winner, amount);
+                        notifyMessage("%s wins $ %.2f.", winner, amount.setScale(2));
                         playersToAct = 0;
                     }
                 } else {
