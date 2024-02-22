@@ -133,7 +133,7 @@ public class BasicBot extends Bot {
      * to determine if the bot should play or not.
      * @return True if the bot should play, false otherwise.
      */
-    public boolean isChenActionNonPlay() {
+    private boolean isChenActionNonPlay() {
         double chenScore = PokerUtils.getChenScore(cards);
         double chenScoreToPlay = tightness * 0.2;
 
@@ -146,7 +146,7 @@ public class BasicBot extends Bot {
      * @param minBet minimum bet amount for the table.
      * @return amount to bet.
      */
-    public BigDecimal calculateBetAmount(BigDecimal minBet) {
+    private BigDecimal calculateBetAmount(BigDecimal minBet) {
         BigDecimal bet = minBet;
 
         if (tableType == TableType.NO_LIMIT) {
@@ -165,7 +165,7 @@ public class BasicBot extends Bot {
      * @param minBet The minimum bet amount for the table.
      * @return
      */
-    public PlayerAction getChenActionPlay(Set<PlayerAction> allowedActions, BigDecimal minBet) {
+    private PlayerAction getChenActionPlay(Set<PlayerAction> allowedActions, BigDecimal minBet) {
         double chenScore = PokerUtils.getChenScore(cards);
         double chenScoreToPlay = tightness * 0.2;
 
