@@ -9,6 +9,8 @@ import org.pokergame.bots.BasicBot;
 import org.pokergame.util.PokerUtils;
 
 import java.lang.IllegalArgumentException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
@@ -117,7 +119,18 @@ public class TestBasicBot {
     public void calculateBetAmountZeroAggression() {
         BasicBot bot = new BasicBot(50, 0);
         bot.joinedTable(TableType.FIXED_LIMIT, new BigDecimal(10), null);
-        BigDecimal bet = bot.calculateBetAmount(new BigDecimal(10));
+
+        BigDecimal bet;
+
+        try {
+            Method calculateBetAmount = BasicBot.class.getDeclaredMethod("calculateBetAmount", BigDecimal.class);
+            calculateBetAmount.setAccessible(true);
+            bet = (BigDecimal) calculateBetAmount.invoke(bot, new BigDecimal(10));
+
+        } catch (ReflectiveOperationException e) {
+            throw new RuntimeException(e);
+        }
+
         assertEquals(new BigDecimal(10), bet);
     }
 
@@ -126,7 +139,18 @@ public class TestBasicBot {
     public void calculateBetAmountMaxAggression() {
         BasicBot bot = new BasicBot(50, 100);
         bot.joinedTable(TableType.FIXED_LIMIT, new BigDecimal(10), null);
-        BigDecimal bet = bot.calculateBetAmount(new BigDecimal(10));
+
+        BigDecimal bet;
+
+        try {
+            Method calculateBetAmount = BasicBot.class.getDeclaredMethod("calculateBetAmount", BigDecimal.class);
+            calculateBetAmount.setAccessible(true);
+            bet = (BigDecimal) calculateBetAmount.invoke(bot, new BigDecimal(10));
+
+        } catch (ReflectiveOperationException e) {
+            throw new RuntimeException(e);
+        }
+
         assertEquals(new BigDecimal(10), bet);
     }
 
@@ -135,7 +159,18 @@ public class TestBasicBot {
     public void calculateBetAmountZeroAggressionNoLimit() {
         BasicBot bot = new BasicBot(50, 0);
         bot.joinedTable(TableType.NO_LIMIT, new BigDecimal(10), null);
-        BigDecimal bet = bot.calculateBetAmount(new BigDecimal(10));
+
+        BigDecimal bet;
+
+        try {
+            Method calculateBetAmount = BasicBot.class.getDeclaredMethod("calculateBetAmount", BigDecimal.class);
+            calculateBetAmount.setAccessible(true);
+            bet = (BigDecimal) calculateBetAmount.invoke(bot, new BigDecimal(10));
+
+        } catch (ReflectiveOperationException e) {
+            throw new RuntimeException(e);
+        }
+
         assertEquals(new BigDecimal(10), bet);
     }
 
@@ -144,7 +179,17 @@ public class TestBasicBot {
     public void calculateBetAmountMaxAggressionNoLimit() {
         BasicBot bot = new BasicBot(50, 100);
         bot.joinedTable(TableType.NO_LIMIT, new BigDecimal(10), null);
-        BigDecimal bet = bot.calculateBetAmount(new BigDecimal(10));
+        BigDecimal bet;
+
+        try {
+            Method calculateBetAmount = BasicBot.class.getDeclaredMethod("calculateBetAmount", BigDecimal.class);
+            calculateBetAmount.setAccessible(true);
+            bet = (BigDecimal) calculateBetAmount.invoke(bot, new BigDecimal(10));
+
+        } catch (ReflectiveOperationException e) {
+            throw new RuntimeException(e);
+        }
+
         assertEquals(new BigDecimal(320), bet);
     }
 
@@ -161,7 +206,16 @@ public class TestBasicBot {
         testPlayer.setCards(cards);
         bot.playerUpdated(testPlayer);
 
-        boolean play = bot.isChenActionNonPlay();
+        boolean play;
+
+        try {
+            Method isChenActionNonPlay = BasicBot.class.getDeclaredMethod("isChenActionNonPlay");
+            isChenActionNonPlay.setAccessible(true);
+            play = (boolean) isChenActionNonPlay.invoke(bot);
+
+        } catch (ReflectiveOperationException e) {
+            throw new RuntimeException(e);
+        }
 
         assertFalse(play);
     }
@@ -180,7 +234,16 @@ public class TestBasicBot {
         testPlayer.setCards(cards);
         bot.playerUpdated(testPlayer);
 
-        boolean play = bot.isChenActionNonPlay();
+        boolean play;
+
+        try {
+            Method isChenActionNonPlay = BasicBot.class.getDeclaredMethod("isChenActionNonPlay");
+            isChenActionNonPlay.setAccessible(true);
+            play = (boolean) isChenActionNonPlay.invoke(bot);
+
+        } catch (ReflectiveOperationException e) {
+            throw new RuntimeException(e);
+        }
 
         assertTrue(play);
     }
@@ -205,7 +268,16 @@ public class TestBasicBot {
         testPlayer.setCards(cards);
         bot.playerUpdated(testPlayer);
 
-        PlayerAction action = bot.getChenActionPlay(allowedActions, new BigDecimal(100));
+        PlayerAction action;
+
+        try {
+            Method getChenActionPlay = BasicBot.class.getDeclaredMethod("getChenActionPlay", Set.class, BigDecimal.class);
+            getChenActionPlay.setAccessible(true);
+            action = (PlayerAction) getChenActionPlay.invoke(bot, allowedActions, new BigDecimal(100));
+
+        } catch (ReflectiveOperationException e) {
+            throw new RuntimeException(e);
+        }
 
         assertInstanceOf(BetAction.class, action);
     }
@@ -231,7 +303,16 @@ public class TestBasicBot {
         testPlayer.setCards(cards);
         bot.playerUpdated(testPlayer);
 
-        PlayerAction action = bot.getChenActionPlay(allowedActions, new BigDecimal(100));
+        PlayerAction action;
+
+        try {
+            Method getChenActionPlay = BasicBot.class.getDeclaredMethod("getChenActionPlay", Set.class, BigDecimal.class);
+            getChenActionPlay.setAccessible(true);
+            action = (PlayerAction) getChenActionPlay.invoke(bot, allowedActions, new BigDecimal(100));
+
+        } catch (ReflectiveOperationException e) {
+            throw new RuntimeException(e);
+        }
 
         assertInstanceOf(RaiseAction.class, action);
     }
@@ -257,7 +338,16 @@ public class TestBasicBot {
         testPlayer.setCards(cards);
         bot.playerUpdated(testPlayer);
 
-        PlayerAction action = bot.getChenActionPlay(allowedActions, new BigDecimal(100));
+        PlayerAction action;
+
+        try {
+            Method getChenActionPlay = BasicBot.class.getDeclaredMethod("getChenActionPlay", Set.class, BigDecimal.class);
+            getChenActionPlay.setAccessible(true);
+            action = (PlayerAction) getChenActionPlay.invoke(bot, allowedActions, new BigDecimal(100));
+
+        } catch (ReflectiveOperationException e) {
+            throw new RuntimeException(e);
+        }
 
         assertInstanceOf(CallAction.class, action);
     }
@@ -282,7 +372,16 @@ public class TestBasicBot {
         testPlayer.setCards(cards);
         bot.playerUpdated(testPlayer);
 
-        PlayerAction action = bot.getChenActionPlay(allowedActions, new BigDecimal(100));
+        PlayerAction action;
+
+        try {
+            Method getChenActionPlay = BasicBot.class.getDeclaredMethod("getChenActionPlay", Set.class, BigDecimal.class);
+            getChenActionPlay.setAccessible(true);
+            action = (PlayerAction) getChenActionPlay.invoke(bot, allowedActions, new BigDecimal(100));
+
+        } catch (ReflectiveOperationException e) {
+            throw new RuntimeException(e);
+        }
 
         assertInstanceOf(CheckAction.class, action);
     }
@@ -307,7 +406,16 @@ public class TestBasicBot {
         testPlayer.setCards(cards);
         bot.playerUpdated(testPlayer);
 
-        PlayerAction action = bot.getChenActionPlay(allowedActions, new BigDecimal(100));
+        PlayerAction action;
+
+        try {
+            Method getChenActionPlay = BasicBot.class.getDeclaredMethod("getChenActionPlay", Set.class, BigDecimal.class);
+            getChenActionPlay.setAccessible(true);
+            action = (PlayerAction) getChenActionPlay.invoke(bot, allowedActions, new BigDecimal(100));
+
+        } catch (ReflectiveOperationException e) {
+            throw new RuntimeException(e);
+        }
         assertInstanceOf(CallAction.class, action);
     }
 
@@ -332,7 +440,17 @@ public class TestBasicBot {
         testPlayer.setCards(cards);
         bot.playerUpdated(testPlayer);
 
-        PlayerAction action = bot.getChenActionPlay(allowedActions, new BigDecimal(100));
+        PlayerAction action;
+
+        try {
+            Method getChenActionPlay = BasicBot.class.getDeclaredMethod("getChenActionPlay", Set.class, BigDecimal.class);
+            getChenActionPlay.setAccessible(true);
+            action = (PlayerAction) getChenActionPlay.invoke(bot, allowedActions, new BigDecimal(100));
+
+        } catch (ReflectiveOperationException e) {
+            throw new RuntimeException(e);
+        }
+
         assertInstanceOf(CheckAction.class, action);
     }
 
