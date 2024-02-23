@@ -78,7 +78,6 @@ public class StartMenu extends JFrame {
         button1.addActionListener(e -> {
             setUsernameText(username.getText());
             System.out.println("Play online button pressed. Username: " + getUsernameText());
-            clientOutput.sendMessage(getUsernameText());
         });
         frame.add(button1);
 

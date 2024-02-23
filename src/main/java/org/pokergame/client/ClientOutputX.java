@@ -9,7 +9,7 @@ public class ClientOutputX extends Thread{
     private Socket socket;
     private ObjectOutputStream out;
 
-    public ClientOutputX(Socket socket){
+    public ClientOutputX(Socket socket) {
         this.socket = socket;
 
         try {
@@ -19,7 +19,7 @@ public class ClientOutputX extends Thread{
         }
     }
     
-    public void sendMessage(Object message){
+    public void sendMessage(Object message) {
         try {
             out.writeObject(message);
             out.flush();
@@ -29,4 +29,5 @@ public class ClientOutputX extends Thread{
         }
 
     }
+
 }

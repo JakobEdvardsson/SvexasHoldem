@@ -2,12 +2,9 @@ package org.pokergame.client;
 
 import org.pokergame.gui.Main;
 import org.pokergame.gui.StartMenu;
-import org.pokergame.server.ServerOutput;
 import org.pokergame.toClientCommands.*;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Scanner;
 
@@ -21,12 +18,14 @@ public class ClientController {
 
     private ClientOutputX clientOutput;
     private ClientInputX clientInput;
+    private String username = startMenu.getUsernameText();
 
 
     public ClientController(String ip, int port) throws IOException {
         this.ip=ip;
         this.port=port;
         socket = new Socket(ip, port);
+
 
 
         //create the GUI
@@ -44,24 +43,25 @@ public class ClientController {
         startMenu = new StartMenu();
 
 
-
         while (true) {
             //Use who is online.
-            String username = startMenu.getUsernameText();
-            System.out.println("User is: " + username);
-            clientOutput.sendMessage(username);
+            String message2 = getUsernameText();
+            System.out.println("Message som skickas är: " + message2);
 
-            /*System.out.print("Enter message to send to client: ");
+
+            System.out.print("Enter message to send to client: ");
             Scanner scanner = new Scanner(System.in);
             String message = scanner.nextLine();
-            clientOutput.sendMessage(message);*/
-
-
-
+            clientOutput.sendMessage(message);
 
         }
     }
 
+    public String getUsernameText() {
+        String username = startMenu.getUsernameText();
+        return username;
+
+    }
 
     /**
      * Command from the server to the client
