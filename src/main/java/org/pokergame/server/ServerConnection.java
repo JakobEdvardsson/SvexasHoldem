@@ -21,7 +21,6 @@ public class ServerConnection extends Thread {
             ServerSocket serverSocket = new ServerSocket(this.port);
             while (true) {
                 try {
-                    System.out.println("serverconnection try sats");
                     Socket socket = serverSocket.accept();
                     ClientHandler clientHandler = new ClientHandler(socket, serverController);
                     clientHandler.start();

@@ -1,6 +1,8 @@
 package org.pokergame.client;
 
 import org.pokergame.gui.Main;
+import org.pokergame.gui.StartMenu;
+import org.pokergame.server.ServerOutput;
 import org.pokergame.toClientCommands.*;
 
 import java.io.IOException;
@@ -15,6 +17,8 @@ public class ClientController {
     private Socket socket;
     private Main ClientGUI;
 
+    private StartMenu startMenu;
+
     private ClientOutputX clientOutput;
     private ClientInputX clientInput;
 
@@ -26,7 +30,7 @@ public class ClientController {
 
 
         //create the GUI
-        //ClientGUI = new Main();
+        ClientGUI = new Main();
         /* The table. */
 
 
@@ -37,12 +41,21 @@ public class ClientController {
         clientOutput = new ClientOutputX(socket);
         clientOutput.start();
 
+        startMenu = new StartMenu();
+        String username = startMenu.getCurrentUser();
+
 
         while (true) {
-            System.out.print("Enter message to send to client: ");
+            /*System.out.print("Enter message to send to client: ");
             Scanner scanner = new Scanner(System.in);
             String message = scanner.nextLine();
-            clientOutput.sendMessage(message);
+            clientOutput.sendMessage(message);*/
+
+            //Use who is online.
+            String thisUser = startMenu.getCurrentUser();
+            System.out.println("User is: " + thisUser);
+            clientOutput.sendUsername(thisUser);
+
         }
     }
 

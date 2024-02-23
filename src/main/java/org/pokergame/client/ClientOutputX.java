@@ -29,4 +29,13 @@ public class ClientOutputX extends Thread{
         }
 
     }
+
+    public void sendUsername(String username) {
+        try {
+            out.writeObject(username);
+            out.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
