@@ -37,6 +37,7 @@ public class ClientHandler extends Thread {
         serverOutput.start();
 
         while (true) {
+
             System.out.print("Enter message to send to client: ");
             Scanner scanner = new Scanner(System.in);
             String message = scanner.nextLine();

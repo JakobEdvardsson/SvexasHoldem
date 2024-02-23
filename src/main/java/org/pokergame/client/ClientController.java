@@ -42,19 +42,22 @@ public class ClientController {
         clientOutput.start();
 
         startMenu = new StartMenu();
-        String username = startMenu.getCurrentUser();
+
 
 
         while (true) {
+            //Use who is online.
+            String username = startMenu.getUsernameText();
+            System.out.println("User is: " + username);
+            clientOutput.sendMessage(username);
+
             /*System.out.print("Enter message to send to client: ");
             Scanner scanner = new Scanner(System.in);
             String message = scanner.nextLine();
             clientOutput.sendMessage(message);*/
 
-            //Use who is online.
-            String thisUser = startMenu.getCurrentUser();
-            System.out.println("User is: " + thisUser);
-            clientOutput.sendUsername(thisUser);
+
+
 
         }
     }

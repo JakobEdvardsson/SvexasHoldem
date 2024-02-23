@@ -1,5 +1,7 @@
 package org.pokergame.gui;
 
+import org.pokergame.client.ClientOutputX;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -11,6 +13,11 @@ public class StartMenu extends JFrame {
     private JTextField username;
     private  JButton button, button1, button2, button3;
     private JLabel label, label1;
+    private ClientOutputX clientOutput;
+
+
+
+    private String usernameText;
     LanguageState state = LanguageState.ENGLISH;
   
     public enum LanguageState {
@@ -68,7 +75,11 @@ public class StartMenu extends JFrame {
 
         button1 = new JButton("Play online");
         button1.setBounds(265, 220, 150, 50);
-        button1.addActionListener(e -> System.out.println("Play online button pressed"));
+        button1.addActionListener(e -> {
+            setUsernameText(username.getText());
+            System.out.println("Play online button pressed. Username: " + getUsernameText());
+            clientOutput.sendMessage(getUsernameText());
+        });
         frame.add(button1);
 
         button2 = new JButton("Tutorial");
@@ -87,6 +98,14 @@ public class StartMenu extends JFrame {
         frame.setLocationRelativeTo(null);
         frame.setResizable(false);
         frame.setVisible(true);
+    }
+
+    public String getUsernameText() {
+        return usernameText;
+    }
+
+    public void setUsernameText(String usernameText) {
+        this.usernameText = usernameText;
     }
 
     private void changeLanguage() {
