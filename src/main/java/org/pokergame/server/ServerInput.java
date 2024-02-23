@@ -24,10 +24,12 @@ public class ServerInput extends Thread {
 
             while (true) {
                 Object incomingMessage = recieveMessage();
-
+                System.out.println(incomingMessage.toString());
                 if (incomingMessage instanceof String) {
                     System.out.println(incomingMessage);
 
+                }else{
+                    System.out.println("No thong pappi");
                 }
             }
 

@@ -75,7 +75,7 @@ public class Main extends JFrame implements Client {
     public Main() {
         super("Texas Hold'em poker");
 
-        StartMenu startMenu = new StartMenu(); //Creates new start menu
+        //StartMenu startMenu = new StartMenu(); //Creates new start menu
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setBackground(UIConstants.TABLE_COLOR);

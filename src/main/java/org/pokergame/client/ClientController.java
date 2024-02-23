@@ -26,13 +26,6 @@ public class ClientController {
         this.port=port;
         socket = new Socket(ip, port);
 
-
-
-        //create the GUI
-        ClientGUI = new Main();
-        /* The table. */
-
-
         // create the input and output streams
         clientInput = new ClientInputX(socket, this);
         clientInput.start();
@@ -40,27 +33,24 @@ public class ClientController {
         clientOutput = new ClientOutputX(socket);
         clientOutput.start();
 
-        startMenu = new StartMenu();
+        /* The table. */
 
 
         while (true) {
-            //Use who is online.
-            String message2 = getUsernameText();
-            System.out.println("Message som skickas är: " + message2);
-
-
-            System.out.print("Enter message to send to client: ");
+            System.out.print("Enter message to send to server: ");
             Scanner scanner = new Scanner(System.in);
             String message = scanner.nextLine();
             clientOutput.sendMessage(message);
-
+            if (message.equals("exit")) {
+                break;
+            }
         }
+        ClientGUI = new Main();
     }
 
     public String getUsernameText() {
         String username = startMenu.getUsernameText();
         return username;
-
     }
 
     /**

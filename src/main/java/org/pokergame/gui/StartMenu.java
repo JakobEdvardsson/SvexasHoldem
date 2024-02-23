@@ -14,10 +14,7 @@ public class StartMenu extends JFrame {
     private  JButton button, button1, button2, button3;
     private JLabel label, label1;
     private ClientOutputX clientOutput;
-
-
-
-    private String usernameText;
+    private static String usernameText;
     LanguageState state = LanguageState.ENGLISH;
   
     public enum LanguageState {
@@ -99,7 +96,7 @@ public class StartMenu extends JFrame {
         frame.setVisible(true);
     }
 
-    public String getUsernameText() {
+    public static String getUsernameText() {
         return usernameText;
     }
 
