@@ -16,6 +16,7 @@ public class StartMenu extends JFrame {
     private ClientOutputX clientOutput;
     private static String usernameText;
     LanguageState state = LanguageState.ENGLISH;
+    private Main clientGUI;
   
     public enum LanguageState {
         ENGLISH,
@@ -67,7 +68,9 @@ public class StartMenu extends JFrame {
 
         button = new JButton("New game");
         button.setBounds(70, 220, 150, 50);
-        button.addActionListener(e -> System.out.println("New game button pressed"));
+        button.addActionListener(e -> { System.out.println("New game button pressed");
+        clientGUI = new Main();
+        });
         frame.add(button);
 
         button1 = new JButton("Play online");

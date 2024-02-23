@@ -139,15 +139,9 @@ public class Main extends JFrame implements Client {
         table.run();
     }
     
-    /**
-     * The application's entry point.
-     * 
-     * @param args
-     *            The command line arguments.
-     */
+
     public static void main(String[] args) {
         new Main();
-
     }
 
     @Override

@@ -4,6 +4,7 @@ import org.pokergame.gui.Main;
 import org.pokergame.gui.StartMenu;
 import org.pokergame.toClientCommands.*;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Scanner;
@@ -45,7 +46,10 @@ public class ClientController {
                 break;
             }
         }
-        ClientGUI = new Main();
+        SwingUtilities.invokeLater(() -> {
+            StartMenu startMenu = new StartMenu();
+        });
+        //StartMenu startMenu = new StartMenu();
     }
 
     public String getUsernameText() {
