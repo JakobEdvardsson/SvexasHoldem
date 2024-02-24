@@ -75,7 +75,6 @@ public class Main extends JFrame implements Client {
     public Main() {
         super("Texas Hold'em poker");
 
-        //StartMenu startMenu = new StartMenu(); //Creates new start menu
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setBackground(UIConstants.TABLE_COLOR);
@@ -84,7 +83,6 @@ public class Main extends JFrame implements Client {
         gc = new GridBagConstraints();
         
         controlPanel = new ControlPanel(TABLE_TYPE);
-        
         boardPanel = new BoardPanel(controlPanel);        
         addComponent(boardPanel, 1, 1, 1, 1);
         
@@ -128,7 +126,7 @@ public class Main extends JFrame implements Client {
                     // Do nothing.
             }
         }
-        
+
         // Show the frame.
         pack();
         setResizable(false);
@@ -138,11 +136,14 @@ public class Main extends JFrame implements Client {
         // Start the game.
         table.run();
     }
-    
 
-    public static void main(String[] args) {
-        new Main();
+    public startTable() {
+
+
+        // Start the game.
+        table.run();
     }
+
 
     @Override
     public void joinedTable(TableType type, BigDecimal bigBlind, List<Player> players) {

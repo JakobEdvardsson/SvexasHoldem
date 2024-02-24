@@ -15,8 +15,10 @@ public class StartMenu extends JFrame {
     private JLabel label, label1;
     private ClientOutputX clientOutput;
     private static String usernameText;
+
+    private Main main;
     LanguageState state = LanguageState.ENGLISH;
-    private Main clientGUI;
+    //private Main clientGUI;
   
     public enum LanguageState {
         ENGLISH,
@@ -69,7 +71,7 @@ public class StartMenu extends JFrame {
         button = new JButton("New game");
         button.setBounds(70, 220, 150, 50);
         button.addActionListener(e -> { System.out.println("New game button pressed");
-        clientGUI = new Main();
+       startGame();
         });
         frame.add(button);
 
@@ -101,6 +103,14 @@ public class StartMenu extends JFrame {
 
     public static String getUsernameText() {
         return usernameText;
+    }
+
+    public void startGame() {
+        SwingUtilities.invokeLater(() -> {
+            main = new Main();
+
+            main.setVisible(true);
+        });
     }
 
     public void setUsernameText(String usernameText) {
