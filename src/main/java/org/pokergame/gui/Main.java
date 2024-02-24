@@ -34,7 +34,7 @@ import java.util.*;
  * 
  * @author Oscar Stigter
  */
-public class Main extends JFrame implements Client,Runnable {
+public class Main extends JFrame implements Client {
     
     /** Serial version UID. */
     private static final long serialVersionUID = -5414633931666096443L;
@@ -135,12 +135,9 @@ public class Main extends JFrame implements Client,Runnable {
         setVisible(true);
 
         // Start the game.
-        table.run();
+        //table.run();
     }
-    @Override
-    public void run() {
 
-    }
 
 
 

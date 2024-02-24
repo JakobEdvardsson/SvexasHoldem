@@ -49,7 +49,7 @@ import java.util.*;
  * 
  * @author Oscar Stigter
  */
-public class Table {
+public class Table extends Thread{
     
     /** In fixed-limit games, the maximum number of raises per betting round. */
     private static final int MAX_RAISES = 3;
@@ -116,6 +116,7 @@ public class Table {
         deck = new Deck();
         board = new ArrayList<>();
         pots = new ArrayList<>();
+        start();
     }
     
     /**

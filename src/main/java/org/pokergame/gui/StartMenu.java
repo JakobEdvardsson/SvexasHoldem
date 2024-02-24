@@ -51,6 +51,14 @@ public class StartMenu extends JFrame {
         setTitle("Start Menu");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        SwingUtilities.invokeLater(() -> {
+            initializeGUI();
+        });
+
+
+    }
+
+    private void initializeGUI() {
         label = new JLabel("TeachMe poker");
         label.setBounds(260, 55, 220, 80);
         label.setFont(new Font("Arial", Font.BOLD, 30));
@@ -78,9 +86,6 @@ public class StartMenu extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("New game button pressed. Username: " + username.getText());
                 main = new Main();
-                main.setVisible(true);
-                Thread thread = new Thread(main);
-                thread.start();
             }
         });
         frame.add(button);
@@ -109,6 +114,8 @@ public class StartMenu extends JFrame {
         frame.setLocationRelativeTo(null);
         frame.setResizable(false);
         frame.setVisible(true);
+
+
     }
 
     public static String getUsernameText() {
