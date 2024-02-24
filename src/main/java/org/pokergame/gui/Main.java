@@ -34,7 +34,7 @@ import java.util.*;
  * 
  * @author Oscar Stigter
  */
-public class Main extends JFrame implements Client {
+public class Main extends JFrame implements Client,Runnable {
     
     /** Serial version UID. */
     private static final long serialVersionUID = -5414633931666096443L;
@@ -76,16 +76,17 @@ public class Main extends JFrame implements Client {
         super("Texas Hold'em poker");
 
 
+
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setBackground(UIConstants.TABLE_COLOR);
         setLayout(new GridBagLayout());
 
         gc = new GridBagConstraints();
-        
+
         controlPanel = new ControlPanel(TABLE_TYPE);
-        boardPanel = new BoardPanel(controlPanel);        
+        boardPanel = new BoardPanel(controlPanel);
         addComponent(boardPanel, 1, 1, 1, 1);
-        
+
         /* The players at the table. */
         Map<String, Player> players = new LinkedHashMap<>();
         humanPlayer = new Player("Player", STARTING_CASH, this);
@@ -136,13 +137,11 @@ public class Main extends JFrame implements Client {
         // Start the game.
         table.run();
     }
+    @Override
+    public void run() {
 
-    public startTable() {
-
-
-        // Start the game.
-        table.run();
     }
+
 
 
     @Override
@@ -268,5 +267,6 @@ public class Main extends JFrame implements Client {
             }
         }
     }
+
 
 }

@@ -4,6 +4,8 @@ import org.pokergame.client.ClientOutputX;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class StartMenu extends JFrame {
 
@@ -70,8 +72,16 @@ public class StartMenu extends JFrame {
 
         button = new JButton("New game");
         button.setBounds(70, 220, 150, 50);
-        button.addActionListener(e -> { System.out.println("New game button pressed");
-       startGame();
+        button.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("New game button pressed. Username: " + username.getText());
+                main = new Main();
+                main.setVisible(true);
+                Thread thread = new Thread(main);
+                thread.start();
+            }
         });
         frame.add(button);
 
@@ -105,13 +115,6 @@ public class StartMenu extends JFrame {
         return usernameText;
     }
 
-    public void startGame() {
-        SwingUtilities.invokeLater(() -> {
-            main = new Main();
-
-            main.setVisible(true);
-        });
-    }
 
     public void setUsernameText(String usernameText) {
         this.usernameText = usernameText;
