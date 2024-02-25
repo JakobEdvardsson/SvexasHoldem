@@ -36,8 +36,14 @@ public class ClientController {
 
         /* The table. */
 
-
+        SwingUtilities.invokeLater(() -> {
+            StartMenu startMenu = new StartMenu();
+        });
         while (true) {
+
+
+            clientOutput.sendMessage(getUsernameText());
+
             System.out.print("Enter message to send to server: ");
             Scanner scanner = new Scanner(System.in);
             String message = scanner.nextLine();
@@ -46,9 +52,9 @@ public class ClientController {
                 break;
             }
         }
-        SwingUtilities.invokeLater(() -> {
+        /**SwingUtilities.invokeLater(() -> {
             StartMenu startMenu = new StartMenu();
-        });
+        }); */
         //StartMenu startMenu = new StartMenu();
     }
 

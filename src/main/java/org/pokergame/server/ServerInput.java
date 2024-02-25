@@ -11,6 +11,7 @@ public class ServerInput extends Thread {
     private Socket socket;
     private ObjectInputStream in;
     private ClientHandler clientHandler;
+    private Lobby lobby;
 
     public ServerInput(Socket socket, ClientHandler clientHandler) {
         this.socket = socket;
@@ -24,11 +25,12 @@ public class ServerInput extends Thread {
 
             while (true) {
                 Object incomingMessage = recieveMessage();
-                System.out.println(incomingMessage.toString());
+                //System.out.println(incomingMessage.toString());
                 if (incomingMessage instanceof String) {
                     System.out.println(incomingMessage);
+                    ServerController.getInstance().joinLobby(incomingMessage.toString(), 1);
 
-                }else{
+                }else {
                     System.out.println("No thong pappi");
                 }
             }

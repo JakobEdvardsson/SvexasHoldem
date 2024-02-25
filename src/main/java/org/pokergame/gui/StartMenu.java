@@ -7,7 +7,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+
 public class StartMenu extends JFrame {
+
+
 
     public static final Color POKER_GREEN = new Color(0,153, 0);
     private JFrame frame;
@@ -17,7 +20,7 @@ public class StartMenu extends JFrame {
     private JLabel label, label1;
     private ClientOutputX clientOutput;
     private static String usernameText;
-
+    private JList onlineUserRoomList;
     private Main main;
     LanguageState state = LanguageState.ENGLISH;
     //private Main clientGUI;
@@ -66,7 +69,6 @@ public class StartMenu extends JFrame {
         frame = new JFrame("Start menu");
         frame.add(label);
 
-
         usernameLabel = new JLabel("Username:");
         usernameLabel.setBounds(70, 130, 165, 50);
         usernameLabel.setFont(new Font("Arial", Font.BOLD, 18));
@@ -78,15 +80,15 @@ public class StartMenu extends JFrame {
         username.setVisible(true);
         frame.add(username);
 
-        button = new JButton("New game");
+        button = new JButton("Play offline");
         button.setBounds(70, 220, 150, 50);
         button.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                usernameText = username.getText();
                 System.out.println("New game button pressed. Username: " + username.getText());
                 main = new Main();
+                frame.setVisible(false);
             }
         });
         frame.add(button);
@@ -94,8 +96,9 @@ public class StartMenu extends JFrame {
         button1 = new JButton("Play online");
         button1.setBounds(265, 220, 150, 50);
         button1.addActionListener(e -> {
-            setUsernameText(username.getText());
+            usernameText = username.getText();
             System.out.println("Play online button pressed. Username: " + getUsernameText());
+            lobbyView();
         });
         frame.add(button1);
 
@@ -116,6 +119,25 @@ public class StartMenu extends JFrame {
         frame.setResizable(false);
         frame.setVisible(true);
 
+    }
+
+    private void lobbyView() {
+        button.setVisible(false);
+        button1.setVisible(false);
+        button2.setVisible(false);
+        button3.setVisible(false);
+        username.setVisible(false);
+        usernameLabel.setVisible(false);
+
+        label.setText("Lobby");
+
+
+        onlineUserRoomList = new JList<>();
+        //onlineUserRoomList.setModel(null);
+        onlineUserRoomList.setSize(400,700);
+        onlineUserRoomList.setLocation(350,10);
+        onlineUserRoomList.setVisible(true);
+        frame.add(onlineUserRoomList);
 
     }
 
@@ -132,7 +154,7 @@ public class StartMenu extends JFrame {
         switch (state) {
             case ENGLISH:
                 label.setText("LärMigPoker");
-                button.setText("Nytt spel");
+                button.setText("Spela offline");
                 button1.setText("Spela online");
                 button2.setText("Instruktioner");
                 button3.setText("Ändra språk till Engelska");
@@ -140,7 +162,7 @@ public class StartMenu extends JFrame {
                 break;
             case SWEDISH:
                 label.setText("TeachMePoker");
-                button.setText("New Game");
+                button.setText("Play offline");
                 button1.setText("Play Online");
                 button2.setText("Tutorial");
                 button3.setText("Change language to Swedish");

@@ -10,6 +10,8 @@ import java.util.ArrayList;
 public class Lobby{
     private final BigDecimal startingCash = new BigDecimal(1000);
     private int lobbyIndex;
+    private int size = 5;
+    private String[] player;
 
     /** If the lobby is open to join */
     private Boolean available = true;
@@ -23,6 +25,7 @@ public class Lobby{
     public Lobby() {
         table = new Table(TableType.FIXED_LIMIT, new BigDecimal(100));
         players = new ArrayList<Player>();
+        player = new String[size];
     }
 
    /** public Player addPlayer(ClientHandler clientHandler) {
@@ -32,6 +35,17 @@ public class Lobby{
         return player;
     } */
 
+
+   public void addPlayer(String playerName) {
+       for (int i = 0; i < size; i++) {
+           if (player[i] == null) {
+                player[i] = playerName;
+                break;
+           }
+
+           }
+
+       }
 
 
     public Boolean getAvailable() {
