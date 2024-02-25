@@ -84,6 +84,7 @@ public class StartMenu extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
+                usernameText = username.getText();
                 System.out.println("New game button pressed. Username: " + username.getText());
                 main = new Main();
             }
