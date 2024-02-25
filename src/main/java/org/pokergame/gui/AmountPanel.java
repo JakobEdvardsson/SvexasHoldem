@@ -95,19 +95,21 @@ public class AmountPanel extends JPanel implements ChangeListener, ActionListene
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.fill = GridBagConstraints.NONE;
         gbc.insets = new Insets(0, 0, 0, 5);
+        amountSlider.setPreferredSize(new Dimension(250, 30));
         add(amountSlider, gbc);
 
         amountLabel = new JLabel(" ");
         amountLabel.setForeground(UIConstants.TEXT_COLOR);
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        gbc.gridwidth = 2;
+        gbc.gridx = 5;
+        gbc.gridy = 0;
+        gbc.gridwidth = 1;
         gbc.gridheight = 1;
         gbc.weightx = 0.0;
         gbc.weighty = 0.0;
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.fill = GridBagConstraints.NONE;
-        gbc.insets = new Insets(5, 0, 5, 0);
+        gbc.insets = new Insets(0, 0, 0, 0);
+        amountLabel.setPreferredSize(new Dimension(65, 25));
         add(amountLabel, gbc);
 
       betRaiseButton = new JButton("Bet");
@@ -194,8 +196,8 @@ public class AmountPanel extends JPanel implements ChangeListener, ActionListene
     @Override
     public void stateChanged(ChangeEvent e) {
         int index = amountSlider.getValue();
-      BigDecimal amount = sliderAmounts.get(index);
-      amountLabel.setText(String.format("$ %.2f", amount.doubleValue()));
+        BigDecimal amount = sliderAmounts.get(index);
+        amountLabel.setText(String.format("<html>Amount<br />$ %.2f</html>", amount.setScale(2)));
     }
 
     /** {@inheritDoc} */
