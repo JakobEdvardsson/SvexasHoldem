@@ -10,13 +10,11 @@ import java.awt.event.ActionListener;
 
 public class StartMenu extends JFrame {
 
-
-
     public static final Color POKER_GREEN = new Color(0,153, 0);
     private JFrame frame;
     private JLabel usernameLabel;
     private JTextField username;
-    private  JButton button, button1, button2, button3;
+    private  JButton button, button1, button2, button3, saveUsernameButton;
     private JLabel label, label1;
     private ClientOutputX clientOutput;
     private static String usernameText;
@@ -53,15 +51,6 @@ public class StartMenu extends JFrame {
     public StartMenu() {
         setTitle("Start Menu");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        SwingUtilities.invokeLater(() -> {
-            initializeGUI();
-        });
-
-
-    }
-
-    private void initializeGUI() {
         label = new JLabel("TeachMe poker");
         label.setBounds(260, 55, 220, 80);
         label.setFont(new Font("Arial", Font.BOLD, 30));
@@ -79,6 +68,40 @@ public class StartMenu extends JFrame {
         username.setBackground(Color.white);
         username.setVisible(true);
         frame.add(username);
+
+        saveUsernameButton = new JButton("Save username");
+        saveUsernameButton.setBounds(70, 220, 150, 50);
+        saveUsernameButton.setVisible(true);
+        frame.add(saveUsernameButton);
+        saveUsernameButton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setUsernameText(username.getText());
+                initializeGUI();
+            }
+        });
+        frame.getContentPane().setBackground(POKER_GREEN);
+        frame.setSize(700, 500);
+        frame.setLayout(null);
+        frame.setLocationRelativeTo(null);
+        frame.setResizable(false);
+        frame.setVisible(true);
+
+        /**SwingUtilities.invokeLater(() -> {
+            initializeGUI();
+        });*/
+
+
+    }
+
+    private void initializeGUI() {
+        /**label = new JLabel("TeachMe poker");
+        label.setBounds(260, 55, 220, 80);
+        label.setFont(new Font("Arial", Font.BOLD, 30));
+
+        frame = new JFrame("Start menu");
+        frame.add(label);*/
 
         button = new JButton("Play offline");
         button.setBounds(70, 220, 150, 50);
@@ -112,12 +135,12 @@ public class StartMenu extends JFrame {
         button3.addActionListener(e -> changeLanguage());
         frame.add(button3);
 
-        frame.getContentPane().setBackground(POKER_GREEN);
+        /**frame.getContentPane().setBackground(POKER_GREEN);
         frame.setSize(700, 500);
         frame.setLayout(null);
         frame.setLocationRelativeTo(null);
         frame.setResizable(false);
-        frame.setVisible(true);
+        frame.setVisible(true); */
 
     }
 
