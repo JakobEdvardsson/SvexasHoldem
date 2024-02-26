@@ -31,7 +31,7 @@ public class ServerInput extends Thread {
                     ServerController.getInstance().joinLobby(incomingMessage.toString(), 1);
 
                 }else {
-                    System.out.println("No thong pappi");
+                    System.out.print(" ");
                 }
             }
 

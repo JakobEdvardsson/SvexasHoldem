@@ -39,23 +39,24 @@ public class ClientController {
         SwingUtilities.invokeLater(() -> {
             StartMenu startMenu = new StartMenu();
         });
+
         while (true) {
 
-
-            clientOutput.sendMessage(getUsernameText());
-
-            System.out.print("Enter message to send to server: ");
-            Scanner scanner = new Scanner(System.in);
-            String message = scanner.nextLine();
-            clientOutput.sendMessage(message);
-            if (message.equals("exit")) {
+            if (getUsernameText() != null) {
+                System.out.println(getUsernameText());
+                clientOutput.sendMessage(getUsernameText());
                 break;
             }
+            clientOutput.sendMessage(getUsernameText());
+
+            //System.out.print("Enter message to send to server: ");
+            Scanner scanner = new Scanner(System.in);
+            //String message = scanner.nextLine();
+            /**clientOutput.sendMessage(message);
+            if (message.equals("exit")) {
+                break;
+            } */
         }
-        /**SwingUtilities.invokeLater(() -> {
-            StartMenu startMenu = new StartMenu();
-        }); */
-        //StartMenu startMenu = new StartMenu();
     }
 
     public String getUsernameText() {

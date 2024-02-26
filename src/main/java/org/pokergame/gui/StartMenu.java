@@ -78,7 +78,9 @@ public class StartMenu extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setUsernameText(username.getText());
-                initializeGUI();
+                SwingUtilities.invokeLater(() -> {
+                    initializeGUI();
+                });
             }
         });
         frame.getContentPane().setBackground(POKER_GREEN);
@@ -88,20 +90,15 @@ public class StartMenu extends JFrame {
         frame.setResizable(false);
         frame.setVisible(true);
 
-        /**SwingUtilities.invokeLater(() -> {
-            initializeGUI();
-        });*/
-
-
     }
 
     private void initializeGUI() {
-        /**label = new JLabel("TeachMe poker");
-        label.setBounds(260, 55, 220, 80);
-        label.setFont(new Font("Arial", Font.BOLD, 30));
+        frame.getContentPane().remove(username);
+        frame.getContentPane().remove(usernameLabel);
+        frame.getContentPane().remove(saveUsernameButton);
 
-        frame = new JFrame("Start menu");
-        frame.add(label);*/
+        frame.revalidate();
+        frame.repaint();
 
         button = new JButton("Play offline");
         button.setBounds(70, 220, 150, 50);
@@ -134,13 +131,6 @@ public class StartMenu extends JFrame {
         button3.setBounds(220, 400, 250, 50);
         button3.addActionListener(e -> changeLanguage());
         frame.add(button3);
-
-        /**frame.getContentPane().setBackground(POKER_GREEN);
-        frame.setSize(700, 500);
-        frame.setLayout(null);
-        frame.setLocationRelativeTo(null);
-        frame.setResizable(false);
-        frame.setVisible(true); */
 
     }
 
