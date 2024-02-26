@@ -30,4 +30,18 @@ public class ClientOutputX extends Thread{
 
     }
 
+    public void playerAction(Object playerAction) {
+        try {
+            out.writeObject(playerAction);
+            out.flush();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+
+
 }

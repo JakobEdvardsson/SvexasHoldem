@@ -1,6 +1,8 @@
 package org.pokergame.server;
 
 
+import org.pokergame.Player;
+import org.pokergame.actions.PlayerAction;
 import org.pokergame.client.ClientController;
 
 import java.io.IOException;
@@ -30,7 +32,16 @@ public class ServerInput extends Thread {
                     System.out.println(incomingMessage);
                     ServerController.getInstance().joinLobby(incomingMessage.toString(), 1);
 
-                }else {
+                }if(incomingMessage instanceof PlayerAction){
+                    System.out.println("Player: " + ((PlayerAction) incomingMessage).getVerb());
+                }
+
+
+
+
+
+
+                else {
                     System.out.print(" ");
                 }
             }
