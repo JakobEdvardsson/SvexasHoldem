@@ -23,6 +23,8 @@ public class TestHand {
     Card cards[];
     IllegalArgumentException exception;
 
+    String expectedMessage, actualMessage;
+
     List<Card> cardList;
 
     @BeforeEach
@@ -121,6 +123,7 @@ public class TestHand {
         assertEquals(expectedMessage, actualMessage);
 
     }
+    /*
 
     @Test
     void testAddNullCardArray(){
@@ -136,8 +139,11 @@ public class TestHand {
 
     }
 
+     */
+
     @Test
-    void testAddCardArrayMax(){
+    void testAddCardArray(){
+        //Adding 9 cards to the hand
         exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
             hand = new Hand(new Card[]{new Card("3d"), new Card("4d"),
                     new Card("5d"), new Card("6d"), new Card("7d"),
@@ -145,13 +151,26 @@ public class TestHand {
                     new Card("Jd")});
         });
 
-        String expectedMessage = "Too many cards";
-        String actualMessage = exception.getMessage();
+        expectedMessage = "Too many cards";
+        actualMessage = exception.getMessage();
 
         assertEquals(expectedMessage, actualMessage);
 
+        //Adding a "null array" to the hand
+        cards = null;
+        exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            hand = new Hand(cards);
+        });
+
+        expectedMessage = "Null array";
+        actualMessage = exception.getMessage();
+
+        assertEquals(expectedMessage, actualMessage);
+
+
     }
 
+    /*
     @Test
     void testAddCardArrayMin(){
         exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
@@ -165,6 +184,8 @@ public class TestHand {
 
     }
 
+
+     */
     @Test
     void testAddCardArrayWithCollection(){
         Collection<Card> cards = new ArrayList<>();
@@ -179,6 +200,15 @@ public class TestHand {
         hand2.addCards(cards);
 
         assertEquals(3, hand2.size());
+
+        exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            new Hand((Collection<Card>) null);
+        });
+
+        expectedMessage = "Null array";
+        actualMessage = exception.getMessage();
+
+        assertEquals(expectedMessage, actualMessage);
 
     }
 

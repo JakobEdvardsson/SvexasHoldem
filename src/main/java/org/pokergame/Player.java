@@ -109,7 +109,7 @@ public class Player {
             if (cards.size() == 2) {
                 hand.addCards(cards);
                 hasCards = true;
-                System.out.format("[CHEAT] %s's cards:\t%s\n", name, hand);
+                //System.out.format("[CHEAT] %s's cards:\t%s\n", name, hand);
             } else {
                 throw new IllegalArgumentException("Invalid number of cards");
             }
