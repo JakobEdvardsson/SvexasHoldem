@@ -44,37 +44,39 @@ import java.util.*;
 /**
  * Limit Texas Hold'em poker table. <br />
  * <br />
- * 
+ *
  * This class forms the heart of the poker engine. It controls the game flow for a single poker table.
- * 
+ *
  * @author Oscar Stigter
  */
+
 public class Table extends Thread{
     
+
     /** In fixed-limit games, the maximum number of raises per betting round. */
     private static final int MAX_RAISES = 3;
-    
+
     /** Whether players will always call the showdown, or fold when no chance. */
     private static final boolean ALWAYS_CALL_SHOWDOWN = false;
-    
+
     /** Table type (poker variant). */
     private final TableType tableType;
-    
+
     /** The size of the big blind. */
     private final BigDecimal bigBlind;
 
     /** The players at the table. */
     private final List<Player> players;
-    
+
     /** The active players in the current hand. */
     private final List<Player> activePlayers;
-    
+
     /** The deck of cards. */
     private final Deck deck;
-    
+
     /** The community cards on the board. */
     private final List<Card> board;
-    
+
     /** The current dealer position. */
     private int dealerPosition;
 
@@ -83,7 +85,7 @@ public class Table extends Thread{
 
     /** The position of the acting player. */
     private int actorPosition;
-    
+
     /** The acting player. */
     private Player actor;
 
@@ -95,16 +97,18 @@ public class Table extends Thread{
 
     /** All pots in the current hand (main pot and any side pots). */
     private final List<Pot> pots;
-    
+
     /** The player who bet or raised last (aggressor). */
     private Player lastBettor;
-    
+
     /** Number of raises in the current betting round. */
     private int raises;
-    
+
+   // private List<Player> showingPlayers;
+
     /**
      * Constructor.
-     * 
+     *
      * @param bigBlind
      *            The size of the big blind.
      */
@@ -118,17 +122,17 @@ public class Table extends Thread{
         pots = new ArrayList<>();
         start();
     }
-    
+
     /**
      * Adds a player.
-     * 
+     *
      * @param player
      *            The player.
      */
     public void addPlayer(Player player) {
         players.add(player);
     }
-    
+
     /**
      * Main game loop.
      */
@@ -151,7 +155,7 @@ public class Table extends Thread{
                 break;
             }
         }
-        
+
         // Game over.
         board.clear();
         pots.clear();
@@ -163,27 +167,27 @@ public class Table extends Thread{
         notifyPlayersUpdated(false);
         notifyMessage("Game over.");
     }
-    
+
     /**
      * Plays a single hand.
      */
     private void playHand() {
         resetHand();
-        
+
         // Small blind.
         if (activePlayers.size() > 2) {
             rotateActor();
         }
         postSmallBlind();
-        
+
         // Big blind.
         rotateActor();
         postBigBlind();
-        
+
         // Pre-Flop.
         dealHoleCards();
         doBettingRound();
-        
+
         // Flop.
         if (activePlayers.size() > 1) {
             bet = BigDecimal.ZERO;
@@ -212,7 +216,7 @@ public class Table extends Thread{
             }
         }
     }
-    
+
     /**
      * Resets the game for a new hand.
      */
@@ -221,7 +225,7 @@ public class Table extends Thread{
         board.clear();
         pots.clear();
         notifyBoardUpdated();
-        
+
         // Determine the active players.
         activePlayers.clear();
         for (Player player : players) {
@@ -231,7 +235,7 @@ public class Table extends Thread{
                 activePlayers.add(player);
             }
         }
-        
+
         // Rotate the dealer button.
         dealerPosition = (dealerPosition + 1) % activePlayers.size();
         dealer = activePlayers.get(dealerPosition);
@@ -242,11 +246,11 @@ public class Table extends Thread{
         // Determine the first player to act.
         actorPosition = dealerPosition;
         actor = activePlayers.get(actorPosition);
-        
+
         // Set the initial bet to the big blind.
         minBet = bigBlind;
         bet = minBet;
-        
+
         // Notify all clients a new hand has started.
         for (Player player : players) {
             player.getClient().handStarted(dealer);
@@ -265,7 +269,7 @@ public class Table extends Thread{
             player.getClient().actorRotated(actor);
         }
     }
-    
+
     /**
      * Posts the small blind.
      */
@@ -276,7 +280,7 @@ public class Table extends Thread{
         notifyBoardUpdated();
         notifyPlayerActed();
     }
-    
+
     /**
      * Posts the big blind.
      */
@@ -286,7 +290,7 @@ public class Table extends Thread{
         notifyBoardUpdated();
         notifyPlayerActed();
     }
-    
+
     /**
      * Deals the Hole Cards.
      */
@@ -298,10 +302,10 @@ public class Table extends Thread{
         notifyPlayersUpdated(false);
         notifyMessage("%s deals the hole cards.", dealer);
     }
-    
+
     /**
      * Deals a number of community cards.
-     * 
+     *
      * @param phaseName
      *            The name of the phase.
      * @param noOfCards
@@ -314,7 +318,7 @@ public class Table extends Thread{
         notifyPlayersUpdated(false);
         notifyMessage("%s deals the %s.", dealer, phaseName);
     }
-    
+
     /**
      * Performs a betting round.
      */
@@ -330,16 +334,16 @@ public class Table extends Thread{
             actorPosition = dealerPosition;
             bet = BigDecimal.ZERO;
         }
-        
+
         if (playersToAct == 2) {
             // Heads Up mode; player who is not the dealer starts.
             actorPosition = dealerPosition;
         }
-        
+
         lastBettor = null;
         raises = 0;
         notifyBoardUpdated();
-        
+
         while (playersToAct > 0) {
             rotateActor();
             PlayerAction action;
@@ -398,7 +402,7 @@ public class Table extends Thread{
                     contributePot(betIncrement);
                     lastBettor = actor;
                     raises++;
-                    if (tableType == TableType.NO_LIMIT || raises < MAX_RAISES || activePlayers.size() == 2) { 
+                    if (tableType == TableType.NO_LIMIT || raises < MAX_RAISES || activePlayers.size() == 2) {
                         // All players get another turn.
                         playersToAct = activePlayers.size();
                     } else {
@@ -431,7 +435,7 @@ public class Table extends Thread{
                 notifyPlayerActed();
             }
         }
-        
+
         // Reset player's bets.
         for (Player player : activePlayers) {
             player.resetBet();
@@ -439,13 +443,13 @@ public class Table extends Thread{
         notifyBoardUpdated();
         notifyPlayersUpdated(false);
     }
-    
+
     /**
      * Returns the allowed actions of a specific player.
-     * 
+     *
      * @param player
      *            The player.
-     * 
+     *
      * @return The allowed actions.
      */
     private Set<PlayerAction> getAllowedActions(Player player) {
@@ -476,10 +480,10 @@ public class Table extends Thread{
         }
         return actions;
     }
-    
+
     /**
      * Contributes to the pot.
-     * 
+     *
      * @param amount
      *            The amount to contribute.
      */
@@ -507,7 +511,7 @@ public class Table extends Thread{
             pots.add(pot);
         }
     }
-    
+
     /**
      * Performs the showdown.
      */
@@ -517,80 +521,149 @@ public class Table extends Thread{
 //            System.out.format("  %s\n", pot);
 //        }
 //        System.out.format("[DEBUG]  Total: %d\n", getTotalPot());
-        
-        // Determine show order; start with all-in players...
-        List<Player> showingPlayers = new ArrayList<>();
-        for (Pot pot : pots) {
-            for (Player contributor : pot.getContributors()) {
-                if (!showingPlayers.contains(contributor) && contributor.isAllIn()) {
-                    showingPlayers.add(contributor);
-                }
-            }
-        }
-        // ...then last player to bet or raise (aggressor)...
-        if (lastBettor != null) {
-            if (!showingPlayers.contains(lastBettor)) {
-                showingPlayers.add(lastBettor);
-            }
-        }
-        //...and finally the remaining players, starting left of the button.
-        int pos = (dealerPosition + 1) % activePlayers.size();
-        while (showingPlayers.size() < activePlayers.size()) {
-            Player player = activePlayers.get(pos);
-            if (!showingPlayers.contains(player)) {
-                showingPlayers.add(player);
-            }
-            pos = (pos + 1) % activePlayers.size();
-        }
-        
+
+        List<Player> showingPlayers = showPlayerOrder();
+        int pos = lastPlayerToBetOrRaise(showingPlayers);
+
         // Players automatically show or fold in order.
         boolean firstToShow = true;
         int bestHandValue = -1;
+
+        decideOrderToShowCards(firstToShow, bestHandValue, showingPlayers);
+        Map<HandValue, List<Player>> rankedPlayers = sortByHandValue();
+
+        // Per rank (single or multiple winners), calculate pot distribution.
+        BigDecimal totalPot = getTotalPot();
+
+        Map<Player, BigDecimal> potDivision = new HashMap<>();
+        for (HandValue handValue : rankedPlayers.keySet()) {
+            List<Player> winners = rankedPlayers.get(handValue);
+            for (Pot pot : pots) {
+                // Determine how many winners share this pot.
+                int noOfWinnersInPot = getNbrOfWinnersInPot(winners, pot);
+
+                if (noOfWinnersInPot > 0) {
+                    // Divide pot over winners.
+                    BigDecimal potShare = pot.getValue().divide(new BigDecimal(String.valueOf(noOfWinnersInPot))); //TODO
+                    dividePotOverWinners(winners, pot, potDivision, potShare);
+
+                    // Determine if we have any odd chips left in the pot.
+                    BigDecimal oddChips = pot.getValue().remainder(new BigDecimal(String.valueOf(noOfWinnersInPot))); //TODO
+                    if (oddChips.compareTo(BigDecimal.ZERO) > 0) {
+                        // Divide odd chips over winners, starting left of the dealer.
+                        pos = dealerPosition;
+                        divideOddChipsOverWinners(oddChips, pos, potDivision);
+
+                    }
+                    pot.clear();
+                }
+            }
+        }
+
+        StringBuilder winnerText = divideWinnings(potDivision, totalPot);
+        notifyMessage(winnerText.toString());
+
+
+    }
+
+    private void decideOrderToShowCards(boolean firstToShow, int bestHandValue, List<Player> showingPlayers) {
         for (Player playerToShow : showingPlayers) {
             Hand hand = new Hand(board);
             hand.addCards(playerToShow.getCards());
             HandValue handValue = new HandValue(hand);
             boolean doShow = ALWAYS_CALL_SHOWDOWN;
-            if (!doShow) {
-                if (playerToShow.isAllIn()) {
-                    // All-in players must always show.
-                    doShow = true;
-                    firstToShow = false;
-                } else if (firstToShow) {
-                    // First player must always show.
-                    doShow = true;
-                    bestHandValue = handValue.getValue();
-                    firstToShow = false;
-                } else {
-                    // Remaining players only show when having a chance to win.
-                    if (handValue.getValue() >= bestHandValue) {
-                        doShow = true;
-                        bestHandValue = handValue.getValue();
-                    }
-                }
-            }
+            doShow = decideWhoToShow(playerToShow, handValue, doShow, firstToShow, bestHandValue);
             if (doShow) {
-                // Show hand.
-                for (Player player : players) {
-                    player.getClient().playerUpdated(playerToShow);
-                }
-                notifyMessage("%s has %s.", playerToShow, handValue.getDescription());
+                showHand(playerToShow, handValue);
             } else {
-                // Fold.
-                playerToShow.setCards(null);
-                activePlayers.remove(playerToShow);
-                for (Player player : players) {
-                    if (player.equals(playerToShow)) {
-                        player.getClient().playerUpdated(playerToShow);
-                    } else {
-                        // Hide secret information to other players.
-                        player.getClient().playerUpdated(playerToShow.publicClone());
-                    }
-                }
-                notifyMessage("%s folds.", playerToShow);
+                fold(playerToShow);
             }
         }
-        
+    }
+
+    private StringBuilder divideWinnings(Map<Player, BigDecimal> potDivision, BigDecimal totalPot) {
+        // Divide winnings.
+        StringBuilder winnerText = new StringBuilder();
+        BigDecimal totalWon = BigDecimal.ZERO;
+        for (Player winner : potDivision.keySet()) {
+            BigDecimal potShare = potDivision.get(winner);
+            winner.win(potShare);
+            totalWon = totalWon.add(potShare);
+            if (winnerText.length() > 0) {
+                winnerText.append(", ");
+            }
+            winnerText.append(winner + " wins $ " + potShare);
+            notifyPlayersUpdated(true);
+        }
+        winnerText.append('.');
+        // Sanity check.
+        if (!totalWon.equals(totalPot)) {
+            throw new IllegalStateException("Incorrect pot division!");
+        }
+        return winnerText;
+    }
+
+    private void divideOddChipsOverWinners(BigDecimal oddChips, int pos, Map<Player, BigDecimal> potDivision) {
+        while (oddChips.compareTo(BigDecimal.ZERO) > 0) {
+            pos = (pos + 1) % activePlayers.size();
+            Player winner = activePlayers.get(pos);
+            BigDecimal oldShare = potDivision.get(winner);
+            if (oldShare != null) {
+                potDivision.put(winner, oldShare.add(BigDecimal.ONE));
+//                                System.out.format("[DEBUG] %s receives an odd chip from the pot.\n", winner);
+                oddChips = oddChips.subtract(BigDecimal.ONE);
+            }
+        }
+    }
+
+    private void dividePotOverWinners(List<Player> winners, Pot pot, Map<Player, BigDecimal> potDivision, BigDecimal potShare) {
+        for (Player winner : winners) {
+            if (pot.hasContributer(winner)) {
+                BigDecimal oldShare = potDivision.get(winner);
+                if (oldShare != null) {
+                    potDivision.put(winner, oldShare.add(potShare));
+                } else {
+                    potDivision.put(winner, potShare);
+                }
+
+            }
+        }
+    }
+
+    private int getNbrOfWinnersInPot(List<Player> winners, Pot pot) {
+
+        int noOfWinnersInPot = 0;
+        for (Player winner : winners) {
+            if (pot.hasContributer(winner)) {
+               noOfWinnersInPot++;
+            }
+        }
+        return noOfWinnersInPot;
+    }
+
+    private boolean decideWhoToShow(Player playerToShow, HandValue handValue, boolean doShow, boolean firstToShow, int bestHandValue) {
+        if (!doShow) {
+            if (playerToShow.isAllIn()) {
+                // All-in players must always show.
+                doShow = true;
+                //firstToShow = false;
+            } else if (firstToShow) {
+                // First player must always show.
+                doShow = true;
+                //bestHandValue = handValue.getValue();
+                //firstToShow = false;
+            } else {
+                // Remaining players only show when having a chance to win.
+                if (handValue.getValue() >= bestHandValue) {
+                    doShow = true;
+                    //bestHandValue = handValue.getValue();
+                }
+            }
+        }
+        return doShow;
+    }
+
+    private Map<HandValue, List<Player>> sortByHandValue() {
         // Sort players by hand value (highest to lowest).
         Map<HandValue, List<Player>> rankedPlayers = new TreeMap<>();
         for (Player player : activePlayers) {
@@ -607,81 +680,73 @@ public class Table extends Thread{
             playerList.add(player);
             rankedPlayers.put(handValue, playerList);
         }
-
-        // Per rank (single or multiple winners), calculate pot distribution.
-        BigDecimal totalPot = getTotalPot();
-        Map<Player, BigDecimal> potDivision = new HashMap<>();
-        for (HandValue handValue : rankedPlayers.keySet()) {
-            List<Player> winners = rankedPlayers.get(handValue);
-            for (Pot pot : pots) {
-                // Determine how many winners share this pot.
-                int noOfWinnersInPot = 0;
-                for (Player winner : winners) {
-                    if (pot.hasContributer(winner)) {
-                        noOfWinnersInPot++;
-                    }
-                }
-                if (noOfWinnersInPot > 0) {
-                    // Divide pot over winners.
-                    BigDecimal potShare = pot.getValue().divide(new BigDecimal(String.valueOf(noOfWinnersInPot))); //TODO
-                    for (Player winner : winners) {
-                        if (pot.hasContributer(winner)) {
-                            BigDecimal oldShare = potDivision.get(winner);
-                            if (oldShare != null) {
-                                potDivision.put(winner, oldShare.add(potShare));
-                            } else {
-                                potDivision.put(winner, potShare);
-                            }
-                            
-                        }
-                    }
-                    // Determine if we have any odd chips left in the pot.
-                    BigDecimal oddChips = pot.getValue().remainder(new BigDecimal(String.valueOf(noOfWinnersInPot))); //TODO
-                    if (oddChips.compareTo(BigDecimal.ZERO) > 0) {
-                        // Divide odd chips over winners, starting left of the dealer.
-                        pos = dealerPosition;
-                        while (oddChips.compareTo(BigDecimal.ZERO) > 0) {
-                            pos = (pos + 1) % activePlayers.size();
-                            Player winner = activePlayers.get(pos);
-                            BigDecimal oldShare = potDivision.get(winner);
-                            if (oldShare != null) {
-                                potDivision.put(winner, oldShare.add(BigDecimal.ONE));
-//                                System.out.format("[DEBUG] %s receives an odd chip from the pot.\n", winner);
-                                oddChips = oddChips.subtract(BigDecimal.ONE);
-                            }
-                        }
-                        
-                    }
-                    pot.clear();
-                }
-            }
-        }
-        
-        // Divide winnings.
-        StringBuilder winnerText = new StringBuilder();
-        BigDecimal totalWon = BigDecimal.ZERO;
-        for (Player winner : potDivision.keySet()) {
-            BigDecimal potShare = potDivision.get(winner);
-            winner.win(potShare);
-            totalWon = totalWon.add(potShare);
-            if (winnerText.length() > 0) {
-                winnerText.append(", ");
-            }
-            winnerText.append(winner + " wins $ " + potShare);
-            notifyPlayersUpdated(true);
-        }
-        winnerText.append('.');
-        notifyMessage(winnerText.toString());
-        
-        // Sanity check.
-        if (!totalWon.equals(totalPot)) {
-            throw new IllegalStateException("Incorrect pot division!");
-        }
+        return rankedPlayers;
     }
-    
+
+    private void fold(Player playerToShow) {
+        // Fold.
+        playerToShow.setCards(null);
+        activePlayers.remove(playerToShow);
+        for (Player player : players) {
+            if (player.equals(playerToShow)) {
+                player.getClient().playerUpdated(playerToShow);
+            } else {
+                hideSecretInfo(player, playerToShow);
+            }
+        }
+        notifyMessage("%s folds.", playerToShow);
+    }
+
+    private void hideSecretInfo(Player player, Player playerToShow) {
+        // Hide secret information to other players.
+        player.getClient().playerUpdated(playerToShow.publicClone());
+    }
+
+    private void showHand(Player playerToShow, HandValue handValue) {
+        // Show hand.
+        for (Player player : players) {
+            player.getClient().playerUpdated(playerToShow);
+        }
+        notifyMessage("%s has %s.", playerToShow, handValue.getDescription());
+    }
+
+
+    private List<Player> showPlayerOrder() {
+        // Determine show order; start with all-in players...
+       ArrayList orderedPlayerList = new ArrayList<>();
+        for (Pot pot : pots) {
+            for (Player contributor : pot.getContributors()) {
+                if (!orderedPlayerList.contains(contributor) && contributor.isAllIn()) {
+                    orderedPlayerList.add(contributor);
+                }
+            }
+        }
+        return orderedPlayerList;
+    }
+
+    private int lastPlayerToBetOrRaise(List<Player> showingPlayers) {
+        // ...then last player to bet or raise (aggressor)...
+        if (lastBettor != null) {
+            if (!showingPlayers.contains(lastBettor)) {
+                showingPlayers.add(lastBettor);
+            }
+        }
+
+        //...and finally the remaining players, starting left of the button.
+        int pos = (dealerPosition + 1) % activePlayers.size();
+        while (showingPlayers.size() < activePlayers.size()) {
+            Player player = activePlayers.get(pos);
+            if (!showingPlayers.contains(player)) {
+                showingPlayers.add(player);
+            }
+            pos = (pos + 1) % activePlayers.size();
+        }
+        return pos;
+    }
+
     /**
      * Notifies listeners with a custom game message.
-     * 
+     *
      * @param message
      *            The formatted message.
      * @param args
@@ -693,7 +758,7 @@ public class Table extends Thread{
             player.getClient().messageReceived(message);
         }
     }
-    
+
     /**
      * Notifies clients that the board has been updated.
      */
@@ -703,10 +768,10 @@ public class Table extends Thread{
             player.getClient().boardUpdated(board, bet, pot);
         }
     }
-    
+
     /**
      * Returns the total pot size.
-     * 
+     *
      * @return The total pot size.
      */
     private BigDecimal getTotalPot() {
@@ -720,25 +785,30 @@ public class Table extends Thread{
     /**
      * Notifies clients that one or more players have been updated. <br />
      * <br />
-     * 
+     *
      * A player's secret information is only sent its own client; other clients
      * see only a player's public information.
-     * 
+     *
      * @param showdown
      *            Whether we are at the showdown phase.
      */
     private void notifyPlayersUpdated(boolean showdown) {
         for (Player playerToNotify : players) {
             for (Player player : players) {
-                if (!showdown && !player.equals(playerToNotify)) {
-                    // Hide secret information to other players.
-                    player = player.publicClone();
-                }
+                player = hideSecretInfoToOtherPlayers(player, showdown, playerToNotify);
                 playerToNotify.getClient().playerUpdated(player);
             }
         }
     }
-    
+
+    private Player hideSecretInfoToOtherPlayers(Player player, boolean showdown, Player playerToNotify) {
+        if (!showdown && !player.equals(playerToNotify)) {
+            // Hide secret information to other players.
+            player = player.publicClone();
+        }
+        return player;
+    }
+
     /**
      * Notifies clients that a player has acted.
      */
@@ -748,5 +818,5 @@ public class Table extends Thread{
             p.getClient().playerActed(playerInfo);
         }
     }
-    
+
 }
