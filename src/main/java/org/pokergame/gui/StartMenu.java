@@ -16,7 +16,7 @@ public class StartMenu extends JFrame {
     private JFrame frame;
     private JLabel usernameLabel;
     private JTextField username;
-    private  JButton button, button1, button2, button3, saveUsernameButton;
+    private  JButton button, button1, button2, button3, saveUsernameButton,joinLobby;
     private JLabel label, label1, playerStackLabel;
     private JSlider stackSlide;
     private int playersStack;
@@ -160,40 +160,60 @@ public class StartMenu extends JFrame {
                 playerStackLabel = new JLabel("Pott: ");
                 break;
         }
-        playerStackLabel.setBounds(220, 400, 250, 50);
+        playerStackLabel.setBounds(360, 175, 250, 50);
         frame.add(playerStackLabel);
 
         stackSlide = new JSlider(1000, 10000);
-        stackSlide.setBounds(320, 400, 250, 50);
-        stackSlide.setMajorTickSpacing(100);
+        stackSlide.setBounds(400, 150, 275, 75);
+        stackSlide.setMajorTickSpacing(2500);
+        stackSlide.setPaintLabels(true);
         stackSlide.setPaintTicks(true);
+        JLabel playersStackLabel = new JLabel("Value: ");
+        playersStackLabel.setBounds(360, 250, 100, 50);
+        frame.add(playersStackLabel);
+
+        JLabel stackValue = new JLabel("5000");
+        stackValue.setBackground(Color.white);
+        stackValue.setOpaque(true);
+        stackValue.setBounds(400, 250, 100, 50);
+        frame.add(stackValue);
+
+        joinLobby = new JButton("Join lobby");
+        joinLobby.setBounds(275, 350, 150, 50);
+        joinLobby.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("You joined lobby");
+            }
+        });
+        frame.add(joinLobby);
+
         stackSlide.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
                 JSlider source = (JSlider)e.getSource();
                 if (!source.getValueIsAdjusting()) {
                     playersStack = source.getValue();
+                    stackValue.setText(String.valueOf(playersStack));
                 }
             }
         });
         frame.add(stackSlide);
 
         lobby1 = new JList<>(lobby1Players);
-        lobby1.setSize(70, 150);
-        lobby1.setLocation(10, 100);
+        lobby1.setBounds(10, 150, 100, 150);
         lobby1.setVisible(true);
         frame.add(lobby1);
 
         lobby2 = new JList<>(lobby2Players);
-        lobby2.setSize(70, 100);
-        lobby2.setLocation(100, 100);
+        lobby2.setBounds(120, 150, 100, 150);
         lobby2.setVisible(true);
         frame.add(lobby2);
 
         lobby3 = new JList<>(lobby3Players);
-        lobby1.setSize(70, 100);
-        lobby1.setLocation(250, 100);
-        lobby1.setVisible(true);
+        lobby3.setBounds(230, 150, 100, 150);
+        lobby3.setVisible(true);
         frame.add(lobby3);
 
         frame.revalidate();
