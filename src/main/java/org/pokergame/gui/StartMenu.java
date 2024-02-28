@@ -3,6 +3,8 @@ package org.pokergame.gui;
 import org.pokergame.client.ClientOutputX;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,11 +17,17 @@ public class StartMenu extends JFrame {
     private JLabel usernameLabel;
     private JTextField username;
     private  JButton button, button1, button2, button3, saveUsernameButton;
-    private JLabel label, label1;
+    private JLabel label, label1, playerStackLabel;
+    private JSlider stackSlide;
+    private int playersStack;
     private ClientOutputX clientOutput;
     private static String usernameText;
     private JList onlineUserRoomList;
     private Main main;
+    private JList lobby1, lobby2, lobby3;
+    private String[] lobby1Players = {"Player1", "Player2", "Player3", "Player4", "Player5"};
+    private String[] lobby2Players = {"Player6", "Player7", "Player8", "Player9", "Player10"};
+    private String[] lobby3Players = {"Player11", "Player12", "Player13", "Player14", "Player15"};
     LanguageState state = LanguageState.ENGLISH;
     //private Main clientGUI;
   
@@ -52,7 +60,7 @@ public class StartMenu extends JFrame {
         setTitle("Start Menu");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         label = new JLabel("TeachMe poker");
-        label.setBounds(260, 55, 220, 80);
+        label.setBounds(250, 25, 220, 80);
         label.setFont(new Font("Arial", Font.BOLD, 30));
 
         frame = new JFrame("Start menu");
@@ -142,15 +150,61 @@ public class StartMenu extends JFrame {
         username.setVisible(false);
         usernameLabel.setVisible(false);
 
-        label.setText("Lobby");
+        switch (state) {
+            case ENGLISH:
+                label.setText("Lobbies");
+                playerStackLabel = new JLabel("Stack: ");
+                break;
+            case SWEDISH:
+                label.setText("Spelrum");
+                playerStackLabel = new JLabel("Pott: ");
+                break;
+        }
+        playerStackLabel.setBounds(220, 400, 250, 50);
+        frame.add(playerStackLabel);
 
+        stackSlide = new JSlider(1000, 10000);
+        stackSlide.setBounds(320, 400, 250, 50);
+        stackSlide.setMajorTickSpacing(100);
+        stackSlide.setPaintTicks(true);
+        stackSlide.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                JSlider source = (JSlider)e.getSource();
+                if (!source.getValueIsAdjusting()) {
+                    playersStack = source.getValue();
+                }
+            }
+        });
+        frame.add(stackSlide);
 
-        onlineUserRoomList = new JList<>();
+        lobby1 = new JList<>(lobby1Players);
+        lobby1.setSize(70, 150);
+        lobby1.setLocation(10, 100);
+        lobby1.setVisible(true);
+        frame.add(lobby1);
+
+        lobby2 = new JList<>(lobby2Players);
+        lobby2.setSize(70, 100);
+        lobby2.setLocation(100, 100);
+        lobby2.setVisible(true);
+        frame.add(lobby2);
+
+        lobby3 = new JList<>(lobby3Players);
+        lobby1.setSize(70, 100);
+        lobby1.setLocation(250, 100);
+        lobby1.setVisible(true);
+        frame.add(lobby3);
+
+        frame.revalidate();
+        frame.repaint();
+
+        /**onlineUserRoomList = new JList<>();
         //onlineUserRoomList.setModel(null);
-        onlineUserRoomList.setSize(400,700);
-        onlineUserRoomList.setLocation(350,10);
+        onlineUserRoomList.setSize(300,600);
+        onlineUserRoomList.setLocation(350,20);
         onlineUserRoomList.setVisible(true);
-        frame.add(onlineUserRoomList);
+        frame.add(onlineUserRoomList);*/
 
     }
 
