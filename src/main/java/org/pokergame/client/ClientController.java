@@ -14,13 +14,10 @@ public class ClientController {
     private String ip;
     private Socket socket;
     private Main ClientGUI;
-
     private StartMenu startMenu;
-
     private ClientOutputX clientOutput;
     private ClientInputX clientInput;
     private String username = startMenu.getUsernameText();
-
 
     public ClientController(String ip, int port) throws IOException {
         this.ip=ip;
@@ -49,10 +46,7 @@ public class ClientController {
             }
             clientOutput.sendMessage(getUsernameText());
 
-
             //LÄGG IN VAD SPELAREN GÖR HÄR--->
-
-
 
             //Gammalt test för att skicka en sträng över socket.
             /*

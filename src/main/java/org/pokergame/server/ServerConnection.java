@@ -8,7 +8,6 @@ public class ServerConnection extends Thread {
     private int port;
     private ServerController serverController;
 
-
     public ServerConnection(int port, ServerController serverController) {
         this.port = port;
         this.serverController = serverController;

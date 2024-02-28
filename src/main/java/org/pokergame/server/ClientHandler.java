@@ -17,7 +17,6 @@ import java.util.Set;
 public class ClientHandler extends Thread {
     private Socket socket;
     private ServerController serverController;
-    private ObjectInputStream ois;
     private ServerInput serverInput;
     private ServerOutput serverOutput;
 
@@ -36,15 +35,11 @@ public class ClientHandler extends Thread {
         serverOutput.start();
 
         while (true) {
-
             System.out.print("Enter message to send to client: ");
             Scanner scanner = new Scanner(System.in);
-            //String message = "Filip";
             String message = scanner.nextLine();
             serverOutput.sendMessage(message);
         }
-
-
 
         /*TODO:
         - Server send available lobbies

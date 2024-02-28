@@ -27,21 +27,13 @@ public class ServerInput extends Thread {
 
             while (true) {
                 Object incomingMessage = recieveMessage();
-                //System.out.println(incomingMessage.toString());
                 if (incomingMessage instanceof String) {
                     System.out.println(incomingMessage);
                     ServerController.getInstance().joinLobby(incomingMessage.toString(), 1);
 
                 }if(incomingMessage instanceof PlayerAction){
                     System.out.println("Player: " + ((PlayerAction) incomingMessage).getVerb());
-                }
-
-
-
-
-
-
-                else {
+                } else {
                     System.out.print(" ");
                 }
             }
@@ -50,6 +42,7 @@ public class ServerInput extends Thread {
             e.printStackTrace();
         }
     }
+
     public Object recieveMessage(){
         try {
             return in.readObject();
@@ -57,6 +50,4 @@ public class ServerInput extends Thread {
             throw new RuntimeException(e);
         }
     }
-
-
 }

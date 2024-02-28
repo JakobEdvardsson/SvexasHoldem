@@ -7,7 +7,6 @@ public final class ServerController {
     private ArrayList<Lobby> lobbies;
     private static ServerController serverController;
 
-
     private ServerController() {
         ServerConnection serverConnection = new ServerConnection(1337, this);
         serverConnection.start();

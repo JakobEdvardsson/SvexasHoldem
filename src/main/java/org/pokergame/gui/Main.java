@@ -75,8 +75,6 @@ public class Main extends JFrame implements Client {
     public Main() {
         super("Texas Hold'em poker");
 
-
-
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setBackground(UIConstants.TABLE_COLOR);
         setLayout(new GridBagLayout());
@@ -137,9 +135,6 @@ public class Main extends JFrame implements Client {
         // Start the game.
         //table.run();
     }
-
-
-
 
     @Override
     public void joinedTable(TableType type, BigDecimal bigBlind, List<Player> players) {

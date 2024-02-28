@@ -1,7 +1,5 @@
 package org.pokergame.gui;
 
-import org.pokergame.client.ClientOutputX;
-
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -9,9 +7,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-
 public class StartMenu extends JFrame {
-
     public static final Color POKER_GREEN = new Color(0,153, 0);
     private JFrame frame;
     private JLabel usernameLabel;
@@ -20,16 +16,13 @@ public class StartMenu extends JFrame {
     private JLabel label, label1, playerStackLabel;
     private JSlider stackSlide;
     private int playersStack;
-    private ClientOutputX clientOutput;
     private static String usernameText;
-    private JList onlineUserRoomList;
     private Main main;
     private JList lobby1, lobby2, lobby3;
     private String[] lobby1Players = {"Player1", "Player2", "Player3", "Player4", "Player5"};
     private String[] lobby2Players = {"Player6", "Player7", "Player8", "Player9", "Player10"};
     private String[] lobby3Players = {"Player11", "Player12", "Player13", "Player14", "Player15"};
     LanguageState state = LanguageState.ENGLISH;
-    //private Main clientGUI;
   
     public enum LanguageState {
         ENGLISH,
@@ -102,14 +95,10 @@ public class StartMenu extends JFrame {
 
         button = new JButton("Play offline");
         button.setBounds(70, 220, 150, 50);
-        button.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("New game button pressed. Username: " + username.getText());
-                main = new Main();
-                frame.setVisible(false);
-            }
+        button.addActionListener(e -> {
+            System.out.println("New game button pressed. Username: " + username.getText());
+            main = new Main();
+            frame.setVisible(false);
         });
         frame.add(button);
 
@@ -172,23 +161,14 @@ public class StartMenu extends JFrame {
 
         joinLobby = new JButton("Join lobby");
         joinLobby.setBounds(275, 350, 150, 50);
-        joinLobby.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("You joined lobby");
-            }
-        });
+        joinLobby.addActionListener(e -> System.out.println("You joined lobby"));
         frame.add(joinLobby);
 
-        stackSlide.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                JSlider source = (JSlider)e.getSource();
-                if (!source.getValueIsAdjusting()) {
-                    playersStack = source.getValue();
-                    stackValue.setText(String.valueOf(playersStack));
-                }
+        stackSlide.addChangeListener(e -> {
+            JSlider source = (JSlider)e.getSource();
+            if (!source.getValueIsAdjusting()) {
+                playersStack = source.getValue();
+                stackValue.setText(String.valueOf(playersStack));
             }
         });
         frame.add(stackSlide);
@@ -210,13 +190,6 @@ public class StartMenu extends JFrame {
 
         frame.revalidate();
         frame.repaint();
-
-        /**onlineUserRoomList = new JList<>();
-        //onlineUserRoomList.setModel(null);
-        onlineUserRoomList.setSize(300,600);
-        onlineUserRoomList.setLocation(350,20);
-        onlineUserRoomList.setVisible(true);
-        frame.add(onlineUserRoomList);*/
 
     }
 
