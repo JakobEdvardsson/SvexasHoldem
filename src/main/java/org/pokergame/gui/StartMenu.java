@@ -19,23 +19,15 @@ public class StartMenu extends JFrame {
     }
 
     ImageIcon[] slides = {
-            new ImageIcon("src/main/resources/images/tutorial1.png"),
-            new ImageIcon("src/main/resources/images/tutorial2.png"),
-            new ImageIcon("src/main/resources/images/tutorial3.png"),
-            new ImageIcon("src/main/resources/images/tutorial4.png"),
-            new ImageIcon("src/main/resources/images/tutorial5.png"),
-            new ImageIcon("src/main/resources/images/tutorial6.png"),
-            new ImageIcon("src/main/resources/images/tutorial7.png"),
-            new ImageIcon("src/main/resources/images/tutorial8.png"),
-            new ImageIcon("src/main/resources/images/tutorial9.png"),
-            new ImageIcon("src/main/resources/images/tutorial10.png"),
-            new ImageIcon("src/main/resources/images/tutorial11.png"),
-            new ImageIcon("src/main/resources/images/tutorial12.png"),
-            new ImageIcon("src/main/resources/images/tutorial13.png"),
-            new ImageIcon("src/main/resources/images/tutorial14.png"),
-            new ImageIcon("src/main/resources/images/tutorial15.png"),
-            new ImageIcon("src/main/resources/images/tutorial16.png"),
-            new ImageIcon("src/main/resources/images/tutorial17.png")
+            new ImageIcon("src/main/resources/images/tutorial/Tutorial_1.png"),
+            new ImageIcon("src/main/resources/images/tutorial/Tutorial_2.png"),
+            new ImageIcon("src/main/resources/images/tutorial/Tutorial_3.png"),
+            new ImageIcon("src/main/resources/images/tutorial/Tutorial_4.png"),
+            new ImageIcon("src/main/resources/images/tutorial/Tutorial_5.png"),
+            new ImageIcon("src/main/resources/images/tutorial/Tutorial_6.png"),
+            new ImageIcon("src/main/resources/images/tutorial/Tutorial_7.png"),
+            new ImageIcon("src/main/resources/images/tutorial/Tutorial_8.png"),
+
     };
 
     public StartMenu() {
