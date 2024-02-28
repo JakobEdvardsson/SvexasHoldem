@@ -49,8 +49,13 @@ public class ClientController {
             }
             clientOutput.sendMessage(getUsernameText());
 
-           //LÄGG IN VAD SPELAREN GÖR HÄR--->
 
+            //LÄGG IN VAD SPELAREN GÖR HÄR--->
+
+
+
+            //Gammalt test för att skicka en sträng över socket.
+            /*
             //System.out.print("Enter message to send to server: ");
             Scanner scanner = new Scanner(System.in);
             //String message = scanner.nextLine();
