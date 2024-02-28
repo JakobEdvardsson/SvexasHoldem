@@ -1,7 +1,14 @@
 package org.pokergame.gui;
 
+import org.pokergame.client.ClientOutputX;
+
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 
 public class StartMenu extends JFrame {
 
@@ -9,9 +16,20 @@ public class StartMenu extends JFrame {
     private JFrame frame;
     private JLabel usernameLabel;
     private JTextField username;
-    private  JButton button, button1, button2, button3;
-    private JLabel label;
+    private  JButton button, button1, button2, button3, saveUsernameButton,joinLobby;
+    private JLabel label, label1, playerStackLabel;
+    private JSlider stackSlide;
+    private int playersStack;
+    private ClientOutputX clientOutput;
+    private static String usernameText;
+    private JList onlineUserRoomList;
+    private Main main;
+    private JList lobby1, lobby2, lobby3;
+    private String[] lobby1Players = {"Player1", "Player2", "Player3", "Player4", "Player5"};
+    private String[] lobby2Players = {"Player6", "Player7", "Player8", "Player9", "Player10"};
+    private String[] lobby3Players = {"Player11", "Player12", "Player13", "Player14", "Player15"};
     LanguageState state = LanguageState.ENGLISH;
+    //private Main clientGUI;
   
     public enum LanguageState {
         ENGLISH,
@@ -33,14 +51,12 @@ public class StartMenu extends JFrame {
     public StartMenu() {
         setTitle("Start Menu");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        Label label = new Label("TeachMe poker");
-        label.setBounds(260, 55, 220, 80);
+        label = new JLabel("TeachMe poker");
+        label.setBounds(250, 25, 220, 80);
         label.setFont(new Font("Arial", Font.BOLD, 30));
 
         frame = new JFrame("Start menu");
         frame.add(label);
-
 
         usernameLabel = new JLabel("Username:");
         usernameLabel.setBounds(70, 130, 165, 50);
@@ -53,14 +69,57 @@ public class StartMenu extends JFrame {
         username.setVisible(true);
         frame.add(username);
 
-        button = new JButton("New game");
+        saveUsernameButton = new JButton("Save username");
+        saveUsernameButton.setBounds(70, 220, 150, 50);
+        saveUsernameButton.setVisible(true);
+        frame.add(saveUsernameButton);
+        saveUsernameButton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setUsernameText(username.getText());
+                SwingUtilities.invokeLater(() -> {
+                    initializeGUI();
+                });
+            }
+        });
+        frame.getContentPane().setBackground(POKER_GREEN);
+        frame.setSize(700, 500);
+        frame.setLayout(null);
+        frame.setLocationRelativeTo(null);
+        frame.setResizable(false);
+        frame.setVisible(true);
+
+    }
+
+    private void initializeGUI() {
+        frame.getContentPane().remove(username);
+        frame.getContentPane().remove(usernameLabel);
+        frame.getContentPane().remove(saveUsernameButton);
+
+        frame.revalidate();
+        frame.repaint();
+
+        button = new JButton("Play offline");
         button.setBounds(70, 220, 150, 50);
-        button.addActionListener(e -> System.out.println("New game button pressed"));
+        button.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("New game button pressed. Username: " + username.getText());
+                main = new Main();
+                frame.setVisible(false);
+            }
+        });
         frame.add(button);
 
         button1 = new JButton("Play online");
         button1.setBounds(265, 220, 150, 50);
-        button1.addActionListener(e -> System.out.println("Play online button pressed"));
+        button1.addActionListener(e -> {
+            usernameText = username.getText();
+            System.out.println("Play online button pressed. Username: " + getUsernameText());
+            lobbyView();
+        });
         frame.add(button1);
 
         button2 = new JButton("Tutorial");
@@ -73,19 +132,108 @@ public class StartMenu extends JFrame {
         button3.addActionListener(e -> changeLanguage());
         frame.add(button3);
 
-        frame.getContentPane().setBackground(POKER_GREEN);
-        frame.setSize(700, 500);
-        frame.setLayout(null);
-        frame.setLocationRelativeTo(null);
-        frame.setResizable(false);
-        frame.setVisible(true);
+    }
+
+    private void lobbyView() {
+        button.setVisible(false);
+        button1.setVisible(false);
+        button2.setVisible(false);
+        button3.setVisible(false);
+        username.setVisible(false);
+        usernameLabel.setVisible(false);
+
+        switch (state) {
+            case ENGLISH:
+                label.setText("Lobbies");
+                playerStackLabel = new JLabel("Stack: ");
+                break;
+            case SWEDISH:
+                label.setText("Spelrum");
+                playerStackLabel = new JLabel("Pott: ");
+                break;
+        }
+        playerStackLabel.setBounds(360, 175, 250, 50);
+        frame.add(playerStackLabel);
+
+        stackSlide = new JSlider(1000, 10000);
+        stackSlide.setBounds(400, 150, 275, 75);
+        stackSlide.setMajorTickSpacing(2500);
+        stackSlide.setPaintLabels(true);
+        stackSlide.setPaintTicks(true);
+        JLabel playersStackLabel = new JLabel("Value: ");
+        playersStackLabel.setBounds(360, 250, 100, 50);
+        frame.add(playersStackLabel);
+
+        JLabel stackValue = new JLabel("5000");
+        stackValue.setBackground(Color.white);
+        stackValue.setOpaque(true);
+        stackValue.setBounds(400, 250, 100, 50);
+        frame.add(stackValue);
+
+        joinLobby = new JButton("Join lobby");
+        joinLobby.setBounds(275, 350, 150, 50);
+        joinLobby.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("You joined lobby");
+            }
+        });
+        frame.add(joinLobby);
+
+        stackSlide.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                JSlider source = (JSlider)e.getSource();
+                if (!source.getValueIsAdjusting()) {
+                    playersStack = source.getValue();
+                    stackValue.setText(String.valueOf(playersStack));
+                }
+            }
+        });
+        frame.add(stackSlide);
+
+        lobby1 = new JList<>(lobby1Players);
+        lobby1.setBounds(10, 150, 100, 150);
+        lobby1.setVisible(true);
+        frame.add(lobby1);
+
+        lobby2 = new JList<>(lobby2Players);
+        lobby2.setBounds(120, 150, 100, 150);
+        lobby2.setVisible(true);
+        frame.add(lobby2);
+
+        lobby3 = new JList<>(lobby3Players);
+        lobby3.setBounds(230, 150, 100, 150);
+        lobby3.setVisible(true);
+        frame.add(lobby3);
+
+        frame.revalidate();
+        frame.repaint();
+
+        /**onlineUserRoomList = new JList<>();
+        //onlineUserRoomList.setModel(null);
+        onlineUserRoomList.setSize(300,600);
+        onlineUserRoomList.setLocation(350,20);
+        onlineUserRoomList.setVisible(true);
+        frame.add(onlineUserRoomList);*/
+
+    }
+
+    public static String getUsernameText() {
+        return usernameText;
+    }
+
+
+    public void setUsernameText(String usernameText) {
+        this.usernameText = usernameText;
     }
 
     private void changeLanguage() {
         switch (state) {
             case ENGLISH:
                 label.setText("LärMigPoker");
-                button.setText("Nytt spel");
+                button.setText("Spela offline");
                 button1.setText("Spela online");
                 button2.setText("Instruktioner");
                 button3.setText("Ändra språk till Engelska");
@@ -93,7 +241,7 @@ public class StartMenu extends JFrame {
                 break;
             case SWEDISH:
                 label.setText("TeachMePoker");
-                button.setText("New Game");
+                button.setText("Play offline");
                 button1.setText("Play Online");
                 button2.setText("Tutorial");
                 button3.setText("Change language to Swedish");

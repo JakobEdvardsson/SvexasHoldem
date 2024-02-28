@@ -19,6 +19,7 @@ package org.pokergame;
 
 import org.pokergame.actions.PlayerAction;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -31,7 +32,7 @@ import java.util.List;
  * 
  * @author Oscar Stigter
  */
-public class Player {
+public class Player implements Serializable {
 
     /** Name. */
     private final String name;
