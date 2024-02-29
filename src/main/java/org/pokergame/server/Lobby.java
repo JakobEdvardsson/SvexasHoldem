@@ -24,6 +24,8 @@ public class Lobby{
 
     public Lobby() {
         table = new Table(TableType.FIXED_LIMIT, new BigDecimal(100));
+        // Todo figure out where to start the table thread
+        // table.start();
         players = new ArrayList<Player>();
         player = new String[size];
     }

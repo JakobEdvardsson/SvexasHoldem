@@ -116,7 +116,7 @@ public class Table extends Thread{
         deck = new Deck();
         board = new ArrayList<>();
         pots = new ArrayList<>();
-        start();
+        //start();
     }
     
     /**

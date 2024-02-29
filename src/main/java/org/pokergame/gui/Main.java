@@ -133,7 +133,7 @@ public class Main extends JFrame implements Client {
         setVisible(true);
 
         // Start the game.
-        //table.run();
+        table.start();
     }
 
     @Override
