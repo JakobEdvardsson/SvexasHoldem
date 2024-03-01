@@ -4,12 +4,12 @@ package org.pokergame.server;
 import org.pokergame.Player;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 public final class ServerController {
     private volatile ArrayList<Lobby> lobbies;
     private static ServerController serverController;
-
     private HashMap<ClientHandler, String> connectedClients;
 
     private ServerController() {
@@ -57,7 +57,7 @@ public final class ServerController {
         lobbies.add(lobby);
     }
 
-    public Lobby joinLobby(ClientHandler handler, int lobbyIndex) {
+    public synchronized Lobby joinLobby(ClientHandler handler, int lobbyIndex) {
         Lobby lobby = lobbies.get(lobbyIndex);
         String userName = connectedClients.get(handler);
 
@@ -67,6 +67,14 @@ public final class ServerController {
         }
 
         return null;
+    }
+
+    public synchronized Lobby leaveLobby(ClientHandler handler, int lobbyIndex) {
+        Lobby lobby = lobbies.get(lobbyIndex);
+        String userName = connectedClients.get(handler);
+        lobby.removePlayer(userName);
+
+        return lobby;
     }
 
     /**
@@ -80,7 +88,4 @@ public final class ServerController {
         connectedClients.put(handler, userName);
         return true;
     }
-
-
-
 }

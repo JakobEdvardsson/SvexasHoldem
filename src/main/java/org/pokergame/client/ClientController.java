@@ -34,9 +34,7 @@ public class ClientController {
 
         /* The table. */
 
-        SwingUtilities.invokeLater(() -> {
-            StartMenu startMenu = new StartMenu(this);
-        });
+            this.startMenu = new StartMenu(this);
 
         if (getUsernameText() != null) {
             System.out.println(getUsernameText());
@@ -127,4 +125,9 @@ public class ClientController {
             }
         }
     }
+
+    public void setLobbyInfo(String[][] info) {
+        startMenu.setLobbyInfo(info);
+    }
+
 }

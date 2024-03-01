@@ -41,6 +41,8 @@ public class ClientInputX extends Thread {
                         System.out.println(((String[][]) incomingMessage)[i][j]);
                     }
                 }
+
+                clientController.setLobbyInfo((String[][]) incomingMessage);
             }
 
         }

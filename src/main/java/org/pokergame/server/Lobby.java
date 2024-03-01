@@ -43,12 +43,29 @@ public class Lobby{
        for (int i = 0; i < size; i++) {
            if (player[i] == null) {
                 player[i] = playerName;
+                players.add(new Player(playerName, startingCash, client));
                 break;
            }
+       }
+   }
+
+   public void removePlayer(String userName) {
+       for (String s : player) {
+           if (s.equals(userName)) {
+               s = null;
            }
-            players.add(new Player(playerName, startingCash, client));
        }
 
+       for (Player player : players) {
+           if (player.getName().equals(userName)) {
+               players.remove(player);
+           }
+       }
+   }
+
+   public void startTable() {
+       this.table.start();
+   }
 
     public Boolean getAvailable() {
         return available;

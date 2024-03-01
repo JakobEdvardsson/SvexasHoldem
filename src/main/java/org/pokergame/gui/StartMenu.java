@@ -266,6 +266,27 @@ public class StartMenu extends JFrame {
 
     }
 
+    public void setLobbyInfo(String[][] info) {
+        SwingUtilities.invokeLater(() -> {
+            lobby1Players = info[0];
+            lobby2Players = info[1];
+            lobby3Players = info[2];
+            if (lobby1 != null) {
+                lobby1.setListData(lobby1Players);
+                lobby2.setListData(lobby2Players);
+                lobby3.setListData(lobby3Players);
+                repaint();
+            }
+        });
+    }
+
+    public void disableButtonIfEmpty(String[] lobby) {
+        for (int i = 0; i < lobby.length; i++) {
+            if (lobby[i] != null) break;
+
+        }
+    }
+
     private void showTutorial(ImageIcon[] slides) {
         TutorialSlideshow tutorialSlideshow = new TutorialSlideshow(this, slides);
         tutorialSlideshow.setVisible(true);
