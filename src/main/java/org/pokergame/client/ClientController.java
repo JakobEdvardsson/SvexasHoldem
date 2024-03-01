@@ -3,6 +3,8 @@ package org.pokergame.client;
 import org.pokergame.gui.Main;
 import org.pokergame.gui.StartMenu;
 import org.pokergame.toClientCommands.*;
+import org.pokergame.toServerCommands.JoinTable;
+import org.pokergame.toServerCommands.Register;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -37,14 +39,12 @@ public class ClientController {
             StartMenu startMenu = new StartMenu();
         });
 
-        while (true) {
+        if (getUsernameText() != null) {
+            System.out.println(getUsernameText());
+            clientOutput.sendMessage(new Register(getUsernameText()));
+        }
 
-            if (getUsernameText() != null) {
-                System.out.println(getUsernameText());
-                clientOutput.sendMessage(getUsernameText());
-                break;
-            }
-            clientOutput.sendMessage(getUsernameText());
+        clientOutput.sendMessage(new Register(getUsernameText()));
 
             //LÄGG IN VAD SPELAREN GÖR HÄR--->
 
@@ -57,7 +57,6 @@ public class ClientController {
             if (message.equals("exit")) {
                 break;
             } */
-        }
     }
 
     public String getUsernameText() {

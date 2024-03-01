@@ -29,10 +29,15 @@ public class ClientInputX extends Thread {
 
             if (incomingMessage instanceof String) {
                 System.out.println(incomingMessage);
-
             }
-        }
 
+            // Lobby information
+            if (incomingMessage instanceof String[][]) {
+                System.out.println(incomingMessage);
+            }
+
+
+        }
     }
     public synchronized Object recieveMessage(){
         Object incomingObject = null;

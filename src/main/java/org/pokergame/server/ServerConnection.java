@@ -23,6 +23,7 @@ public class ServerConnection extends Thread {
                     Socket socket = serverSocket.accept();
                     ClientHandler clientHandler = new ClientHandler(socket, serverController);
                     clientHandler.start();
+
                     System.out.println("Someone connected to the server");
                 } catch (IOException e) {
                     e.printStackTrace();

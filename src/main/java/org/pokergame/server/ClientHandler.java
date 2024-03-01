@@ -5,6 +5,7 @@ import org.pokergame.Card;
 import org.pokergame.Player;
 import org.pokergame.TableType;
 import org.pokergame.actions.PlayerAction;
+import org.pokergame.toServerCommands.Register;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -29,10 +30,12 @@ public class ClientHandler extends Thread {
 
     @Override
     public void run() {
-        serverInput = new ServerInput(socket, this);
-        serverInput.start();
+
         serverOutput = new ServerOutput(socket);
         serverOutput.start();
+
+        serverInput = new ServerInput(socket, this);
+        serverInput.start();
 
         while (true) {
             System.out.print("Enter message to send to client: ");
@@ -78,4 +81,15 @@ public class ClientHandler extends Thread {
 
     public void playerActed(Player playerInfo) {
     }
+
+    public void registerClient(Register register) {
+        serverController.registerClient(register.name(), this);
+        pushLobbyInformation();
+    }
+
+    private void pushLobbyInformation() {
+        String[][] lobbies = serverController.getLobbies();
+        serverOutput.sendMessage(lobbies);
+    }
+
 }

@@ -14,21 +14,16 @@ public class ServerOutput extends Thread{
     public ServerOutput(Socket socket){
         this.socket = socket;
 
-        try {
-            out = new ObjectOutputStream(socket.getOutputStream());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
     
     public void sendMessage(Object message){
         try {
+            if (out == null) {
+                out = new ObjectOutputStream(socket.getOutputStream());
+            }
             out.writeObject(message);
             out.flush();
-
         } catch (IOException e) {
-            e.printStackTrace();
         }
-
     }
 }
