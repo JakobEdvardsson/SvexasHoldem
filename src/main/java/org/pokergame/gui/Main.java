@@ -72,7 +72,7 @@ public class Main extends JFrame implements Client {
     /**
      * Constructor.
      */
-    public Main() {
+    public Main(String playerName) {
         super("Texas Hold'em poker");
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -87,7 +87,7 @@ public class Main extends JFrame implements Client {
 
         /* The players at the table. */
         Map<String, Player> players = new LinkedHashMap<>();
-        humanPlayer = new Player("Player", STARTING_CASH, this);
+        humanPlayer = new Player(playerName, STARTING_CASH, this);
         players.put("Player", humanPlayer);
         players.put("Joe", new Player("Joe", STARTING_CASH, new BasicBot(0, 75)));
         players.put("Mike", new Player("Mike", STARTING_CASH, new BasicBot(25, 50)));

@@ -102,7 +102,7 @@ public class StartMenu extends JFrame {
         button.setBounds(70, 220, 150, 50);
         button.addActionListener(e -> {
             System.out.println("New game button pressed. Username: " + username.getText());
-            main = new Main();
+            main = new Main(getUsernameText());
             frame.setVisible(false);
         });
         frame.add(button);
