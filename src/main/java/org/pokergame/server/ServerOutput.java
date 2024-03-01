@@ -16,7 +16,7 @@ public class ServerOutput extends Thread{
 
     }
     
-    public void sendMessage(Object message){
+    public synchronized void sendMessage(Object message){
         try {
             if (out == null) {
                 out = new ObjectOutputStream(socket.getOutputStream());

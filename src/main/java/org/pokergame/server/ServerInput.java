@@ -33,7 +33,6 @@ public class ServerInput extends Thread {
                 if (incomingMessage instanceof JoinLobby) {
                     System.out.println("Player tried to join table " + ((JoinLobby) incomingMessage).tableId() + "!");
                     clientHandler.joinTable((JoinLobby) incomingMessage);
-                    clientHandler.pushLobbyInformation();
                 }
 
                 if (incomingMessage instanceof Register) {
@@ -46,7 +45,6 @@ public class ServerInput extends Thread {
                 }
                 if(incomingMessage instanceof LeaveLobby){
                     clientHandler.leaveLobby((LeaveLobby) incomingMessage);
-                    clientHandler.pushLobbyInformation();
                 }
                 else {
                     System.out.print(" ");

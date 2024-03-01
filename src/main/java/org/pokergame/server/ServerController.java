@@ -63,16 +63,26 @@ public final class ServerController {
 
         if (lobby.getAvailable()) {
             lobby.addPlayer(userName, handler);
+            updateLobbyStatus();
             return lobby;
         }
 
         return null;
     }
 
+    public synchronized void updateLobbyStatus() {
+        String[][] lobbies = getLobbies();
+
+        for (ClientHandler handler : connectedClients.keySet()) {
+            handler.pushLobbyInformation(lobbies);
+        }
+    }
+
     public synchronized Lobby leaveLobby(ClientHandler handler, int lobbyIndex) {
         Lobby lobby = lobbies.get(lobbyIndex);
         String userName = connectedClients.get(handler);
         lobby.removePlayer(userName);
+        updateLobbyStatus();
 
         return lobby;
     }

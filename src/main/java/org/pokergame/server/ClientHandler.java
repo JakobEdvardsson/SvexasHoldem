@@ -99,6 +99,10 @@ public class ClientHandler extends Thread implements Client {
         serverOutput.sendMessage(lobbies);
     }
 
+    public void pushLobbyInformation(String[][] lobbyStrings) {
+        serverOutput.sendMessage(lobbyStrings);
+    }
+
     public void leaveLobby(LeaveLobby lobby) {
         serverController.leaveLobby(this, lobby.lobbyId());
     }
