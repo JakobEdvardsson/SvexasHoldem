@@ -35,14 +35,10 @@ public class ClientController {
 
         /* The table. */
 
-            this.startMenu = new StartMenu(this);
+        SwingUtilities.invokeLater(() -> {
+                this.startMenu = new StartMenu(this);
+        });
 
-        if (getUsernameText() != null) {
-            System.out.println(getUsernameText());
-            clientOutput.sendMessage(new Register("hallå"));
-        }
-
-        clientOutput.sendMessage(new Register("hallå"));
 
             //LÄGG IN VAD SPELAREN GÖR HÄR--->
 
@@ -55,6 +51,11 @@ public class ClientController {
             if (message.equals("exit")) {
                 break;
             } */
+    }
+
+    public void playOnline() {
+        String playerName = getUsernameText() != null ? getUsernameText() : "Player";
+        clientOutput.sendMessage(new Register(getUsernameText()));
     }
 
     public String getUsernameText() {

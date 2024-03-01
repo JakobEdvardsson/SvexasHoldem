@@ -113,6 +113,7 @@ public class StartMenu extends JFrame {
             usernameText = username.getText();
             System.out.println("Play online button pressed. Username: " + getUsernameText());
             lobbyView();
+            controller.playOnline();
         });
         frame.add(button1);
 
