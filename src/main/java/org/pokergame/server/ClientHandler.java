@@ -2,9 +2,11 @@ package org.pokergame.server;
 
 
 import org.pokergame.Card;
+import org.pokergame.Client;
 import org.pokergame.Player;
 import org.pokergame.TableType;
 import org.pokergame.actions.PlayerAction;
+import org.pokergame.toServerCommands.JoinLobby;
 import org.pokergame.toServerCommands.Register;
 
 import java.io.IOException;
@@ -15,7 +17,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
-public class ClientHandler extends Thread {
+public class ClientHandler extends Thread implements Client {
     private Socket socket;
     private ServerController serverController;
     private ServerInput serverInput;
@@ -87,7 +89,11 @@ public class ClientHandler extends Thread {
         pushLobbyInformation();
     }
 
-    private void pushLobbyInformation() {
+    public void joinTable(JoinLobby lobby) {
+        serverController.joinLobby(this, lobby.tableId());
+    }
+
+    public void pushLobbyInformation() {
         String[][] lobbies = serverController.getLobbies();
         serverOutput.sendMessage(lobbies);
     }

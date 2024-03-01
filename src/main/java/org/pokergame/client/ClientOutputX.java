@@ -19,7 +19,7 @@ public class ClientOutputX extends Thread{
         }
     }
     
-    public void sendMessage(Object message) {
+    public synchronized void sendMessage(Object message) {
         try {
             out.writeObject(message);
             out.flush();

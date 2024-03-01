@@ -17,13 +17,14 @@ public class ClientInputX extends Thread {
 
     @Override
     public void run() {
+        try {
+            in = new ObjectInputStream(socket.getInputStream());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         while (true) {
-            try {
-                in = new ObjectInputStream(socket.getInputStream());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+
             System.out.println("ClientInput running");
             Object incomingMessage = recieveMessage();
 
@@ -33,9 +34,14 @@ public class ClientInputX extends Thread {
 
             // Lobby information
             if (incomingMessage instanceof String[][]) {
-                System.out.println(incomingMessage);
-            }
+                System.out.println(((String[][]) incomingMessage).length);
 
+                for (int i = 0; i < ((String[][]) incomingMessage).length; i++) {
+                    for (int j = 0; j < ((String[][]) incomingMessage)[i].length; j++) {
+                        System.out.println(((String[][]) incomingMessage)[i][j]);
+                    }
+                }
+            }
 
         }
     }

@@ -1,10 +1,8 @@
 package org.pokergame.server;
 
 
-import org.pokergame.Player;
 import org.pokergame.actions.PlayerAction;
-import org.pokergame.client.ClientController;
-import org.pokergame.toServerCommands.JoinTable;
+import org.pokergame.toServerCommands.JoinLobby;
 import org.pokergame.toServerCommands.Register;
 
 import java.io.IOException;
@@ -31,8 +29,10 @@ public class ServerInput extends Thread {
             while (true) {
                 Object incomingMessage = recieveMessage();
 
-                if (incomingMessage instanceof JoinTable) {
-                    System.out.println("Player tried to join table");
+                if (incomingMessage instanceof JoinLobby) {
+                    System.out.println("Player tried to join table " + ((JoinLobby) incomingMessage).tableId() + "!");
+                    clientHandler.joinTable((JoinLobby) incomingMessage);
+                    clientHandler.pushLobbyInformation();
                 }
 
                 if (incomingMessage instanceof Register) {
@@ -40,11 +40,7 @@ public class ServerInput extends Thread {
                     clientHandler.registerClient(message);
                 }
 
-                if (incomingMessage instanceof String) {
-                    System.out.println(incomingMessage);
-                    ServerController.getInstance().joinLobby(incomingMessage.toString(), 1);
-
-                }if(incomingMessage instanceof PlayerAction){
+                if(incomingMessage instanceof PlayerAction){
                     System.out.println("Player: " + ((PlayerAction) incomingMessage).getVerb());
                 } else {
                     System.out.print(" ");

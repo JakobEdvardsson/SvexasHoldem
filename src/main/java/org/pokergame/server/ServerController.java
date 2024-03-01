@@ -7,17 +7,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public final class ServerController {
-    private ArrayList<Lobby> lobbies;
+    private volatile ArrayList<Lobby> lobbies;
     private static ServerController serverController;
 
-    private HashMap<String, ClientHandler> connectedClients;
+    private HashMap<ClientHandler, String> connectedClients;
 
     private ServerController() {
         ServerConnection serverConnection = new ServerConnection(1337, this);
         serverConnection.start();
 
         lobbies = new ArrayList<Lobby>();
-        connectedClients = new HashMap<String, ClientHandler>();
+        connectedClients = new HashMap<ClientHandler, String>();
 
         lobbies.add(new Lobby());
         lobbies.add(new Lobby());
@@ -42,6 +42,8 @@ public final class ServerController {
 
             int index = 0;
             for (Player player : lobby.getPlayers()) {
+                System.out.println("player found!");
+                System.out.println(player.getName());
                 lobbyStrings[i][index++] = player.getName();
             }
         }
@@ -55,12 +57,15 @@ public final class ServerController {
         lobbies.add(lobby);
     }
 
-    public Lobby joinLobby(String userName, int lobbyIndex) {
+    public Lobby joinLobby(ClientHandler handler, int lobbyIndex) {
         Lobby lobby = lobbies.get(lobbyIndex);
+        String userName = connectedClients.get(handler);
+
         if (lobby.getAvailable()) {
-            lobby.addPlayer(userName);
+            lobby.addPlayer(userName, handler);
             return lobby;
         }
+
         return null;
     }
 
@@ -72,7 +77,7 @@ public final class ServerController {
      */
     public boolean registerClient(String userName, ClientHandler handler) {
         if (connectedClients.containsKey(userName)) return false;
-        connectedClients.put(userName, handler);
+        connectedClients.put(handler, userName);
         return true;
     }
 

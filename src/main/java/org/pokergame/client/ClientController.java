@@ -3,13 +3,12 @@ package org.pokergame.client;
 import org.pokergame.gui.Main;
 import org.pokergame.gui.StartMenu;
 import org.pokergame.toClientCommands.*;
-import org.pokergame.toServerCommands.JoinTable;
+import org.pokergame.toServerCommands.JoinLobby;
 import org.pokergame.toServerCommands.Register;
 
 import javax.swing.*;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.Scanner;
 
 public class ClientController {
     private int port;
@@ -36,15 +35,15 @@ public class ClientController {
         /* The table. */
 
         SwingUtilities.invokeLater(() -> {
-            StartMenu startMenu = new StartMenu();
+            StartMenu startMenu = new StartMenu(this);
         });
 
         if (getUsernameText() != null) {
             System.out.println(getUsernameText());
-            clientOutput.sendMessage(new Register(getUsernameText()));
+            clientOutput.sendMessage(new Register("hallå"));
         }
 
-        clientOutput.sendMessage(new Register(getUsernameText()));
+        clientOutput.sendMessage(new Register("hallå"));
 
             //LÄGG IN VAD SPELAREN GÖR HÄR--->
 
@@ -62,6 +61,11 @@ public class ClientController {
     public String getUsernameText() {
         String username = startMenu.getUsernameText();
         return username;
+    }
+
+    public void joinLobby(int lobbyId) {
+        JoinLobby lobby = new JoinLobby(lobbyId);
+        clientOutput.sendMessage(lobby);
     }
 
     /**

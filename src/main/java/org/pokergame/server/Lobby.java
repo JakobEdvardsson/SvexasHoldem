@@ -1,5 +1,6 @@
 package org.pokergame.server;
 
+import org.pokergame.Client;
 import org.pokergame.Player;
 import org.pokergame.Table;
 import org.pokergame.TableType;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 public class Lobby{
     private final BigDecimal startingCash = new BigDecimal(1000);
     private int lobbyIndex;
-    private int size = 5;
+    private int size = 4;
     private String[] player;
 
     /** If the lobby is open to join */
@@ -38,15 +39,14 @@ public class Lobby{
     } */
 
 
-   public void addPlayer(String playerName) {
+   public void addPlayer(String playerName, Client client) {
        for (int i = 0; i < size; i++) {
            if (player[i] == null) {
                 player[i] = playerName;
                 break;
            }
-
            }
-
+            players.add(new Player(playerName, startingCash, client));
        }
 
 

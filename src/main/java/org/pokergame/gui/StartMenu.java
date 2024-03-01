@@ -1,5 +1,7 @@
 package org.pokergame.gui;
 
+import org.pokergame.client.ClientController;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -22,6 +24,8 @@ public class StartMenu extends JFrame {
     private String[] lobby3Players = {"Player11", "Player12", "Player13", "Player14", "Player15"};
     LanguageState state = LanguageState.ENGLISH;
 
+    ClientController controller;
+
     public enum LanguageState {
         ENGLISH,
         SWEDISH
@@ -39,7 +43,10 @@ public class StartMenu extends JFrame {
 
     };
 
-    public StartMenu() {
+    public StartMenu(ClientController controller) {
+
+        this.controller = controller;
+
         setTitle("Start Menu");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         label = new JLabel("TeachMe poker");
@@ -165,6 +172,7 @@ public class StartMenu extends JFrame {
             joinLobby1.setEnabled(!button.isEnabled());
             joinLobby2.setEnabled(true);
             joinLobby3.setEnabled(true);
+            controller.joinLobby(0);
         });
         frame.add(joinLobby1);
 
@@ -176,6 +184,7 @@ public class StartMenu extends JFrame {
             joinLobby2.setEnabled(!button.isEnabled());
             joinLobby1.setEnabled(true);
             joinLobby3.setEnabled(true);
+            controller.joinLobby(1);
         });
         frame.add(joinLobby2);
 
@@ -187,6 +196,7 @@ public class StartMenu extends JFrame {
             joinLobby3.setEnabled(!button.isEnabled());
             joinLobby1.setEnabled(true);
             joinLobby2.setEnabled(true);
+            controller.joinLobby(2);
         });
         frame.add(joinLobby3);
 
