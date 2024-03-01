@@ -3,6 +3,7 @@ package org.pokergame.gui;
 import org.pokergame.client.ClientController;
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,8 +13,9 @@ public class StartMenu extends JFrame {
     private JFrame frame;
     private JLabel usernameLabel;
     private JTextField username;
-    private JButton button, button1, button2, button3, saveUsernameButton, joinLobby1, joinLobby2, joinLobby3, startGame;
-    private JLabel label, label1, playerStackLabel;
+    private JButton button, button1, button2, button3, saveUsernameButton,
+            joinLobby1, joinLobby2, joinLobby3, startGame, arrowButton;
+    private JLabel label, stackValue, playerStackLabel, playersStackLabel;
     private JSlider stackSlide;
     private int playersStack;
     private static String usernameText;
@@ -23,6 +25,8 @@ public class StartMenu extends JFrame {
     private String[] lobby2Players = {"Player6", "Player7", "Player8", "Player9", "Player10"};
     private String[] lobby3Players = {"Player11", "Player12", "Player13", "Player14", "Player15"};
     LanguageState state = LanguageState.ENGLISH;
+
+    private ImageIcon flagIcon;
 
     ClientController controller;
 
@@ -49,26 +53,26 @@ public class StartMenu extends JFrame {
 
         setTitle("Start Menu");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        label = new JLabel("TeachMe poker");
-        label.setBounds(250, 25, 220, 80);
+        label = new JLabel("TeachMePoker");
+        label.setBounds(240, 80, 220, 80);
         label.setFont(new Font("Arial", Font.BOLD, 30));
 
         frame = new JFrame("Start menu");
         frame.add(label);
 
         usernameLabel = new JLabel("Username:");
-        usernameLabel.setBounds(70, 130, 165, 50);
+        usernameLabel.setBounds(300, 200, 165, 50);
         usernameLabel.setFont(new Font("Arial", Font.BOLD, 18));
         frame.add(usernameLabel);
 
         username = new JTextField();
-        username.setBounds(70, 170, 345, 40);
+        username.setBounds(178, 250, 345, 40);
         username.setBackground(Color.white);
         username.setVisible(true);
         frame.add(username);
 
         saveUsernameButton = new JButton("Save username");
-        saveUsernameButton.setBounds(70, 220, 150, 50);
+        saveUsernameButton.setBounds(275, 300, 150, 50);
         saveUsernameButton.setVisible(true);
         frame.add(saveUsernameButton);
         saveUsernameButton.addActionListener(new ActionListener() {
@@ -122,11 +126,29 @@ public class StartMenu extends JFrame {
         button2.addActionListener(e -> showTutorial(slides));
         frame.add(button2);
 
-        button3 = new JButton("Change language to Swedish");
-        button3.setBounds(220, 400, 250, 50);
-        button3.addActionListener(e -> changeLanguage());
-        frame.add(button3);
+        String imgSource = getImagePath();
+        createFlagButton(imgSource);
 
+    }
+
+    private void createFlagButton(String imgSource) {
+
+        flagIcon = new ImageIcon(imgSource);
+        Image originalImage = flagIcon.getImage();
+
+        int newWidth = 55;
+        int newHeight = 40;
+
+        Image scaledImage = originalImage.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+        ImageIcon scaledIcon = new ImageIcon(scaledImage);
+
+        button3 = new JButton(scaledIcon);
+        button3.setBounds(323, 400, newWidth, newHeight);
+        button3.addActionListener(e -> changeLanguage());
+        button3.setOpaque(false);
+        button3.setContentAreaFilled(false);
+        button3.setBorderPainted(false);
+        frame.add(button3);
     }
 
     private void lobbyView() {
@@ -137,6 +159,7 @@ public class StartMenu extends JFrame {
         username.setVisible(false);
         usernameLabel.setVisible(false);
 
+        label.setBounds(300,50,220,80);
         switch (state) {
             case ENGLISH:
                 label.setText("Lobbies");
@@ -151,22 +174,23 @@ public class StartMenu extends JFrame {
         frame.add(playerStackLabel);
 
         stackSlide = new JSlider(1000, 10000);
-        stackSlide.setBounds(400, 150, 275, 75);
+        stackSlide.setBounds(410, 150, 250, 75);
         stackSlide.setMajorTickSpacing(2500);
         stackSlide.setPaintLabels(true);
         stackSlide.setPaintTicks(true);
-        JLabel playersStackLabel = new JLabel("Value: ");
+        playersStackLabel = new JLabel("Value: ");
         playersStackLabel.setBounds(360, 250, 100, 50);
         frame.add(playersStackLabel);
 
-        JLabel stackValue = new JLabel("5000");
+        stackValue = new JLabel("5000");
         stackValue.setBackground(Color.white);
         stackValue.setOpaque(true);
-        stackValue.setBounds(400, 250, 100, 50);
+        stackValue.setBounds(410, 250, 100, 50);
+        stackValue.setHorizontalAlignment(JLabel.CENTER);
         frame.add(stackValue);
 
         joinLobby1 = new JButton("Join lobby");
-        joinLobby1.setBounds(10, 320, 100, 40);
+        joinLobby1.setBounds(20, 320, 100, 40);
         joinLobby1.addActionListener(e -> {
             if (joinLobby1.getText().equals("Join lobby")) {
                 System.out.println("You joined lobby 1");
@@ -188,7 +212,7 @@ public class StartMenu extends JFrame {
         frame.add(joinLobby1);
 
         joinLobby2 = new JButton("Join lobby");
-        joinLobby2.setBounds(120, 320, 100, 40);
+        joinLobby2.setBounds(130, 320, 100, 40);
         joinLobby2.addActionListener(e -> {
             if(joinLobby2.getText().equals("Join lobby")) {
                 System.out.println("You joined lobby 2");
@@ -210,7 +234,7 @@ public class StartMenu extends JFrame {
         frame.add(joinLobby2);
 
         joinLobby3 = new JButton("Join lobby");
-        joinLobby3.setBounds(230, 320, 100, 40);
+        joinLobby3.setBounds(240, 320, 100, 40);
         joinLobby3.addActionListener(e -> {
             if(joinLobby3.getText().equals("Join lobby")) {
                 System.out.println("You joined lobby 3");
@@ -247,24 +271,68 @@ public class StartMenu extends JFrame {
         });
         frame.add(stackSlide);
 
+
+        ImageIcon originalIcon = new ImageIcon("src/main/resources/images/leftarrow.png");
+        Image originalImage = originalIcon.getImage();
+
+        int newWidth = 40;
+        int newHeight = 40;
+
+        Image scaledImage = originalImage.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+        ImageIcon scaledIcon = new ImageIcon(scaledImage);
+        arrowButton = new JButton(scaledIcon);
+        arrowButton.setBounds(20, 20, newWidth, newHeight);
+        arrowButton.setOpaque(false);
+        arrowButton.setContentAreaFilled(false);
+        arrowButton.setBorderPainted(false);
+        arrowButton.addActionListener(e -> {
+            SwingUtilities.invokeLater(() -> {
+                returnToMainMenu();
+            });
+        });
+        frame.add(arrowButton);
+
         lobby1 = new JList<>(lobby1Players);
-        lobby1.setBounds(10, 150, 100, 150);
+        lobby1.setBounds(20, 150, 100, 150);
+        addListWithBorder(lobby1, "Lobby 1", 20, 150, 100, 150);
         lobby1.setVisible(true);
         frame.add(lobby1);
 
         lobby2 = new JList<>(lobby2Players);
-        lobby2.setBounds(120, 150, 100, 150);
+        lobby2.setBounds(130, 150, 100, 150);
+        addListWithBorder(lobby2, "Lobby 2", 130, 150, 100, 150);
         lobby2.setVisible(true);
         frame.add(lobby2);
 
         lobby3 = new JList<>(lobby3Players);
-        lobby3.setBounds(230, 150, 100, 150);
+        lobby3.setBounds(240, 150, 100, 150);
+        addListWithBorder(lobby3, "Lobby 3", 240, 150, 100, 150);
         lobby3.setVisible(true);
         frame.add(lobby3);
 
         frame.revalidate();
         frame.repaint();
 
+    }
+
+    private void returnToMainMenu() {
+        arrowButton.setVisible(false);
+        stackSlide.setVisible(false);
+        startGame.setVisible(false);
+        joinLobby1.setVisible(false);
+        joinLobby2.setVisible(false);
+        joinLobby3.setVisible(false);
+        lobby1.setVisible(false);
+        lobby2.setVisible(false);
+        lobby3.setVisible(false);
+        stackSlide.setVisible(false);
+        stackValue.setVisible(false);
+        playerStackLabel.setVisible(false);
+        playersStackLabel.setVisible(false);
+        label.setBounds(240, 80, 220, 80);
+        label.setText("TeachMe poker");
+        frame.repaint();
+        initializeGUI();
     }
 
     public static String getUsernameText() {
@@ -280,22 +348,36 @@ public class StartMenu extends JFrame {
         switch (state) {
             case ENGLISH:
                 label.setText("LärMigPoker");
+                label.setBounds(260, 80, 220, 80);
                 button.setText("Spela offline");
                 button1.setText("Spela online");
                 button2.setText("Instruktioner");
-                button3.setText("Ändra språk till Engelska");
                 state = LanguageState.SWEDISH;
                 break;
             case SWEDISH:
                 label.setText("TeachMePoker");
+                label.setBounds(240, 80, 220, 80);
                 button.setText("Play offline");
                 button1.setText("Play Online");
                 button2.setText("Tutorial");
-                button3.setText("Change language to Swedish");
                 state = LanguageState.ENGLISH;
                 break;
         }
+        // Ta bort den befintliga knappen (button3)
+        frame.remove(button3);
+        String imgPath = getImagePath();
+        createFlagButton(imgPath);
 
+        frame.revalidate();
+        frame.repaint();
+
+    }
+
+    private String getImagePath() {
+        String imgPath = (state == LanguageState.ENGLISH) ?
+                "src/main/resources/images/sverige.png" :
+                "src/main/resources/images/uk.png";
+        return imgPath;
     }
 
     public void setLobbyInfo(String[][] info) {
@@ -322,5 +404,19 @@ public class StartMenu extends JFrame {
     private void showTutorial(ImageIcon[] slides) {
         TutorialSlideshow tutorialSlideshow = new TutorialSlideshow(this, slides);
         tutorialSlideshow.setVisible(true);
+    }
+
+    private void addListWithBorder(JList<String> list, String title, int x, int y, int width, int height) {
+        list.setBounds(x, y, width, height);
+        list.setVisible(true);
+
+        // Skapa en TitledBorder med den angivna titeln
+        TitledBorder border = BorderFactory.createTitledBorder(title);
+        // Ställ in titelns justering till mitten
+        border.setTitleJustification(TitledBorder.CENTER);
+        // Använd TitledBorder som en ram runt listan
+        list.setBorder(border);
+
+        frame.add(list);
     }
 }
