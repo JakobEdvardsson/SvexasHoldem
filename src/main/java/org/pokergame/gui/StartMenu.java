@@ -1,18 +1,16 @@
 package org.pokergame.gui;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class StartMenu extends JFrame {
-    public static final Color POKER_GREEN = new Color(0,153, 0);
+    public static final Color POKER_GREEN = new Color(0, 153, 0);
     private JFrame frame;
     private JLabel usernameLabel;
     private JTextField username;
-    private  JButton button, button1, button2, button3, saveUsernameButton,joinLobby;
+    private JButton button, button1, button2, button3, saveUsernameButton, joinLobby1, joinLobby2, joinLobby3, startGame;
     private JLabel label, label1, playerStackLabel;
     private JSlider stackSlide;
     private int playersStack;
@@ -23,7 +21,7 @@ public class StartMenu extends JFrame {
     private String[] lobby2Players = {"Player6", "Player7", "Player8", "Player9", "Player10"};
     private String[] lobby3Players = {"Player11", "Player12", "Player13", "Player14", "Player15"};
     LanguageState state = LanguageState.ENGLISH;
-  
+
     public enum LanguageState {
         ENGLISH,
         SWEDISH
@@ -159,13 +157,47 @@ public class StartMenu extends JFrame {
         stackValue.setBounds(400, 250, 100, 50);
         frame.add(stackValue);
 
-        joinLobby = new JButton("Join lobby");
-        joinLobby.setBounds(275, 350, 150, 50);
-        joinLobby.addActionListener(e -> System.out.println("You joined lobby"));
-        frame.add(joinLobby);
+        joinLobby1 = new JButton("Join lobby");
+        joinLobby1.setBounds(10, 320, 100, 40);
+        joinLobby1.addActionListener(e -> {
+            System.out.println("You joined lobby 1");
+            startGame.setEnabled(true);
+            joinLobby1.setEnabled(!button.isEnabled());
+            joinLobby2.setEnabled(true);
+            joinLobby3.setEnabled(true);
+        });
+        frame.add(joinLobby1);
+
+        joinLobby2 = new JButton("Join lobby");
+        joinLobby2.setBounds(120, 320, 100, 40);
+        joinLobby2.addActionListener(e -> {
+            System.out.println("You joined lobby 2");
+            startGame.setEnabled(true);
+            joinLobby2.setEnabled(!button.isEnabled());
+            joinLobby1.setEnabled(true);
+            joinLobby3.setEnabled(true);
+        });
+        frame.add(joinLobby2);
+
+        joinLobby3 = new JButton("Join lobby");
+        joinLobby3.setBounds(230, 320, 100, 40);
+        joinLobby3.addActionListener(e -> {
+            System.out.println("You joined lobby 3");
+            startGame.setEnabled(true);
+            joinLobby3.setEnabled(!button.isEnabled());
+            joinLobby1.setEnabled(true);
+            joinLobby2.setEnabled(true);
+        });
+        frame.add(joinLobby3);
+
+        startGame = new JButton("Start Game");
+        startGame.setBounds(275, 390, 150, 40);
+        startGame.addActionListener(e -> System.out.println("Game started"));
+        startGame.setEnabled(false);
+        frame.add(startGame);
 
         stackSlide.addChangeListener(e -> {
-            JSlider source = (JSlider)e.getSource();
+            JSlider source = (JSlider) e.getSource();
             if (!source.getValueIsAdjusting()) {
                 playersStack = source.getValue();
                 stackValue.setText(String.valueOf(playersStack));
