@@ -9,7 +9,6 @@ import org.pokergame.actions.PlayerAction;
 import org.pokergame.toServerCommands.JoinLobby;
 import org.pokergame.toServerCommands.LeaveLobby;
 import org.pokergame.toServerCommands.Register;
-import org.pokergame.toServerCommands.StartGame;
 
 import java.math.BigDecimal;
 import java.net.Socket;
@@ -92,8 +91,5 @@ public class ClientHandler extends Thread implements Client {
     public void disconnectClient() {
         serverController.disconnectClient(this);
     }
-
-    public void startGame(StartGame incomingMessage) {
-
-    }
+    
 }

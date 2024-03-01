@@ -45,11 +45,6 @@ public class ServerInput extends Thread {
                     clientHandler.leaveLobby((LeaveLobby) incomingMessage);
                 }
 
-                if(incomingMessage instanceof StartGame) {
-                    clientHandler.startGame((StartGame) incomingMessage);
-                }
-
-
                 if(incomingMessage instanceof PlayerAction){
                     System.out.println("Player: " + ((PlayerAction) incomingMessage).getVerb());
                 }
