@@ -31,7 +31,6 @@ public class ClientController {
         clientInput.start();
 
         clientOutput = new ClientOutputX(socket);
-        clientOutput.start();
 
         /* The table. */
 

@@ -9,13 +9,11 @@ import org.pokergame.actions.PlayerAction;
 import org.pokergame.toServerCommands.JoinLobby;
 import org.pokergame.toServerCommands.LeaveLobby;
 import org.pokergame.toServerCommands.Register;
+import org.pokergame.toServerCommands.StartGame;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.math.BigDecimal;
 import java.net.Socket;
 import java.util.List;
-import java.util.Scanner;
 import java.util.Set;
 
 public class ClientHandler extends Thread implements Client {
@@ -33,26 +31,10 @@ public class ClientHandler extends Thread implements Client {
 
     @Override
     public void run() {
-
         serverOutput = new ServerOutput(socket);
-        serverOutput.start();
-
         serverInput = new ServerInput(socket, this);
         serverInput.start();
-
-        while (true) {
-            System.out.print("Enter message to send to client: ");
-            Scanner scanner = new Scanner(System.in);
-            String message = scanner.nextLine();
-            serverOutput.sendMessage(message);
-        }
-
-        /*TODO:
-        - Server send available lobbies
-        - Client sends what lobby to join
-         */
     }
-
 
     /*
      TODO: Implement these methods
@@ -105,5 +87,13 @@ public class ClientHandler extends Thread implements Client {
 
     public void leaveLobby(LeaveLobby lobby) {
         serverController.leaveLobby(this, lobby.lobbyId());
+    }
+
+    public void disconnectClient() {
+        serverController.disconnectClient(this);
+    }
+
+    public void startGame(StartGame incomingMessage) {
+
     }
 }

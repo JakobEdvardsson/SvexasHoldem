@@ -1,10 +1,6 @@
 package org.pokergame.server;
-
-
 import org.pokergame.Player;
-
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 
 public final class ServerController {
@@ -70,6 +66,9 @@ public final class ServerController {
         return null;
     }
 
+    /**
+     * Updates the status of the lobbies in the server to all connected clients
+     */
     public synchronized void updateLobbyStatus() {
         String[][] lobbies = getLobbies();
 
@@ -93,9 +92,28 @@ public final class ServerController {
      * @param handler Handler to communicate with the client
      * @return true if the client was successfully registered, false otherwise
      */
-    public boolean registerClient(String userName, ClientHandler handler) {
-        if (connectedClients.containsKey(userName)) return false;
+    public synchronized boolean registerClient(String userName, ClientHandler handler) {
+        if (connectedClients.containsValue(userName)) return false;
         connectedClients.put(handler, userName);
         return true;
+    }
+
+    /**
+     * Disconnect and remove client from connected clients & any lobbies
+     * @param clientHandler client handler to disconnect
+     */
+    public synchronized void disconnectClient(ClientHandler clientHandler) {
+        System.out.println("Removing client: " + connectedClients.get(clientHandler) + " from the server");
+
+        for (Lobby lobby : lobbies) {
+            for (Player player : lobby.getPlayers()) {
+                if (player.getName().equals(connectedClients.get(clientHandler))) {
+                    lobby.removePlayer(connectedClients.get(clientHandler));
+                    connectedClients.remove(clientHandler);
+                    updateLobbyStatus();
+                    return;
+                }
+            }
+        }
     }
 }

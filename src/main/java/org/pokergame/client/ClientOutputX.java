@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-public class ClientOutputX extends Thread{
+public class ClientOutputX {
     private Socket socket;
     private ObjectOutputStream out;
 
