@@ -3,6 +3,7 @@ package org.pokergame.server;
 
 import org.pokergame.actions.PlayerAction;
 import org.pokergame.toServerCommands.JoinLobby;
+import org.pokergame.toServerCommands.LeaveLobby;
 import org.pokergame.toServerCommands.Register;
 
 import java.io.IOException;
@@ -42,7 +43,12 @@ public class ServerInput extends Thread {
 
                 if(incomingMessage instanceof PlayerAction){
                     System.out.println("Player: " + ((PlayerAction) incomingMessage).getVerb());
-                } else {
+                }
+                if(incomingMessage instanceof LeaveLobby){
+                    clientHandler.leaveLobby((LeaveLobby) incomingMessage);
+                    clientHandler.pushLobbyInformation();
+                }
+                else {
                     System.out.print(" ");
                 }
             }

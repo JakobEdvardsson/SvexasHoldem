@@ -167,42 +167,73 @@ public class StartMenu extends JFrame {
         joinLobby1 = new JButton("Join lobby");
         joinLobby1.setBounds(10, 320, 100, 40);
         joinLobby1.addActionListener(e -> {
-            System.out.println("You joined lobby 1");
-            startGame.setEnabled(true);
-            joinLobby1.setEnabled(!button.isEnabled());
-            joinLobby2.setEnabled(true);
-            joinLobby3.setEnabled(true);
-            controller.joinLobby(0);
+            if (joinLobby1.getText().equals("Join lobby")) {
+                System.out.println("You joined lobby 1");
+                startGame.setEnabled(true);
+                //joinLobby1.setEnabled(!button.isEnabled());
+                joinLobby2.setEnabled(false);
+                joinLobby3.setEnabled(false);
+                controller.joinLobby(0);
+                joinLobby1.setText("Leave lobby");
+            } else {
+                //controller.leaveLobby(0);
+                joinLobby2.setEnabled(true);
+                joinLobby3.setEnabled(true);
+                joinLobby1.setText("Join lobby");
+                startGame.setEnabled(false);
+                controller.leaveLobby(0);
+            }
         });
         frame.add(joinLobby1);
 
         joinLobby2 = new JButton("Join lobby");
         joinLobby2.setBounds(120, 320, 100, 40);
         joinLobby2.addActionListener(e -> {
-            System.out.println("You joined lobby 2");
-            startGame.setEnabled(true);
-            joinLobby2.setEnabled(!button.isEnabled());
-            joinLobby1.setEnabled(true);
-            joinLobby3.setEnabled(true);
-            controller.joinLobby(1);
+            if(joinLobby2.getText().equals("Join lobby")) {
+                System.out.println("You joined lobby 2");
+                startGame.setEnabled(true);
+                //joinLobby2.setEnabled(!button.isEnabled());
+                joinLobby1.setEnabled(false);
+                joinLobby3.setEnabled(false);
+                controller.joinLobby(1);
+                joinLobby2.setText("Leave lobby");
+            } else {
+                //controller.leaveLobby(1);
+                joinLobby1.setEnabled(true);
+                joinLobby3.setEnabled(true);
+                joinLobby2.setText("Join lobby");
+                startGame.setEnabled(false);
+                controller.leaveLobby(1);
+            }
         });
         frame.add(joinLobby2);
 
         joinLobby3 = new JButton("Join lobby");
         joinLobby3.setBounds(230, 320, 100, 40);
         joinLobby3.addActionListener(e -> {
-            System.out.println("You joined lobby 3");
-            startGame.setEnabled(true);
-            joinLobby3.setEnabled(!button.isEnabled());
-            joinLobby1.setEnabled(true);
-            joinLobby2.setEnabled(true);
-            controller.joinLobby(2);
+            if(joinLobby3.getText().equals("Join lobby")) {
+                System.out.println("You joined lobby 3");
+                startGame.setEnabled(true);
+                //joinLobby3.setEnabled(!button.isEnabled());
+                joinLobby1.setEnabled(false);
+                joinLobby2.setEnabled(false);
+                controller.joinLobby(2);
+                joinLobby3.setText("Leave lobby");
+            } else {
+                //controller.leaveLobby(2);
+                joinLobby1.setEnabled(true);
+                joinLobby2.setEnabled(true);
+                joinLobby3.setText("Join lobby");
+                startGame.setEnabled(false);
+                controller.leaveLobby(2);
+            }
         });
         frame.add(joinLobby3);
 
         startGame = new JButton("Start Game");
         startGame.setBounds(275, 390, 150, 40);
-        startGame.addActionListener(e -> System.out.println("Game started"));
+        startGame.addActionListener(e -> {System.out.println("Game started");
+        });
         startGame.setEnabled(false);
         frame.add(startGame);
 

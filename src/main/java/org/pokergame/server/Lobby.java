@@ -22,6 +22,8 @@ public class Lobby{
 
     /** The players at the table. */
     private ArrayList<Player> players;
+    private Object lock = new Object();
+
 
     public Lobby() {
         table = new Table(TableType.FIXED_LIMIT, new BigDecimal(100));
@@ -39,27 +41,37 @@ public class Lobby{
     } */
 
 
-   public void addPlayer(String playerName, Client client) {
-       for (int i = 0; i < size; i++) {
-           if (player[i] == null) {
-                player[i] = playerName;
-                players.add(new Player(playerName, startingCash, client));
-                break;
+   public synchronized void addPlayer(String playerName, Client client) {
+       synchronized (lock) {
+           for (int i = 0; i < size; i++) {
+               if (player[i] == null) {
+                   player[i] = playerName;
+                   players.add(new Player(playerName, startingCash, client));
+                   break;
+               }
            }
        }
    }
 
-   public void removePlayer(String userName) {
-       for (String s : player) {
-           if (s.equals(userName)) {
-               s = null;
+   public synchronized void removePlayer(String userName) {
+       synchronized (lock) {
+           for (int i = 0; i < player.length; i++) {
+               if (player[i] != null && player[i].equals(userName)) {
+                   player[i] = null;
+               }
            }
-       }
 
-       for (Player player : players) {
-           if (player.getName().equals(userName)) {
-               players.remove(player);
+           Player playerToRemove = null;
+
+           for (Player player : players) {
+               if (player.getName().equals(userName)) {
+                   playerToRemove = player;
+                   break;
+               }
            }
+
+           players.remove(playerToRemove);
+
        }
    }
 

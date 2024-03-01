@@ -7,6 +7,7 @@ import org.pokergame.Player;
 import org.pokergame.TableType;
 import org.pokergame.actions.PlayerAction;
 import org.pokergame.toServerCommands.JoinLobby;
+import org.pokergame.toServerCommands.LeaveLobby;
 import org.pokergame.toServerCommands.Register;
 
 import java.io.IOException;
@@ -98,4 +99,7 @@ public class ClientHandler extends Thread implements Client {
         serverOutput.sendMessage(lobbies);
     }
 
+    public void leaveLobby(LeaveLobby lobby) {
+        serverController.leaveLobby(this, lobby.lobbyId());
+    }
 }

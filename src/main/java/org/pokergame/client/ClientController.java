@@ -4,6 +4,7 @@ import org.pokergame.gui.Main;
 import org.pokergame.gui.StartMenu;
 import org.pokergame.toClientCommands.*;
 import org.pokergame.toServerCommands.JoinLobby;
+import org.pokergame.toServerCommands.LeaveLobby;
 import org.pokergame.toServerCommands.Register;
 
 import javax.swing.*;
@@ -128,6 +129,10 @@ public class ClientController {
 
     public void setLobbyInfo(String[][] info) {
         startMenu.setLobbyInfo(info);
+    }
+
+    public void leaveLobby(int lobbyId){
+        clientOutput.sendMessage(new LeaveLobby(lobbyId));
     }
 
 }
