@@ -2,18 +2,18 @@ package org.pokergame.server;
 
 
 import org.pokergame.actions.PlayerAction;
-import org.pokergame.toServerCommands.JoinLobby;
-import org.pokergame.toServerCommands.LeaveLobby;
-import org.pokergame.toServerCommands.Register;
+import org.pokergame.toServerCommands.*;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
+import java.net.SocketException;
 
 public class ServerInput extends Thread {
     private Socket socket;
     private ObjectInputStream in;
     private ClientHandler clientHandler;
+    private boolean isRunning;
     private Lobby lobby;
 
     public ServerInput(Socket socket, ClientHandler clientHandler) {
@@ -25,9 +25,10 @@ public class ServerInput extends Thread {
     public void run() {
         try {
 
+            isRunning = true;
             in = new ObjectInputStream(socket.getInputStream());
 
-            while (true) {
+            while (isRunning) {
                 Object incomingMessage = recieveMessage();
 
                 if (incomingMessage instanceof JoinLobby) {
@@ -40,12 +41,25 @@ public class ServerInput extends Thread {
                     clientHandler.registerClient(message);
                 }
 
-                if(incomingMessage instanceof PlayerAction){
-                    System.out.println("Player: " + ((PlayerAction) incomingMessage).getVerb());
-                }
                 if(incomingMessage instanceof LeaveLobby){
                     clientHandler.leaveLobby((LeaveLobby) incomingMessage);
                 }
+
+                if(incomingMessage instanceof StartGame) {
+                    clientHandler.startGame((StartGame) incomingMessage);
+                }
+
+
+                if(incomingMessage instanceof PlayerAction){
+                    System.out.println("Player: " + ((PlayerAction) incomingMessage).getVerb());
+                }
+
+                if(incomingMessage instanceof Disconnect){
+                    clientHandler.disconnectClient();
+                    isRunning = false;
+                    continue;
+                }
+
                 else {
                     System.out.print(" ");
                 }
@@ -59,7 +73,12 @@ public class ServerInput extends Thread {
     public Object recieveMessage(){
         try {
             return in.readObject();
-        } catch (IOException | ClassNotFoundException e) {
+
+        }
+        catch (SocketException e) {
+            return new Disconnect();
+        }
+        catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }

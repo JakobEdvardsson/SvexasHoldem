@@ -7,13 +7,12 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-public class ServerOutput extends Thread{
+public class ServerOutput {
     private Socket socket;
     private ObjectOutputStream out;
 
     public ServerOutput(Socket socket){
         this.socket = socket;
-
     }
     
     public synchronized void sendMessage(Object message){
