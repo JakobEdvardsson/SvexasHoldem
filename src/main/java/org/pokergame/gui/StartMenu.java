@@ -7,6 +7,8 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class StartMenu extends JFrame {
     public static final Color POKER_GREEN = new Color(0, 153, 0);
@@ -52,12 +54,12 @@ public class StartMenu extends JFrame {
         this.controller = controller;
 
         setTitle("Start Menu");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         label = new JLabel("TeachMePoker");
         label.setBounds(240, 80, 220, 80);
         label.setFont(new Font("Arial", Font.BOLD, 30));
 
         frame = new JFrame("Start menu");
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.add(label);
 
         usernameLabel = new JLabel("Username:");
@@ -79,6 +81,7 @@ public class StartMenu extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
+                controller.setUsername(username.getText());
                 setUsernameText(username.getText());
                 SwingUtilities.invokeLater(() -> {
                     initializeGUI();
@@ -316,6 +319,7 @@ public class StartMenu extends JFrame {
     }
 
     private void returnToMainMenu() {
+        controller.disconnectClient();
         arrowButton.setVisible(false);
         stackSlide.setVisible(false);
         startGame.setVisible(false);
