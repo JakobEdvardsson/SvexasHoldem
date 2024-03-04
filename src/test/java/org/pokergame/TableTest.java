@@ -3,6 +3,7 @@ package org.pokergame;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.pokergame.bots.BasicBot;
+import org.pokergame.gui.Main;
 
 import java.math.BigDecimal;
 import java.util.LinkedHashMap;
@@ -31,7 +32,7 @@ class TableTest {
     void setUp() {
         /* The players at the table. */
         Map<String, Player> players = new LinkedHashMap<>();
-        humanPlayer = new Player("Player", STARTING_CASH, (Client) this);
+        humanPlayer = new Player("Player", STARTING_CASH, new Main("Human"));
         players.put("Player", humanPlayer);
         players.put("Joe", new Player("Joe", STARTING_CASH, new BasicBot(0, 75)));
         players.put("Mike", new Player("Mike", STARTING_CASH, new BasicBot(25, 50)));
@@ -42,12 +43,6 @@ class TableTest {
         for (Player player : players.values()) {
             table.addPlayer(player);
         }
-
-        table = new Table(TABLE_TYPE, BIG_BLIND);
-        for (Player player : players.values()) {
-            table.addPlayer(player);
-        }
-
     }
 
     @Test
