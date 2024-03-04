@@ -39,7 +39,7 @@ class TableTest {
         players.put("Eddie", new Player("Eddie", STARTING_CASH, new BasicBot(50, 25)));
 
         /* The table. */
-        Table table = new Table(TABLE_TYPE, BIG_BLIND);
+        table = new Table(TABLE_TYPE, BIG_BLIND);
         for (Player player : players.values()) {
             table.addPlayer(player);
         }
@@ -47,11 +47,9 @@ class TableTest {
 
     @Test
     void addPlayer() {
-        //Player player = new Player("Player");
-
-        String name = "Player";
-        String expected = "Player";
-        assertEquals(name, expected);
+        Player player = new Player("Test Player", BigDecimal.valueOf(500), new BasicBot(0, 75));
+        table.addPlayer(player);
+        assertTrue(table.getPlayers().contains(player), "Player should be added to the table");
     }
 
 

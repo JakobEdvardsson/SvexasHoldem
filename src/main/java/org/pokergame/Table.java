@@ -819,4 +819,8 @@ public class Table extends Thread{
         }
     }
 
+
+    public List<Player> getPlayers() {
+        return players;
+    }
 }
