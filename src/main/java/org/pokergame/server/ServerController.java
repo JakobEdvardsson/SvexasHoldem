@@ -29,7 +29,7 @@ public final class ServerController {
         return serverController;
     }
 
-    public String[][] getLobbies() {
+    public String[][] getLobbiesAsString() {
 
         String[][] lobbyStrings = new String[3][4];
 
@@ -47,10 +47,11 @@ public final class ServerController {
         return lobbyStrings;
     }
 
-    public synchronized void createLobby() {
+    public synchronized Lobby createLobby() {
         Lobby lobby = new Lobby();
         lobby.setLobbyIndex(lobbies.size());
         lobbies.add(lobby);
+        return lobby;
     }
 
     public synchronized Lobby joinLobby(ClientHandler handler, int lobbyIndex) {
@@ -70,7 +71,7 @@ public final class ServerController {
      * Updates the status of the lobbies in the server to all connected clients
      */
     public synchronized void updateLobbyStatus() {
-        String[][] lobbies = getLobbies();
+        String[][] lobbies = getLobbiesAsString();
 
         for (ClientHandler handler : connectedClients.keySet()) {
             handler.pushLobbyInformation(lobbies);
@@ -79,8 +80,7 @@ public final class ServerController {
 
     public synchronized Lobby leaveLobby(ClientHandler handler, int lobbyIndex) {
         Lobby lobby = lobbies.get(lobbyIndex);
-        String userName = connectedClients.get(handler);
-        lobby.removePlayer(userName);
+        lobby.removePlayer(handler);
         updateLobbyStatus();
 
         return lobby;
@@ -107,13 +107,17 @@ public final class ServerController {
 
         for (Lobby lobby : lobbies) {
             for (Player player : lobby.getPlayers()) {
-                if (player.getName().equals(connectedClients.get(clientHandler))) {
-                    lobby.removePlayer(connectedClients.get(clientHandler));
+                if (player.getClient().equals(clientHandler)) {
+                    lobby.removePlayer(clientHandler);
                     connectedClients.remove(clientHandler);
                     updateLobbyStatus();
                     return;
                 }
             }
         }
+    }
+
+    public ArrayList<Lobby> getLobbies() {
+        return lobbies;
     }
 }

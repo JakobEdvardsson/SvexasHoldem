@@ -8,19 +8,24 @@ import org.pokergame.TableType;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
-public class Lobby{
+public class Lobby {
     private final BigDecimal startingCash = new BigDecimal(1000);
     private int lobbyIndex;
     private int size = 4;
-    private String[] player;
 
-    /** If the lobby is open to join */
+    /**
+     * If the lobby is open to join
+     */
     private Boolean available = true;
 
-    /** The table (Game Engine) in the lobby */
+    /**
+     * The table (Game Engine) in the lobby
+     */
     private Table table;
 
-    /** The players at the table. */
+    /**
+     * The players at the table.
+     */
     private ArrayList<Player> players;
     private Object lock = new Object();
 
@@ -29,55 +34,41 @@ public class Lobby{
         table = new Table(TableType.FIXED_LIMIT, new BigDecimal(100));
         // Todo figure out where to start the table thread
         // table.start();
-        players = new ArrayList<Player>();
-        player = new String[size];
+        players = new ArrayList<>();
     }
 
-   /** public Player addPlayer(ClientHandler clientHandler) {
-        //TODO: Implement name
-        Player player = new Player("Implement_Name",startingCash, clientHandler);
-        players.add(player);
-        return player;
-    } */
+    /**
+     * public Player addPlayer(ClientHandler clientHandler) {
+     * //TODO: Implement name
+     * Player player = new Player("Implement_Name",startingCash, clientHandler);
+     * players.add(player);
+     * return player;
+     * }
+     */
 
 
-   public synchronized void addPlayer(String playerName, Client client) {
-       synchronized (lock) {
-           for (int i = 0; i < size; i++) {
-               if (player[i] == null) {
-                   player[i] = playerName;
-                   players.add(new Player(playerName, startingCash, client));
-                   break;
-               }
-           }
-       }
-   }
+    public synchronized Player addPlayer(String playerName, Client client) {
+        synchronized (lock) {
+            Player player = new Player(playerName, startingCash, client);
+            players.add(player);
+            return player;
+        }
+    }
 
-   public synchronized void removePlayer(String userName) {
-       synchronized (lock) {
-           for (int i = 0; i < player.length; i++) {
-               if (player[i] != null && player[i].equals(userName)) {
-                   player[i] = null;
-               }
-           }
+    public synchronized void removePlayer(ClientHandler ClientHandler) {
+        synchronized (lock) {
+            for (Player player : players) {
+                if (player.getClient() == ClientHandler) {
+                    players.remove(player);
+                    break;
+                }
+            }
+        }
+    }
 
-           Player playerToRemove = null;
-
-           for (Player player : players) {
-               if (player.getName().equals(userName)) {
-                   playerToRemove = player;
-                   break;
-               }
-           }
-
-           players.remove(playerToRemove);
-
-       }
-   }
-
-   public void startTable() {
-       this.table.start();
-   }
+    public void startTable() {
+        this.table.start();
+    }
 
     public Boolean getAvailable() {
         return available;
