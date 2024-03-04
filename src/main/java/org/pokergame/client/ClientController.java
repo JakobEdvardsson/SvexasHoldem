@@ -3,6 +3,7 @@ package org.pokergame.client;
 import org.pokergame.gui.Main;
 import org.pokergame.gui.StartMenu;
 import org.pokergame.toClientCommands.*;
+import org.pokergame.toServerCommands.Disconnect;
 import org.pokergame.toServerCommands.JoinLobby;
 import org.pokergame.toServerCommands.LeaveLobby;
 import org.pokergame.toServerCommands.Register;
@@ -19,23 +20,17 @@ public class ClientController {
     private StartMenu startMenu;
     private ClientOutputX clientOutput;
     private ClientInputX clientInput;
-    private String username = startMenu.getUsernameText();
+    private String username;
 
     public ClientController(String ip, int port) throws IOException {
-        this.ip=ip;
-        this.port=port;
-        socket = new Socket(ip, port);
-
-        // create the input and output streams
-        clientInput = new ClientInputX(socket, this);
-        clientInput.start();
-
-        clientOutput = new ClientOutputX(socket);
-
         /* The table. */
+
+        this.ip = ip;
+        this.port = port;
 
         SwingUtilities.invokeLater(() -> {
                 this.startMenu = new StartMenu(this);
+                startMenu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         });
 
 
@@ -53,8 +48,23 @@ public class ClientController {
     }
 
     public void playOnline() {
-        String playerName = getUsernameText() != null ? getUsernameText() : "Player";
-        clientOutput.sendMessage(new Register(getUsernameText()));
+        try {
+            socket = new Socket(ip, port);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // create the input and output streams
+        clientInput = new ClientInputX(socket, this);
+        clientInput.start();
+
+        clientOutput = new ClientOutputX(socket);
+
+        clientOutput.sendMessage(new Register(this.username));
+    }
+
+    public void disconnectClient() {
+        clientOutput.sendMessage(new Disconnect());
     }
 
     public String getUsernameText() {
@@ -135,4 +145,7 @@ public class ClientController {
         clientOutput.sendMessage(new LeaveLobby(lobbyId));
     }
 
+    public void setUsername(String text) {
+        this.username = text;
+    }
 }
