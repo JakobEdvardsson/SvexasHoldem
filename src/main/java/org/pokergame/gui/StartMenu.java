@@ -260,7 +260,9 @@ public class StartMenu extends JFrame {
 
         startGame = new JButton("Start Game");
         startGame.setBounds(275, 390, 150, 40);
-        startGame.addActionListener(e -> {System.out.println("Game started");
+        startGame.addActionListener(e -> {
+            controller.startGame();
+            System.out.println("Game started");
         });
         startGame.setEnabled(false);
         frame.add(startGame);

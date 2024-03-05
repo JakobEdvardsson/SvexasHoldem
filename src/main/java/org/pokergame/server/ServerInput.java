@@ -55,6 +55,10 @@ public class ServerInput extends Thread {
                     continue;
                 }
 
+                if (incomingMessage instanceof StartGame) {
+                    clientHandler.startGame();
+                }
+
                 else {
                     System.out.print(" ");
                 }

@@ -1,14 +1,25 @@
 package org.pokergame.client;
 
 
+import org.pokergame.Player;
+import org.pokergame.TableType;
+import org.pokergame.gui.OnlineMain;
+import org.pokergame.toClientCommands.JoinedTable;
+import org.pokergame.toServerCommands.StartGame;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.math.BigDecimal;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ClientInputX extends Thread {
     private Socket socket;
     private ObjectInputStream in;
     private ClientController clientController;
+    private OnlineMain onlineMain;
+
 
     public ClientInputX(Socket socket, ClientController clientController) {
         this.socket = socket;
@@ -43,6 +54,33 @@ public class ClientInputX extends Thread {
                 }
 
                 clientController.setLobbyInfo((String[][]) incomingMessage);
+            }
+
+            if (incomingMessage instanceof StartGame) {
+                if (onlineMain == null) {
+                    onlineMain = new OnlineMain(clientController.getUsername());
+                }
+            }
+
+            if (incomingMessage instanceof JoinedTable) {
+
+                System.out.println("hll");
+
+                if (onlineMain != null) {
+
+                    TableType type = ((JoinedTable) incomingMessage).type();
+                    BigDecimal bigBlind = ((JoinedTable) incomingMessage).bigBlind();
+                    List<String> players = ((JoinedTable) incomingMessage).players();
+
+                    ArrayList<Player> playerObjects = new ArrayList<Player>();
+
+                    for (String player : players) {
+                        playerObjects.add(new Player(player, new BigDecimal(500), null));
+                    }
+
+
+                    onlineMain.joinedTable(type, bigBlind, playerObjects);
+                }
             }
 
         }

@@ -60,6 +60,7 @@ public interface Client {
      * @param dealer
      *            The dealer.
      */
+
     void handStarted(Player dealer);
     
     /**

@@ -6,6 +6,7 @@ import org.pokergame.Client;
 import org.pokergame.Player;
 import org.pokergame.TableType;
 import org.pokergame.actions.PlayerAction;
+import org.pokergame.toClientCommands.JoinedTable;
 import org.pokergame.toServerCommands.JoinLobby;
 import org.pokergame.toServerCommands.LeaveLobby;
 import org.pokergame.toServerCommands.Register;
@@ -91,5 +92,12 @@ public class ClientHandler extends Thread implements Client {
     public void disconnectClient() {
         serverController.disconnectClient(this);
     }
-    
+
+    public void sendMessage(Object obj) {
+        serverOutput.sendMessage(obj);
+    }
+
+    public void startGame() {
+        serverController.startGame(this);
+    }
 }

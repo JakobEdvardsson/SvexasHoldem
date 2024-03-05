@@ -3,10 +3,7 @@ package org.pokergame.client;
 import org.pokergame.gui.Main;
 import org.pokergame.gui.StartMenu;
 import org.pokergame.toClientCommands.*;
-import org.pokergame.toServerCommands.Disconnect;
-import org.pokergame.toServerCommands.JoinLobby;
-import org.pokergame.toServerCommands.LeaveLobby;
-import org.pokergame.toServerCommands.Register;
+import org.pokergame.toServerCommands.*;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -67,8 +64,7 @@ public class ClientController {
         clientOutput.sendMessage(new Disconnect());
     }
 
-    public String getUsernameText() {
-        String username = startMenu.getUsernameText();
+    public String getUsername() {
         return username;
     }
 
@@ -92,7 +88,7 @@ public class ClientController {
         switch (message.getClass().getSimpleName()) {
             case "JoinedTable" -> {
                 JoinedTable joinedTable = (JoinedTable) message;
-                ClientGUI.joinedTable(joinedTable.type(), joinedTable.bigBlind(), joinedTable.players());
+                // ClientGUI.joinedTable(joinedTable.type(), joinedTable.bigBlind(), joinedTable.players());
                 return joinedTable;
             }
             case "MessageReceived" -> {
@@ -147,5 +143,9 @@ public class ClientController {
 
     public void setUsername(String text) {
         this.username = text;
+    }
+
+    public void startGame() {
+        clientOutput.sendMessage(new StartGame());
     }
 }
