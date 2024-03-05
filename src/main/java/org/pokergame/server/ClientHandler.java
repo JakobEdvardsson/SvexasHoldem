@@ -6,9 +6,7 @@ import org.pokergame.Client;
 import org.pokergame.Player;
 import org.pokergame.TableType;
 import org.pokergame.actions.PlayerAction;
-import org.pokergame.toClientCommands.BoardUpdated;
-import org.pokergame.toClientCommands.HandStarted;
-import org.pokergame.toClientCommands.JoinedTable;
+import org.pokergame.toClientCommands.*;
 import org.pokergame.toServerCommands.JoinLobby;
 import org.pokergame.toServerCommands.LeaveLobby;
 import org.pokergame.toServerCommands.Register;
@@ -24,19 +22,20 @@ public class ClientHandler extends Thread implements Client {
     private ServerController serverController;
     private ServerInput serverInput;
     private ServerOutput serverOutput;
-    private Buffer<Player> packetBuffer;
+    private Buffer<PlayerAction> packetBuffer;
 
 
     public ClientHandler(Socket socket, ServerController serverController){
         System.out.println("Client Handler created");
         this.socket = socket;
         this.serverController = serverController;
+        this.packetBuffer = new Buffer<PlayerAction>(10);
     }
 
     @Override
     public void run() {
-        serverOutput = new ServerOutput(socket);
-        serverInput = new ServerInput(socket, this);
+        serverOutput = new ServerOutput(socket, packetBuffer);
+        serverInput = new ServerInput(socket, this, packetBuffer);
         serverInput.start();
     }
 
@@ -55,13 +54,16 @@ public class ClientHandler extends Thread implements Client {
     }
 
     public void actorRotated(Player actor) {
+        serverOutput.sendMessage(new ActorRotated(actor.publicClone()));
     }
 
     public PlayerAction act(BigDecimal minBet, BigDecimal bet, Set<PlayerAction> allowedActions) {
-        return null;
+        serverOutput.sendMessage(new Act(minBet, bet, allowedActions));
+        return packetBuffer.get();
     }
 
     public void playerUpdated(Player playerToShow) {
+        serverOutput.sendMessage(new PlayerUpdated(playerToShow.publicClone()));
     }
 
     public void messageReceived(String message) {
@@ -72,6 +74,7 @@ public class ClientHandler extends Thread implements Client {
     }
 
     public void playerActed(Player playerInfo) {
+        serverOutput.sendMessage(new PlayerActed(playerInfo));
     }
 
     public void registerClient(Register register) {

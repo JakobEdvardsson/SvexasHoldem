@@ -20,6 +20,7 @@ package org.pokergame.gui;
 import org.pokergame.*;
 import org.pokergame.actions.PlayerAction;
 import org.pokergame.bots.BasicBot;
+import org.pokergame.client.ClientController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -66,11 +67,15 @@ public class OnlineMain extends JFrame implements Client {
     /** The current actor's name. */
     private String actorName;
 
+    private ClientController clientController;
+
     /**
      * Constructor.
      */
-    public OnlineMain(String playerName) {
+    public OnlineMain(String playerName, ClientController clientController) {
         super("Texas Hold'em poker");
+
+        this.clientController = clientController;
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setBackground(UIConstants.TABLE_COLOR);
@@ -192,6 +197,7 @@ public class OnlineMain extends JFrame implements Client {
     @Override
     public PlayerAction act(BigDecimal minBet, BigDecimal currentBet, Set<PlayerAction> allowedActions) {
         boardPanel.setMessage("Please select an action:");
+        System.out.println(allowedActions.size());
         return controlPanel.getUserInput(minBet, humanPlayer.getCash(), allowedActions);
     }
 

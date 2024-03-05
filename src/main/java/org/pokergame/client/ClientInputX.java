@@ -3,9 +3,9 @@ package org.pokergame.client;
 
 import org.pokergame.Player;
 import org.pokergame.TableType;
+import org.pokergame.actions.PlayerAction;
 import org.pokergame.gui.OnlineMain;
-import org.pokergame.toClientCommands.HandStarted;
-import org.pokergame.toClientCommands.JoinedTable;
+import org.pokergame.toClientCommands.*;
 import org.pokergame.toServerCommands.StartGame;
 
 import java.io.IOException;
@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class ClientInputX extends Thread {
     private Socket socket;
@@ -59,7 +60,7 @@ public class ClientInputX extends Thread {
 
             if (incomingMessage instanceof StartGame) {
                 if (onlineMain == null) {
-                    onlineMain = new OnlineMain(clientController.getUsername());
+                    onlineMain = new OnlineMain(clientController.getUsername(), clientController);
                 }
             }
 
@@ -82,8 +83,27 @@ public class ClientInputX extends Thread {
             }
 
             if (incomingMessage instanceof HandStarted) {
-                System.out.println("Hand started packet");
-                onlineMain.handStarted(((HandStarted) incomingMessage).dealer().publicClone());
+                onlineMain.handStarted(((HandStarted) incomingMessage).dealer());
+            }
+
+            if (incomingMessage instanceof ActorRotated) {
+                onlineMain.actorRotated(((ActorRotated) incomingMessage).actor());
+            }
+
+            if (incomingMessage instanceof PlayerActed) {
+                onlineMain.playerActed(((PlayerActed) incomingMessage).player());
+            }
+
+            if (incomingMessage instanceof PlayerUpdated) {
+                onlineMain.playerUpdated(((PlayerUpdated) incomingMessage).player());
+            }
+
+            if (incomingMessage instanceof Act) {
+                BigDecimal minBet = ((Act) incomingMessage).minBet();
+                BigDecimal currentBet = ((Act) incomingMessage).currentBet();
+                Set<PlayerAction> allowedActions = ((Act) incomingMessage).allowedActions();
+                PlayerAction action = onlineMain.act(minBet, currentBet, allowedActions);
+                clientController.sendMessage(action);
             }
 
         }

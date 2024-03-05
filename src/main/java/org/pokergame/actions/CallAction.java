@@ -17,12 +17,14 @@
 
 package org.pokergame.actions;
 
+import java.io.Serializable;
+
 /**
  * The action of calling a previous bet or raise.
  * 
  * @author Oscar Stigter
  */
-public class CallAction extends PlayerAction {
+public class CallAction extends PlayerAction implements Serializable {
 
     /**
      * Constructor.

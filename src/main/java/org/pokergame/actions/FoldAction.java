@@ -17,12 +17,14 @@
 
 package org.pokergame.actions;
 
+import java.io.Serializable;
+
 /**
  * The action of folding the current hand.
  * 
  * @author Oscar Stigter
  */
-public class FoldAction extends PlayerAction {
+public class FoldAction extends PlayerAction implements Serializable {
 
     /**
      * Constructor.

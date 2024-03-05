@@ -1,5 +1,6 @@
 package org.pokergame.client;
 
+import org.pokergame.actions.PlayerAction;
 import org.pokergame.gui.Main;
 import org.pokergame.gui.StartMenu;
 import org.pokergame.toClientCommands.*;
@@ -147,5 +148,9 @@ public class ClientController {
 
     public void startGame() {
         clientOutput.sendMessage(new StartGame());
+    }
+
+    public void sendMessage(PlayerAction action) {
+        clientOutput.sendMessage(action);
     }
 }

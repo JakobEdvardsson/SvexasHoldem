@@ -3,6 +3,7 @@ package org.pokergame.server;
 
 import org.pokergame.actions.PlayerAction;
 import org.pokergame.toServerCommands.*;
+import org.pokergame.util.Buffer;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -14,11 +15,13 @@ public class ServerInput extends Thread {
     private ObjectInputStream in;
     private ClientHandler clientHandler;
     private boolean isRunning;
+    private Buffer<PlayerAction> packetBuffer;
     private Lobby lobby;
 
-    public ServerInput(Socket socket, ClientHandler clientHandler) {
+    public ServerInput(Socket socket, ClientHandler clientHandler, Buffer<PlayerAction> packetBuffer) {
         this.socket = socket;
         this.clientHandler = clientHandler;
+        this.packetBuffer = packetBuffer;
     }
 
     @Override
@@ -46,7 +49,7 @@ public class ServerInput extends Thread {
                 }
 
                 if(incomingMessage instanceof PlayerAction){
-                    System.out.println("Player: " + ((PlayerAction) incomingMessage).getVerb());
+                    packetBuffer.add((PlayerAction) incomingMessage);
                 }
 
                 if(incomingMessage instanceof Disconnect){

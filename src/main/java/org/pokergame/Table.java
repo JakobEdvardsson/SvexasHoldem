@@ -146,12 +146,9 @@ public class Table extends Thread{
         while (true) {
             int noOfActivePlayers = 0;
                 for (Player player : players) {
-                    System.out.println(players.size());
                     if (player.getCash().compareTo(bigBlind) >= 0) {
-                        System.out.println("test");
                         noOfActivePlayers++;
                     }
-                    System.out.println(noOfActivePlayers);
             }
             if (noOfActivePlayers > 1) {
                 playHand();

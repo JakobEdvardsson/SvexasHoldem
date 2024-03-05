@@ -17,12 +17,14 @@
 
 package org.pokergame.actions;
 
+import java.io.Serializable;
+
 /**
  * The action of going all-in.
  * 
  * @author Oscar Stigter
  */
-public class AllInAction extends PlayerAction {
+public class AllInAction extends PlayerAction implements Serializable {
     
     /**
      * Constructor.
