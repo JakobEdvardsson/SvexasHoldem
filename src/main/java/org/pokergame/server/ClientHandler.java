@@ -76,12 +76,12 @@ public class ClientHandler extends Thread implements Client {
     }
 
     public void pushLobbyInformation() {
-        String[][] lobbies = serverController.getLobbies();
+        String[][] lobbies = serverController.getLobbiesAsString();
         serverOutput.sendMessage(lobbies);
     }
 
     public void pushLobbyInformation(String[][] lobbyStrings) {
-        serverOutput.sendMessage(lobbyStrings);
+            serverOutput.sendMessage(lobbyStrings);
     }
 
     public void leaveLobby(LeaveLobby lobby) {
