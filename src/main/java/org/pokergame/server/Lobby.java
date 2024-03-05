@@ -55,15 +55,16 @@ public class Lobby {
         }
     }
 
-    public synchronized void removePlayer(ClientHandler ClientHandler) {
+    public synchronized Player removePlayer(ClientHandler ClientHandler) {
         synchronized (lock) {
             for (Player player : players) {
                 if (player.getClient() == ClientHandler) {
                     players.remove(player);
-                    break;
+                    return player;
                 }
             }
         }
+        return null;
     }
 
     public void startTable() {
