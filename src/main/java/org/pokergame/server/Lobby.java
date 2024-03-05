@@ -36,7 +36,6 @@ public class Lobby {
     public Lobby() {
         table = new Table(TABLE_TYPE, BIG_BLIND);
         // Todo figure out where to start the table thread
-        // table.start();
         players = new ArrayList<>();
     }
 
@@ -54,6 +53,7 @@ public class Lobby {
         synchronized (lock) {
             Player player = new Player(playerName, startingCash, client);
             players.add(player);
+            table.addPlayer(player);
             return player;
         }
     }
@@ -63,6 +63,7 @@ public class Lobby {
             for (Player player : players) {
                 if (player.getClient() == ClientHandler) {
                     players.remove(player);
+                    table.removePlayer(player);
                     break;
                 }
             }
@@ -73,9 +74,13 @@ public class Lobby {
         int playerCount = players.size();
 
         while (playerCount < 4) {
-            players.add(new Player("Player_" + (playerCount + 1),
+            Player playerToAdd = new Player("Player_" + (playerCount + 1),
                     startingCash,
-                    new BasicBot(50, 50)));
+                    new BasicBot(50, 50));
+
+            players.add(playerToAdd);
+            table.addPlayer(playerToAdd);
+
             playerCount++;
         }
 

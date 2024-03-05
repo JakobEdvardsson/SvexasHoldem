@@ -37,6 +37,7 @@ package org.pokergame;
 import org.pokergame.actions.BetAction;
 import org.pokergame.actions.PlayerAction;
 import org.pokergame.actions.RaiseAction;
+import org.pokergame.server.ClientHandler;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -144,10 +145,13 @@ public class Table extends Thread{
         actorPosition = -1;
         while (true) {
             int noOfActivePlayers = 0;
-            for (Player player : players) {
-                if (player.getCash().compareTo(bigBlind) >= 0) {
-                    noOfActivePlayers++;
-                }
+                for (Player player : players) {
+                    System.out.println(players.size());
+                    if (player.getCash().compareTo(bigBlind) >= 0) {
+                        System.out.println("test");
+                        noOfActivePlayers++;
+                    }
+                    System.out.println(noOfActivePlayers);
             }
             if (noOfActivePlayers > 1) {
                 playHand();
@@ -822,5 +826,9 @@ public class Table extends Thread{
 
     public List<Player> getPlayers() {
         return players;
+    }
+
+    public void removePlayer(Player player) {
+        players.remove(player);
     }
 }

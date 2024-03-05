@@ -4,6 +4,7 @@ package org.pokergame.client;
 import org.pokergame.Player;
 import org.pokergame.TableType;
 import org.pokergame.gui.OnlineMain;
+import org.pokergame.toClientCommands.HandStarted;
 import org.pokergame.toClientCommands.JoinedTable;
 import org.pokergame.toServerCommands.StartGame;
 
@@ -63,9 +64,6 @@ public class ClientInputX extends Thread {
             }
 
             if (incomingMessage instanceof JoinedTable) {
-
-                System.out.println("hll");
-
                 if (onlineMain != null) {
 
                     TableType type = ((JoinedTable) incomingMessage).type();
@@ -81,6 +79,11 @@ public class ClientInputX extends Thread {
 
                     onlineMain.joinedTable(type, bigBlind, playerObjects);
                 }
+            }
+
+            if (incomingMessage instanceof HandStarted) {
+                System.out.println("Hand started packet");
+                onlineMain.handStarted(((HandStarted) incomingMessage).dealer().publicClone());
             }
 
         }

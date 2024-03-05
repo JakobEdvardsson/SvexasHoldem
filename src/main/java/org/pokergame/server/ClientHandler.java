@@ -6,10 +6,13 @@ import org.pokergame.Client;
 import org.pokergame.Player;
 import org.pokergame.TableType;
 import org.pokergame.actions.PlayerAction;
+import org.pokergame.toClientCommands.BoardUpdated;
+import org.pokergame.toClientCommands.HandStarted;
 import org.pokergame.toClientCommands.JoinedTable;
 import org.pokergame.toServerCommands.JoinLobby;
 import org.pokergame.toServerCommands.LeaveLobby;
 import org.pokergame.toServerCommands.Register;
+import org.pokergame.util.Buffer;
 
 import java.math.BigDecimal;
 import java.net.Socket;
@@ -21,6 +24,7 @@ public class ClientHandler extends Thread implements Client {
     private ServerController serverController;
     private ServerInput serverInput;
     private ServerOutput serverOutput;
+    private Buffer<Player> packetBuffer;
 
 
     public ClientHandler(Socket socket, ServerController serverController){
@@ -43,9 +47,11 @@ public class ClientHandler extends Thread implements Client {
      */
 
     public void joinedTable(TableType tableType, BigDecimal bigBlind, List<Player> players) {
+
     }
 
     public void handStarted(Player dealer) {
+        serverOutput.sendMessage(new HandStarted(dealer.publicClone()));
     }
 
     public void actorRotated(Player actor) {
@@ -62,6 +68,7 @@ public class ClientHandler extends Thread implements Client {
     }
 
     public void boardUpdated(List<Card> board, BigDecimal bet, BigDecimal pot) {
+        serverOutput.sendMessage(new BoardUpdated(board, bet, pot));
     }
 
     public void playerActed(Player playerInfo) {

@@ -1,4 +1,6 @@
 package org.pokergame.toClientCommands;
 
-public record MessageReceived(String message) {
+import java.io.Serializable;
+
+public record MessageReceived(String message) implements Serializable {
 }

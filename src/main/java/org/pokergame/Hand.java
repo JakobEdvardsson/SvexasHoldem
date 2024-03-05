@@ -17,6 +17,7 @@
 
 package org.pokergame;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 /**
@@ -30,7 +31,7 @@ import java.util.Collection;
  * 
  * @author Oscar Stigter
  */
-public class Hand {
+public class Hand implements Serializable {
     
     /** The maximum number of cards in a hand. */
     private static final int MAX_NO_OF_CARDS = 7;
