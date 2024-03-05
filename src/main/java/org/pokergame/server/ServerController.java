@@ -8,6 +8,10 @@ public final class ServerController {
     private static ServerController serverController;
     private HashMap<ClientHandler, String> connectedClients;
 
+    public static void setServerController(ServerController serverController) {
+        ServerController.serverController = serverController;
+    }
+
     private ServerController() {
         ServerConnection serverConnection = new ServerConnection(1337, this);
         serverConnection.start();
@@ -31,9 +35,9 @@ public final class ServerController {
 
     public String[][] getLobbiesAsString() {
 
-        String[][] lobbyStrings = new String[3][4];
+        String[][] lobbyStrings = new String[lobbies.size()][4];
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < lobbies.size(); i++) {
             Lobby lobby = lobbies.get(i);
 
             int index = 0;
@@ -119,5 +123,9 @@ public final class ServerController {
 
     public ArrayList<Lobby> getLobbies() {
         return lobbies;
+    }
+
+    public HashMap<ClientHandler, String> getConnectedClients() {
+        return connectedClients;
     }
 }

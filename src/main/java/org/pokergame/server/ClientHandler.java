@@ -81,7 +81,11 @@ public class ClientHandler extends Thread implements Client {
     }
 
     public void pushLobbyInformation(String[][] lobbyStrings) {
-        serverOutput.sendMessage(lobbyStrings);
+        try {
+            serverOutput.sendMessage(lobbyStrings);
+        }catch (Exception e){
+            e.printStackTrace();
+            }
     }
 
     public void leaveLobby(LeaveLobby lobby) {
