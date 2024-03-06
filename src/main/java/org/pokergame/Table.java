@@ -365,9 +365,9 @@ public class Table extends Thread{
                     }
                 }
                 playersToAct--;
-                if (action == PlayerAction.CHECK) {
+                if (action.getVerb().equals("checks") || action.getVerb().equals("continues")) {
                     // Do nothing.
-                } else if (action == PlayerAction.CALL) {
+                } else if (action.getVerb().equals("calls")) {
                     BigDecimal betIncrement = bet.subtract(actor.getBet());
                     if (betIncrement.compareTo(actor.getCash()) > 0) {
                         betIncrement = actor.getCash();
@@ -410,7 +410,7 @@ public class Table extends Thread{
                         // Max. number of raises reached; other players get one more turn.
                         playersToAct = activePlayers.size() - 1;
                     }
-                } else if (action == PlayerAction.FOLD) {
+                } else if (action.getVerb().equals("folds")) {
                     actor.setCards(null);
                     activePlayers.remove(actor);
                     actorPosition--;
@@ -815,7 +815,7 @@ public class Table extends Thread{
      */
     private void notifyPlayerActed() {
         for (Player p : players) {
-            Player playerInfo = p.equals(actor) ? actor : actor.publicClone();
+            Player playerInfo = p.equals(actor) ? actor.packetClone() : actor.publicClone();
             p.getClient().playerActed(playerInfo);
         }
     }

@@ -1,6 +1,7 @@
 package org.pokergame.client;
 
 
+import org.pokergame.Card;
 import org.pokergame.Player;
 import org.pokergame.TableType;
 import org.pokergame.actions.PlayerAction;
@@ -86,6 +87,13 @@ public class ClientInputX extends Thread {
                 onlineMain.handStarted(((HandStarted) incomingMessage).dealer());
             }
 
+            if (incomingMessage instanceof BoardUpdated) {
+                List<Card> cards = ((BoardUpdated) incomingMessage).cards();
+                BigDecimal bet = ((BoardUpdated) incomingMessage).bet();
+                BigDecimal pot = ((BoardUpdated) incomingMessage).pot();
+                onlineMain.boardUpdated(cards, bet, pot);
+            }
+
             if (incomingMessage instanceof ActorRotated) {
                 onlineMain.actorRotated(((ActorRotated) incomingMessage).actor());
             }
@@ -104,6 +112,10 @@ public class ClientInputX extends Thread {
                 Set<PlayerAction> allowedActions = ((Act) incomingMessage).allowedActions();
                 PlayerAction action = onlineMain.act(minBet, currentBet, allowedActions);
                 clientController.sendMessage(action);
+            }
+
+            if (incomingMessage instanceof MessageReceived) {
+                onlineMain.messageReceived(((MessageReceived) incomingMessage).message());
             }
 
         }

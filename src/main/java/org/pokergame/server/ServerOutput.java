@@ -26,6 +26,7 @@ public class ServerOutput {
             }
             out.writeObject(message);
             out.flush();
+            out.reset();
         } catch (IOException e) {
         }
     }

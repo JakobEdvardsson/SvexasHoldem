@@ -14,8 +14,7 @@ import org.pokergame.util.Buffer;
 
 import java.math.BigDecimal;
 import java.net.Socket;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class ClientHandler extends Thread implements Client {
     private Socket socket;
@@ -63,10 +62,11 @@ public class ClientHandler extends Thread implements Client {
     }
 
     public void playerUpdated(Player playerToShow) {
-        serverOutput.sendMessage(new PlayerUpdated(playerToShow.publicClone()));
+        serverOutput.sendMessage(new PlayerUpdated(playerToShow.packetClone()));
     }
 
     public void messageReceived(String message) {
+        serverOutput.sendMessage(new MessageReceived(message));
     }
 
     public void boardUpdated(List<Card> board, BigDecimal bet, BigDecimal pot) {

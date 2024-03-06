@@ -119,7 +119,7 @@ public class ClientController {
             }
             case "PlayerActed" -> {
                 PlayerActed playerActed = (PlayerActed) message;
-                ClientGUI.playerActed(playerActed.player());
+                ClientGUI.playerActed(playerActed.player().publicClone());
                 return playerActed;
             }
             case "Act" -> {

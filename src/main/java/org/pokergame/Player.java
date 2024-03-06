@@ -21,6 +21,7 @@ import org.pokergame.actions.PlayerAction;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -112,7 +113,7 @@ public class Player implements Serializable {
                 hasCards = true;
                 //System.out.format("[CHEAT] %s's cards:\t%s\n", name, hand);
             } else {
-                throw new IllegalArgumentException("Invalid number of cards");
+                // throw new IllegalArgumentException("Invalid number of cards");
             }
         }
     }
@@ -254,6 +255,15 @@ public class Player implements Serializable {
      */
     public Player publicClone() {
         Player clone = new Player(name, cash, null);
+        clone.hasCards = hasCards;
+        clone.bet = bet;
+        clone.action = action;
+        return clone;
+    }
+
+    public Player packetClone() {
+        Player clone = new Player(name, cash, null);
+        clone.setCards(Arrays.stream(getCards()).toList());
         clone.hasCards = hasCards;
         clone.bet = bet;
         clone.action = action;
