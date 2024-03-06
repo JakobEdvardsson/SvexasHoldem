@@ -17,6 +17,8 @@
 
 package org.pokergame;
 
+import java.io.Serializable;
+
 /**
  * A generic game card in a deck (without jokers). <br />
  * <br />
@@ -25,7 +27,7 @@ package org.pokergame;
  * 
  * @author Oscar Stigter
  */
-public class Card implements Comparable<Card> {
+public class Card implements Comparable<Card>, Serializable {
     
     /** The number of ranks in a deck. */
     public static final int NO_OF_RANKS = 13;

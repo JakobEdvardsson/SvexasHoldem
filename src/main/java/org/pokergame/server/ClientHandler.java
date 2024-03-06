@@ -6,32 +6,35 @@ import org.pokergame.Client;
 import org.pokergame.Player;
 import org.pokergame.TableType;
 import org.pokergame.actions.PlayerAction;
+import org.pokergame.toClientCommands.*;
 import org.pokergame.toServerCommands.JoinLobby;
 import org.pokergame.toServerCommands.LeaveLobby;
 import org.pokergame.toServerCommands.Register;
+import org.pokergame.util.Buffer;
 
 import java.math.BigDecimal;
 import java.net.Socket;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class ClientHandler extends Thread implements Client {
     private Socket socket;
     private ServerController serverController;
     private ServerInput serverInput;
     private ServerOutput serverOutput;
+    private Buffer<PlayerAction> packetBuffer;
 
 
     public ClientHandler(Socket socket, ServerController serverController){
         System.out.println("Client Handler created");
         this.socket = socket;
         this.serverController = serverController;
+        this.packetBuffer = new Buffer<PlayerAction>(10);
     }
 
     @Override
     public void run() {
-        serverOutput = new ServerOutput(socket);
-        serverInput = new ServerInput(socket, this);
+        serverOutput = new ServerOutput(socket, packetBuffer);
+        serverInput = new ServerInput(socket, this, packetBuffer);
         serverInput.start();
     }
 
@@ -42,28 +45,36 @@ public class ClientHandler extends Thread implements Client {
      */
 
     public void joinedTable(TableType tableType, BigDecimal bigBlind, List<Player> players) {
+
     }
 
     public void handStarted(Player dealer) {
+        serverOutput.sendMessage(new HandStarted(dealer.publicClone()));
     }
 
     public void actorRotated(Player actor) {
+        serverOutput.sendMessage(new ActorRotated(actor.publicClone()));
     }
 
     public PlayerAction act(BigDecimal minBet, BigDecimal bet, Set<PlayerAction> allowedActions) {
-        return null;
+        serverOutput.sendMessage(new Act(minBet, bet, allowedActions));
+        return packetBuffer.get();
     }
 
     public void playerUpdated(Player playerToShow) {
+        serverOutput.sendMessage(new PlayerUpdated(playerToShow.packetClone()));
     }
 
     public void messageReceived(String message) {
+        serverOutput.sendMessage(new MessageReceived(message));
     }
 
     public void boardUpdated(List<Card> board, BigDecimal bet, BigDecimal pot) {
+        serverOutput.sendMessage(new BoardUpdated(board, bet, pot));
     }
 
     public void playerActed(Player playerInfo) {
+        serverOutput.sendMessage(new PlayerActed(playerInfo));
     }
 
     public void registerClient(Register register) {
@@ -91,5 +102,12 @@ public class ClientHandler extends Thread implements Client {
     public void disconnectClient() {
         serverController.disconnectClient(this);
     }
-    
+
+    public void sendMessage(Object obj) {
+        serverOutput.sendMessage(obj);
+    }
+
+    public void startGame() {
+        serverController.startGame(this);
+    }
 }

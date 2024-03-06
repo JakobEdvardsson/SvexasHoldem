@@ -17,12 +17,14 @@
 
 package org.pokergame;
 
+import java.io.Serializable;
+
 /**
  * Supported table types (betting structures).
  * 
  * @author Oscar Stigter
  */
-public enum TableType {
+public enum TableType implements Serializable {
     
     /** Fixed-Limit Texas Hold'em. */
     FIXED_LIMIT("Fixed-Limit"),

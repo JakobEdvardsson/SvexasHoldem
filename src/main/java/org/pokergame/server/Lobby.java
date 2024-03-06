@@ -4,12 +4,15 @@ import org.pokergame.Client;
 import org.pokergame.Player;
 import org.pokergame.Table;
 import org.pokergame.TableType;
+import org.pokergame.bots.BasicBot;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
 public class Lobby {
-    private final BigDecimal startingCash = new BigDecimal(1000);
+    private final BigDecimal startingCash = new BigDecimal(500);
+    private final BigDecimal BIG_BLIND = new BigDecimal(100);
+    private final TableType TABLE_TYPE = TableType.FIXED_LIMIT;
     private int lobbyIndex;
     private int size = 4;
 
@@ -31,9 +34,8 @@ public class Lobby {
 
 
     public Lobby() {
-        table = new Table(TableType.FIXED_LIMIT, new BigDecimal(100));
+        table = new Table(TABLE_TYPE, BIG_BLIND);
         // Todo figure out where to start the table thread
-        // table.start();
         players = new ArrayList<>();
     }
 
@@ -51,6 +53,7 @@ public class Lobby {
         synchronized (lock) {
             Player player = new Player(playerName, startingCash, client);
             players.add(player);
+            table.addPlayer(player);
             return player;
         }
     }
@@ -60,6 +63,7 @@ public class Lobby {
             for (Player player : players) {
                 if (player.getClient() == ClientHandler) {
                     players.remove(player);
+                    table.removePlayer(player);
                     break;
                 }
             }
@@ -67,6 +71,19 @@ public class Lobby {
     }
 
     public void startTable() {
+        int playerCount = players.size();
+
+        while (playerCount < 4) {
+            Player playerToAdd = new Player("Player_" + (playerCount + 1),
+                    startingCash,
+                    new BasicBot(50, 50));
+
+            players.add(playerToAdd);
+            table.addPlayer(playerToAdd);
+
+            playerCount++;
+        }
+
         this.table.start();
     }
 
@@ -86,7 +103,7 @@ public class Lobby {
         this.table = table;
     }
 
-    public ArrayList<Player> getPlayers() {
+    public synchronized ArrayList<Player> getPlayers() {
         return players;
     }
 
@@ -96,6 +113,14 @@ public class Lobby {
 
     public int getLobbyIndex() {
         return lobbyIndex;
+    }
+
+    public BigDecimal getBigBlind() {
+        return BIG_BLIND;
+    }
+
+    public TableType getTableType() {
+        return TABLE_TYPE;
     }
 
     public void setLobbyIndex(int lobbyIndex) {

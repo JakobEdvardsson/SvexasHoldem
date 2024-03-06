@@ -37,6 +37,7 @@ package org.pokergame;
 import org.pokergame.actions.BetAction;
 import org.pokergame.actions.PlayerAction;
 import org.pokergame.actions.RaiseAction;
+import org.pokergame.server.ClientHandler;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -144,10 +145,10 @@ public class Table extends Thread{
         actorPosition = -1;
         while (true) {
             int noOfActivePlayers = 0;
-            for (Player player : players) {
-                if (player.getCash().compareTo(bigBlind) >= 0) {
-                    noOfActivePlayers++;
-                }
+                for (Player player : players) {
+                    if (player.getCash().compareTo(bigBlind) >= 0) {
+                        noOfActivePlayers++;
+                    }
             }
             if (noOfActivePlayers > 1) {
                 playHand();
@@ -364,9 +365,9 @@ public class Table extends Thread{
                     }
                 }
                 playersToAct--;
-                if (action == PlayerAction.CHECK) {
+                if (action.getVerb().equals("checks") || action.getVerb().equals("continues")) {
                     // Do nothing.
-                } else if (action == PlayerAction.CALL) {
+                } else if (action.getVerb().equals("calls")) {
                     BigDecimal betIncrement = bet.subtract(actor.getBet());
                     if (betIncrement.compareTo(actor.getCash()) > 0) {
                         betIncrement = actor.getCash();
@@ -409,7 +410,7 @@ public class Table extends Thread{
                         // Max. number of raises reached; other players get one more turn.
                         playersToAct = activePlayers.size() - 1;
                     }
-                } else if (action == PlayerAction.FOLD) {
+                } else if (action.getVerb().equals("folds")) {
                     actor.setCards(null);
                     activePlayers.remove(actor);
                     actorPosition--;
@@ -814,7 +815,7 @@ public class Table extends Thread{
      */
     private void notifyPlayerActed() {
         for (Player p : players) {
-            Player playerInfo = p.equals(actor) ? actor : actor.publicClone();
+            Player playerInfo = p.equals(actor) ? actor.packetClone() : actor.publicClone();
             p.getClient().playerActed(playerInfo);
         }
     }
@@ -822,5 +823,9 @@ public class Table extends Thread{
 
     public List<Player> getPlayers() {
         return players;
+    }
+
+    public void removePlayer(Player player) {
+        players.remove(player);
     }
 }

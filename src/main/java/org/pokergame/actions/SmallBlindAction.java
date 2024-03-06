@@ -17,12 +17,14 @@
 
 package org.pokergame.actions;
 
+import java.io.Serializable;
+
 /**
  * The action of posting the small blind.
  * 
  * @author Oscar Stigter
  */
-public class SmallBlindAction extends PlayerAction {
+public class SmallBlindAction extends PlayerAction implements Serializable {
 
     /**
      * Constructor.

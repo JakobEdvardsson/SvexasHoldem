@@ -17,12 +17,14 @@
 
 package org.pokergame.actions;
 
+import java.io.Serializable;
+
 /**
  * The action of checking.
  * 
  * @author Oscar Stigter
  */
-public class CheckAction extends PlayerAction {
+public class CheckAction extends PlayerAction implements Serializable {
 
     /**
      * Constructor.

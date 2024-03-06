@@ -1,5 +1,10 @@
 package org.pokergame.server;
+import org.pokergame.Client;
 import org.pokergame.Player;
+import org.pokergame.bots.BasicBot;
+import org.pokergame.toClientCommands.JoinedTable;
+import org.pokergame.toServerCommands.StartGame;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -127,5 +132,43 @@ public final class ServerController {
 
     public HashMap<ClientHandler, String> getConnectedClients() {
         return connectedClients;
+    }
+
+    public void startGame(ClientHandler clientHandler) {
+        Lobby foundLobby = null;
+
+        for (Lobby lobby : lobbies) {
+            for (Player player : lobby.getPlayers()) {
+                if (player.getClient().equals(clientHandler)) {
+                    foundLobby = lobby;
+                    lobby.startTable();
+                    break;
+                }
+            }
+        }
+
+
+        if (foundLobby!= null) {
+            for (Player player : foundLobby.getPlayers()) {
+                if (!(player.getClient() instanceof BasicBot)) {
+                    ((ClientHandler) player.getClient()).sendMessage(new StartGame());
+                }
+            }
+
+
+            ArrayList<String> players = new ArrayList<String>();
+            for (Player player : foundLobby.getPlayers()) {
+                players.add(player.getName());
+            }
+
+            JoinedTable packet = new JoinedTable(foundLobby.getTableType(), foundLobby.getBigBlind(), players);
+            for (Player player : foundLobby.getPlayers()) {
+                if (!(player.getClient() instanceof BasicBot)) {
+                    ((ClientHandler) player.getClient()).sendMessage(packet);
+                }
+            }
+        }
+
+        updateLobbyStatus();
     }
 }
