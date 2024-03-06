@@ -51,12 +51,4 @@ class TableTest {
         table.addPlayer(player);
         assertTrue(table.getPlayers().contains(player), "Player should be added to the table");
     }
-
-
-
-
-
-    @Test
-    void run() {
-    }
 }

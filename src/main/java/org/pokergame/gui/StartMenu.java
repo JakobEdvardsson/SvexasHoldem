@@ -11,7 +11,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 public class StartMenu extends JFrame {
-    public static final Color POKER_GREEN = new Color(0, 153, 0);
+    public static final Color POKER_GREEN = new Color(0, 128, 0);
     private JFrame frame;
     private JLabel usernameLabel;
     private JTextField username;
