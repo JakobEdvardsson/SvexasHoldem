@@ -68,10 +68,12 @@ class LobbyTest {
 
     @Test
     void getTable() {
+        //Method not currently used
     }
 
     @Test
     void setTable() {
+        //Method not currently used
     }
 
     @Test
