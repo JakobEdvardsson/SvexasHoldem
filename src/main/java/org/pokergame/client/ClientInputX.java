@@ -38,8 +38,6 @@ public class ClientInputX extends Thread {
         }
 
         while (true) {
-
-            System.out.println("ClientInput running");
             Object incomingMessage = recieveMessage();
 
             if (incomingMessage instanceof String) {
@@ -48,14 +46,6 @@ public class ClientInputX extends Thread {
 
             // Lobby information
             if (incomingMessage instanceof String[][]) {
-                System.out.println(((String[][]) incomingMessage).length);
-
-                for (int i = 0; i < ((String[][]) incomingMessage).length; i++) {
-                    for (int j = 0; j < ((String[][]) incomingMessage)[i].length; j++) {
-                        System.out.println(((String[][]) incomingMessage)[i][j]);
-                    }
-                }
-
                 clientController.setLobbyInfo((String[][]) incomingMessage);
             }
 
@@ -77,7 +67,6 @@ public class ClientInputX extends Thread {
                     for (String player : players) {
                         playerObjects.add(new Player(player, new BigDecimal(500), null));
                     }
-
 
                     onlineMain.joinedTable(type, bigBlind, playerObjects);
                 }
