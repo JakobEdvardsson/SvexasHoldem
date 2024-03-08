@@ -386,6 +386,11 @@ public class StartMenu extends JFrame {
         return imgPath;
     }
 
+    /**
+     * If the lobby is joinable, allow a user to join.
+     * @param lobby String[] with the lobby information
+     * @return true if joinable, false otherwise
+     */
     private boolean lobbyIsJoinable(String[] lobby) {
         if (lobby[0].equals("Running")) return false;
         boolean hasNull = false;
@@ -394,7 +399,7 @@ public class StartMenu extends JFrame {
             if (lobby[i] == null) return true;
         }
 
-        return true;
+        return hasNull;
     }
 
     public void setLobbyInfo(String[][] info) {
@@ -415,9 +420,17 @@ public class StartMenu extends JFrame {
                 lobby3.setListData(lobby3PlayerInfo);
                 repaint();
 
-                joinLobby1.setEnabled(lobbyIsJoinable(info[0]));
-                joinLobby2.setEnabled(lobbyIsJoinable(info[1]));
-                joinLobby3.setEnabled(lobbyIsJoinable(info[2]));
+                if (joinLobby1.getText().equals("Join lobby")) {
+                    joinLobby1.setEnabled(lobbyIsJoinable(info[0]));
+                }
+
+                if (joinLobby2.getText().equals("Join lobby")) {
+                    joinLobby2.setEnabled(lobbyIsJoinable(info[1]));
+                }
+
+                if (joinLobby3.getText().equals("Join lobby")) {
+                    joinLobby3.setEnabled(lobbyIsJoinable(info[2]));
+                }
             }
         });
     }
