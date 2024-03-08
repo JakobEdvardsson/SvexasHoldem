@@ -37,7 +37,9 @@ package org.pokergame;
 import org.pokergame.actions.BetAction;
 import org.pokergame.actions.PlayerAction;
 import org.pokergame.actions.RaiseAction;
+import org.pokergame.bots.BasicBot;
 import org.pokergame.server.ClientHandler;
+import org.pokergame.server.Lobby;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -105,6 +107,10 @@ public class Table extends Thread{
     /** Number of raises in the current betting round. */
     private int raises;
 
+    private boolean gameRunning;
+
+    private Lobby lobby;
+
    // private List<Player> showingPlayers;
 
     /**
@@ -113,7 +119,7 @@ public class Table extends Thread{
      * @param bigBlind
      *            The size of the big blind.
      */
-    public Table(TableType type, BigDecimal bigBlind) {
+    public Table(TableType type, BigDecimal bigBlind, Lobby lobby) {
         this.tableType = type;
         this.bigBlind = bigBlind;
         players = new ArrayList<>();
@@ -121,7 +127,7 @@ public class Table extends Thread{
         deck = new Deck();
         board = new ArrayList<>();
         pots = new ArrayList<>();
-        //start();
+        this.lobby = lobby;
     }
 
     /**
@@ -138,12 +144,16 @@ public class Table extends Thread{
      * Main game loop.
      */
     public void run() {
+
+        gameRunning = true;
+
         for (Player player : players) {
             player.getClient().joinedTable(tableType, bigBlind, players);
         }
         dealerPosition = -1;
         actorPosition = -1;
-        while (true) {
+
+        while (gameRunning) {
             int noOfActivePlayers = 0;
                 for (Player player : players) {
                     if (player.getCash().compareTo(bigBlind) >= 0) {
@@ -167,6 +177,17 @@ public class Table extends Thread{
         }
         notifyPlayersUpdated(false);
         notifyMessage("Game over.");
+
+        // If there's an associated lobby, notify that the game is over
+        if (lobby != null) lobby.gameFinished();
+    }
+
+    public void exitGame() {
+        gameRunning = false;
+    }
+
+    public boolean isRunning() {
+        return gameRunning;
     }
 
     /**
@@ -190,7 +211,7 @@ public class Table extends Thread{
         doBettingRound();
 
         // Flop.
-        if (activePlayers.size() > 1) {
+        if (activePlayers.size() > 1 && gameRunning) {
             bet = BigDecimal.ZERO;
             dealCommunityCards("Flop", 3);
             doBettingRound();
@@ -321,6 +342,16 @@ public class Table extends Thread{
     }
 
     /**
+     * Replaces the player with a bot if the player leaves the round.
+     * @param actor The player to replace
+     * @return The new client of the player
+     */
+    private Client replacePlayer(Player actor) {
+        actor.setClient(new BasicBot(50, 50));
+        return actor.getClient();
+    }
+
+    /**
      * Performs a betting round.
      */
     private void doBettingRound() {
@@ -356,6 +387,25 @@ public class Table extends Thread{
                 // Otherwise allow client to act.
                 Set<PlayerAction> allowedActions = getAllowedActions(actor);
                 action = actor.getClient().act(minBet, bet, allowedActions);
+
+                if (action == null)  {
+                    System.out.printf("Player '%s' disconnected, replacing with bot.%n", actor.getName());
+                    replacePlayer(actor); // Replaces the player with a bot-client.
+                    actor.getClient().playerUpdated(actor); // Updates the new client with the necessary information.
+                    action = actor.getClient().act(minBet, bet, allowedActions);
+                }
+
+                if (action == PlayerAction.TIMED_OUT) {
+                    // Defaulting in order: fold, check, call
+                    if (allowedActions.contains(PlayerAction.FOLD)) action = PlayerAction.FOLD;
+                    else if (allowedActions.contains(PlayerAction.CHECK)) action = PlayerAction.CHECK;
+                    else if (allowedActions.contains(PlayerAction.CALL)) action = PlayerAction.CALL;
+
+                    System.out.printf("Player '%s' didn't act in time, defaulting action %s.%n",
+                            actor.getName(),
+                            action.getVerb());
+                }
+
                 // Verify chosen action to guard against broken clients (accidental or on purpose).
                 if (!allowedActions.contains(action)) {
                     if (action instanceof BetAction && !allowedActions.contains(PlayerAction.BET)) {

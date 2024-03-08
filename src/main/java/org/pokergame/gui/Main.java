@@ -94,7 +94,7 @@ public class Main extends JFrame implements Client {
         players.put("Eddie", new Player("Eddie", STARTING_CASH, new BasicBot(50, 25)));
 
         /* The table. */
-        Table table = new Table(TABLE_TYPE, BIG_BLIND);
+        Table table = new Table(TABLE_TYPE, BIG_BLIND, null);
         for (Player player : players.values()) {
             table.addPlayer(player);
         }

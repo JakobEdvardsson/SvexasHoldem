@@ -39,7 +39,7 @@ class TableTest {
         players.put("Eddie", new Player("Eddie", STARTING_CASH, new BasicBot(50, 25)));
 
         /* The table. */
-        table = new Table(TABLE_TYPE, BIG_BLIND);
+        table = new Table(TABLE_TYPE, BIG_BLIND, null);
         for (Player player : players.values()) {
             table.addPlayer(player);
         }

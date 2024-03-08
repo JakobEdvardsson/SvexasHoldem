@@ -28,7 +28,7 @@ public class ClientHandler extends Thread implements Client {
         System.out.println("Client Handler created");
         this.socket = socket;
         this.serverController = serverController;
-        this.packetBuffer = new Buffer<PlayerAction>(10);
+        this.packetBuffer = new Buffer<PlayerAction>(10, 60000);
     }
 
     @Override
@@ -101,6 +101,7 @@ public class ClientHandler extends Thread implements Client {
 
     public void disconnectClient() {
         serverController.disconnectClient(this);
+        packetBuffer.add(null);
     }
 
     public void sendMessage(Object obj) {

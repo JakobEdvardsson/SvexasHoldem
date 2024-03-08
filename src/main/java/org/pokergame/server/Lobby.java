@@ -32,11 +32,19 @@ public class Lobby {
     private ArrayList<Player> players;
     private Object lock = new Object();
 
+    private int playerCount;
 
-    public Lobby() {
-        table = new Table(TABLE_TYPE, BIG_BLIND);
-        // Todo figure out where to start the table thread
+    private ServerController controller;
+
+    private boolean running;
+
+
+    public Lobby(ServerController controller) {
+        table = new Table(TABLE_TYPE, BIG_BLIND, this);
         players = new ArrayList<>();
+        this.controller = controller;
+        playerCount = 0;
+        running = false;
     }
 
     /**
@@ -51,23 +59,41 @@ public class Lobby {
 
     public synchronized Player addPlayer(String playerName, Client client) {
         synchronized (lock) {
-            Player player = new Player(playerName, startingCash, client);
-            players.add(player);
-            table.addPlayer(player);
-            return player;
+            if (!table.isRunning() && playerCount < 5) {
+                Player player = new Player(playerName, startingCash, client);
+                players.add(player);
+                table.addPlayer(player);
+                playerCount++;
+                return player;
+            }
+            return null;
         }
     }
 
     public synchronized void removePlayer(ClientHandler ClientHandler) {
         synchronized (lock) {
             for (Player player : players) {
-                if (player.getClient() == ClientHandler) {
+                if (!table.isRunning() && player.getClient() == ClientHandler) {
                     players.remove(player);
                     table.removePlayer(player);
+                    playerCount--;
                     break;
                 }
             }
         }
+
+        // If only bot players remain
+        if (playerCount == 0 && table.isRunning()) {
+            System.out.println("No remaining players in the lobby, exiting game.");
+            table.exitGame();
+        }
+    }
+
+    public void gameFinished() {
+        players.clear();
+        this.running = false;
+        table = new Table(TABLE_TYPE, BIG_BLIND, this);
+        if (controller != null) controller.updateLobbyStatus(); // Update clients with lobby status
     }
 
     public void startTable() {
@@ -84,7 +110,12 @@ public class Lobby {
             playerCount++;
         }
 
+        running = true;
         this.table.start();
+    }
+
+    public boolean isRunning() {
+        return running;
     }
 
     public Boolean getAvailable() {

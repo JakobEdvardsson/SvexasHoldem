@@ -53,6 +53,9 @@ public abstract class PlayerAction implements Serializable {
     
     /** Posting the small blind. */
     public static final PlayerAction SMALL_BLIND = new SmallBlindAction();
+
+    /** Timed out action. */
+    public static final PlayerAction TIMED_OUT = new TimedOutAction();
     
     /** The action's name. */
     private final String name;
