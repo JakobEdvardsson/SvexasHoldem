@@ -386,16 +386,38 @@ public class StartMenu extends JFrame {
         return imgPath;
     }
 
+    private boolean lobbyIsJoinable(String[] lobby) {
+        if (lobby[0].equals("Running")) return false;
+        boolean hasNull = false;
+
+        for (int i = 1; i < lobby.length; i++) {
+            if (lobby[i] == null) return true;
+        }
+
+        return true;
+    }
+
     public void setLobbyInfo(String[][] info) {
+
+        String[] lobby1PlayerInfo = new String[4];
+        System.arraycopy(info[0], 1, lobby1PlayerInfo, 0, 4);
+
+        String[] lobby2PlayerInfo = new String[4];
+        System.arraycopy(info[1], 1, lobby2PlayerInfo, 0, 4);
+
+        String[] lobby3PlayerInfo = new String[4];
+        System.arraycopy(info[2], 1, lobby3PlayerInfo, 0, 4);
+
         SwingUtilities.invokeLater(() -> {
-            lobby1Players = info[0];
-            lobby2Players = info[1];
-            lobby3Players = info[2];
             if (lobby1 != null) {
-                lobby1.setListData(lobby1Players);
-                lobby2.setListData(lobby2Players);
-                lobby3.setListData(lobby3Players);
+                lobby1.setListData(lobby1PlayerInfo);
+                lobby2.setListData(lobby2PlayerInfo);
+                lobby3.setListData(lobby3PlayerInfo);
                 repaint();
+
+                joinLobby1.setEnabled(lobbyIsJoinable(info[0]));
+                joinLobby2.setEnabled(lobbyIsJoinable(info[1]));
+                joinLobby3.setEnabled(lobbyIsJoinable(info[2]));
             }
         });
     }

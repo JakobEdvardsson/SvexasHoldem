@@ -36,12 +36,15 @@ public class Lobby {
 
     private ServerController controller;
 
+    private boolean running;
+
 
     public Lobby(ServerController controller) {
         table = new Table(TABLE_TYPE, BIG_BLIND, this);
         players = new ArrayList<>();
         this.controller = controller;
         playerCount = 0;
+        running = false;
     }
 
     /**
@@ -88,6 +91,7 @@ public class Lobby {
 
     public void gameFinished() {
         players.clear();
+        this.running = false;
         table = new Table(TABLE_TYPE, BIG_BLIND, this);
         if (controller != null) controller.updateLobbyStatus(); // Update clients with lobby status
     }
@@ -106,7 +110,12 @@ public class Lobby {
             playerCount++;
         }
 
+        running = true;
         this.table.start();
+    }
+
+    public boolean isRunning() {
+        return running;
     }
 
     public Boolean getAvailable() {
