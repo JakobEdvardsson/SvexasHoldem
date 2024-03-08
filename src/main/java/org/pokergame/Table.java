@@ -395,6 +395,17 @@ public class Table extends Thread{
                     action = actor.getClient().act(minBet, bet, allowedActions);
                 }
 
+                if (action == PlayerAction.TIMED_OUT) {
+                    // Defaulting in order: fold, check, call
+                    if (allowedActions.contains(PlayerAction.FOLD)) action = PlayerAction.FOLD;
+                    else if (allowedActions.contains(PlayerAction.CHECK)) action = PlayerAction.CHECK;
+                    else if (allowedActions.contains(PlayerAction.CALL)) action = PlayerAction.CALL;
+
+                    System.out.printf("Player '%s' didn't act in time, defaulting action %s.%n",
+                            actor.getName(),
+                            action.getVerb());
+                }
+
                 // Verify chosen action to guard against broken clients (accidental or on purpose).
                 if (!allowedActions.contains(action)) {
                     if (action instanceof BetAction && !allowedActions.contains(PlayerAction.BET)) {
