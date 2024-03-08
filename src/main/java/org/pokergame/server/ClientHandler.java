@@ -101,6 +101,7 @@ public class ClientHandler extends Thread implements Client {
 
     public void disconnectClient() {
         serverController.disconnectClient(this);
+        packetBuffer.add(null);
     }
 
     public void sendMessage(Object obj) {

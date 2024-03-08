@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class LobbyTest {
 
-    private final Lobby lobby = new Lobby();
+    private final Lobby lobby = new Lobby(null);
 
     @Test
     void addPlayer() {

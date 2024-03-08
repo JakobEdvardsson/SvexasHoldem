@@ -24,9 +24,9 @@ public final class ServerController {
         lobbies = new ArrayList<Lobby>();
         connectedClients = new HashMap<ClientHandler, String>();
 
-        lobbies.add(new Lobby());
-        lobbies.add(new Lobby());
-        lobbies.add(new Lobby());
+        lobbies.add(new Lobby(this));
+        lobbies.add(new Lobby(this));
+        lobbies.add(new Lobby(this));
 
     }
 
@@ -57,7 +57,7 @@ public final class ServerController {
     }
 
     public synchronized Lobby createLobby() {
-        Lobby lobby = new Lobby();
+        Lobby lobby = new Lobby(this);
         lobby.setLobbyIndex(lobbies.size());
         lobbies.add(lobby);
         return lobby;
