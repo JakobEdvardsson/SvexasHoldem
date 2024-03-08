@@ -40,12 +40,14 @@ public final class ServerController {
 
     public String[][] getLobbiesAsString() {
 
-        String[][] lobbyStrings = new String[lobbies.size()][4];
+        String[][] lobbyStrings = new String[lobbies.size()][5];
 
         for (int i = 0; i < lobbies.size(); i++) {
             Lobby lobby = lobbies.get(i);
 
-            int index = 0;
+            lobbyStrings[i][0] = String.format("%s", lobby.isRunning() ? "Running" : "Not Running");
+
+            int index = 1;
             for (Player player : lobby.getPlayers()) {
                 System.out.println("player found!");
                 System.out.println(player.getName());
