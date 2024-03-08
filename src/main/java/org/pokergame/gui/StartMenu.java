@@ -27,6 +27,7 @@ public class StartMenu extends JFrame {
     private String[] lobby2Players = {"Player6", "Player7", "Player8", "Player9", "Player10"};
     private String[] lobby3Players = {"Player11", "Player12", "Player13", "Player14", "Player15"};
     LanguageState state = LanguageState.ENGLISH;
+    private boolean playerInLobby;
 
     private ImageIcon flagIcon;
 
@@ -51,6 +52,7 @@ public class StartMenu extends JFrame {
 
     public StartMenu(ClientController controller) {
 
+        this.playerInLobby = false;
         this.controller = controller;
 
         setTitle("Start Menu");
@@ -196,6 +198,7 @@ public class StartMenu extends JFrame {
         joinLobby1.setBounds(20, 320, 100, 40);
         joinLobby1.addActionListener(e -> {
             if (joinLobby1.getText().equals("Join lobby")) {
+                playerInLobby = true;
                 System.out.println("You joined lobby 1");
                 startGame.setEnabled(true);
                 //joinLobby1.setEnabled(!button.isEnabled());
@@ -204,6 +207,7 @@ public class StartMenu extends JFrame {
                 controller.joinLobby(0);
                 joinLobby1.setText("Leave lobby");
             } else {
+                playerInLobby = false;
                 //controller.leaveLobby(0);
                 joinLobby2.setEnabled(true);
                 joinLobby3.setEnabled(true);
@@ -218,6 +222,7 @@ public class StartMenu extends JFrame {
         joinLobby2.setBounds(130, 320, 100, 40);
         joinLobby2.addActionListener(e -> {
             if(joinLobby2.getText().equals("Join lobby")) {
+                playerInLobby = true;
                 System.out.println("You joined lobby 2");
                 startGame.setEnabled(true);
                 //joinLobby2.setEnabled(!button.isEnabled());
@@ -226,6 +231,7 @@ public class StartMenu extends JFrame {
                 controller.joinLobby(1);
                 joinLobby2.setText("Leave lobby");
             } else {
+                playerInLobby = false;
                 //controller.leaveLobby(1);
                 joinLobby1.setEnabled(true);
                 joinLobby3.setEnabled(true);
@@ -240,6 +246,7 @@ public class StartMenu extends JFrame {
         joinLobby3.setBounds(240, 320, 100, 40);
         joinLobby3.addActionListener(e -> {
             if(joinLobby3.getText().equals("Join lobby")) {
+                playerInLobby = true;
                 System.out.println("You joined lobby 3");
                 startGame.setEnabled(true);
                 //joinLobby3.setEnabled(!button.isEnabled());
@@ -248,6 +255,7 @@ public class StartMenu extends JFrame {
                 controller.joinLobby(2);
                 joinLobby3.setText("Leave lobby");
             } else {
+                playerInLobby = false;
                 //controller.leaveLobby(2);
                 joinLobby1.setEnabled(true);
                 joinLobby2.setEnabled(true);
@@ -420,16 +428,18 @@ public class StartMenu extends JFrame {
                 lobby3.setListData(lobby3PlayerInfo);
                 repaint();
 
-                if (joinLobby1.getText().equals("Join lobby")) {
-                    joinLobby1.setEnabled(lobbyIsJoinable(info[0]));
-                }
+                if (!playerInLobby) {
+                    if (joinLobby1.getText().equals("Join lobby")) {
+                        joinLobby1.setEnabled(lobbyIsJoinable(info[0]));
+                    }
 
-                if (joinLobby2.getText().equals("Join lobby")) {
-                    joinLobby2.setEnabled(lobbyIsJoinable(info[1]));
-                }
+                    if (joinLobby2.getText().equals("Join lobby")) {
+                        joinLobby2.setEnabled(lobbyIsJoinable(info[1]));
+                    }
 
-                if (joinLobby3.getText().equals("Join lobby")) {
-                    joinLobby3.setEnabled(lobbyIsJoinable(info[2]));
+                    if (joinLobby3.getText().equals("Join lobby")) {
+                        joinLobby3.setEnabled(lobbyIsJoinable(info[2]));
+                    }
                 }
             }
         });
