@@ -59,7 +59,7 @@ public class OnlineMain extends JFrame implements Client {
     private final Map<String, PlayerPanel> playerPanels;
 
     /** The human player. */
-    private final Player humanPlayer;
+    private Player humanPlayer;
 
     /** The current dealer's name. */
     private String dealerName;
@@ -170,6 +170,7 @@ public class OnlineMain extends JFrame implements Client {
     @Override
     public void playerUpdated(Player player) {
         PlayerPanel playerPanel = playerPanels.get(player.getName());
+        if (humanPlayer.getName().equals(player.getName())) humanPlayer = player;
         if (playerPanel != null) {
             playerPanel.update(player);
         }
@@ -197,7 +198,6 @@ public class OnlineMain extends JFrame implements Client {
     @Override
     public PlayerAction act(BigDecimal minBet, BigDecimal currentBet, Set<PlayerAction> allowedActions) {
         boardPanel.setMessage("Please select an action:");
-        System.out.println(allowedActions.size());
         return controlPanel.getUserInput(minBet, humanPlayer.getCash(), allowedActions);
     }
 

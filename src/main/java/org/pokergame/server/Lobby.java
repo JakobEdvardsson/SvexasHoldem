@@ -11,8 +11,8 @@ import java.util.ArrayList;
 
 public class Lobby {
     private final BigDecimal startingCash = new BigDecimal(500);
-    private final BigDecimal BIG_BLIND = new BigDecimal(100);
-    private final TableType TABLE_TYPE = TableType.FIXED_LIMIT;
+    private final BigDecimal BIG_BLIND = new BigDecimal(10);
+    private final TableType TABLE_TYPE = TableType.NO_LIMIT;
     private int lobbyIndex;
     private int size = 4;
 
