@@ -43,6 +43,7 @@ import org.pokergame.server.Lobby;
 import org.pokergame.util.PokerUtils;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 
 /**
@@ -597,7 +598,7 @@ public class Table extends Thread{
 
                 if (noOfWinnersInPot > 0) {
                     // Divide pot over winners.
-                    BigDecimal potShare = pot.getValue().divide(new BigDecimal(String.valueOf(noOfWinnersInPot))); //TODO
+                    BigDecimal potShare = pot.getValue().divide(new BigDecimal(String.valueOf(noOfWinnersInPot)), RoundingMode.FLOOR); //TODO
                     dividePotOverWinners(winners, pot, potDivision, potShare);
 
                     // Determine if we have any odd chips left in the pot.
