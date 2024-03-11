@@ -348,6 +348,7 @@ public class Table extends Thread{
      */
     private Client replacePlayer(Player actor) {
         actor.setClient(new BasicBot(50, 50));
+        actor.setName(String.format("%s (bot)", actor.getName()));
         return actor.getClient();
     }
 

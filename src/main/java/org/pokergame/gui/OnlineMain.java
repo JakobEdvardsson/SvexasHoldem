@@ -180,6 +180,12 @@ public class OnlineMain extends JFrame implements Client {
     public void playerActed(Player player) {
         String name = player.getName();
         PlayerPanel playerPanel = playerPanels.get(name);
+
+        if (playerPanel == null) {
+            String oldName = player.getName().substring(0, player.getName().length() - 6);
+            playerPanel = playerPanels.get(oldName);
+        }
+
         if (playerPanel != null) {
             playerPanel.update(player);
             PlayerAction action = player.getAction();

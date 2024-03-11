@@ -52,7 +52,7 @@ public class Lobby {
     }
 
     private ArrayList<String> generateBotNames() {
-        ArrayList<String> names = new ArrayList<String>() {{
+        names = new ArrayList<String>() {{
             add("Alex");
             add("Bella");
             add("Caleb");
@@ -95,11 +95,14 @@ public class Lobby {
     public synchronized void removePlayer(ClientHandler ClientHandler) {
         synchronized (lock) {
             for (Player player : players) {
-                if (!table.isRunning() && player.getClient() == ClientHandler) {
+                if (!table.isRunning()) {
                     players.remove(player);
                     table.removePlayer(player);
                     playerCount--;
                     break;
+                } else {
+                    System.out.println("Removing player " + player.getName() + " from table.");
+                    playerCount--;
                 }
             }
         }
