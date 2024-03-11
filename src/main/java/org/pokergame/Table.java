@@ -320,7 +320,6 @@ public class Table extends Thread{
         for (Player player : activePlayers) {
             player.setCards(deck.deal(2));
         }
-        System.out.println();
         notifyPlayersUpdated(false);
         notifyMessage("%s deals the hole cards.", dealer);
     }
