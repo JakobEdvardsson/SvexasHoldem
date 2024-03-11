@@ -59,7 +59,7 @@ public class ServerInput extends Thread {
                 }
 
                 if (incomingMessage instanceof StartGame) {
-                    clientHandler.startGame();
+                    clientHandler.startGame(incomingMessage);
                 }
             }
 

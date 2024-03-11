@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.math.BigDecimal;
 
 public class StartMenu extends JFrame {
     public static final Color POKER_GREEN = new Color(0, 128, 0);
@@ -180,8 +181,12 @@ public class StartMenu extends JFrame {
 
         stackSlide = new JSlider(1000, 10000);
         stackSlide.setBounds(410, 150, 250, 75);
-        stackSlide.setMajorTickSpacing(2500);
+        stackSlide.setMajorTickSpacing(1000);
+        stackSlide.setMinorTickSpacing(200);
         stackSlide.setPaintLabels(true);
+        stackSlide.setSnapToTicks(true);
+        stackSlide.setMinimum(500);
+        stackSlide.setMaximum(5000);
         stackSlide.setPaintTicks(true);
         playersStackLabel = new JLabel("Value: ");
         playersStackLabel.setBounds(360, 250, 100, 50);
@@ -266,7 +271,7 @@ public class StartMenu extends JFrame {
         startGame = new JButton("Start Game");
         startGame.setBounds(275, 390, 150, 40);
         startGame.addActionListener(e -> {
-            controller.startGame();
+            controller.startGame(new BigDecimal(stackSlide.getValue()));
             System.out.println("Game started");
         });
         startGame.setEnabled(false);

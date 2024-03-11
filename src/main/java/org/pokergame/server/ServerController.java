@@ -5,6 +5,7 @@ import org.pokergame.bots.BasicBot;
 import org.pokergame.toClientCommands.JoinedTable;
 import org.pokergame.toServerCommands.StartGame;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -134,13 +135,16 @@ public final class ServerController {
         return connectedClients;
     }
 
-    public void startGame(ClientHandler clientHandler) {
+    public void startGame(ClientHandler clientHandler, Object obj) {
         Lobby foundLobby = null;
+
+        BigDecimal stack = ((StartGame) obj).stackSize();
 
         for (Lobby lobby : lobbies) {
             for (Player player : lobby.getPlayers()) {
                 if (player.getClient().equals(clientHandler)) {
                     foundLobby = lobby;
+                    lobby.setStackSize(stack);
                     lobby.startTable();
                     break;
                 }
@@ -151,7 +155,7 @@ public final class ServerController {
         if (foundLobby!= null) {
             for (Player player : foundLobby.getPlayers()) {
                 if (!(player.getClient() instanceof BasicBot)) {
-                    ((ClientHandler) player.getClient()).sendMessage(new StartGame());
+                    ((ClientHandler) player.getClient()).sendMessage(new StartGame(null));
                 }
             }
 

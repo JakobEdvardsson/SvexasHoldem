@@ -64,7 +64,7 @@ class ClientInputXTest {
 
     private void startGame() {
         // Arrange
-        StartGame startGame = new StartGame();
+        StartGame startGame = new StartGame(null);
         doReturn(startGame).when(spyClientInputX).recieveMessage();
 
         // Act

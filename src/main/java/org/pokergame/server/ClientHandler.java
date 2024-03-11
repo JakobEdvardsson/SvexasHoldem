@@ -108,7 +108,7 @@ public class ClientHandler extends Thread implements Client {
         serverOutput.sendMessage(obj);
     }
 
-    public void startGame() {
-        serverController.startGame(this);
+    public void startGame(Object obj) {
+        serverController.startGame(this, obj);
     }
 }

@@ -8,6 +8,7 @@ import org.pokergame.toServerCommands.*;
 
 import javax.swing.*;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.Socket;
 
 public class ClientController {
@@ -146,8 +147,11 @@ public class ClientController {
         this.username = text;
     }
 
-    public void startGame() {
-        clientOutput.sendMessage(new StartGame());
+    public void startGame(BigDecimal stackSize) {
+        // Checks if the stack size is divisible by 4.
+        if (stackSize.remainder(new BigDecimal(4)).equals(BigDecimal.ZERO)) {
+            clientOutput.sendMessage(new StartGame(stackSize));
+        }
     }
 
     public void sendMessage(PlayerAction action) {
