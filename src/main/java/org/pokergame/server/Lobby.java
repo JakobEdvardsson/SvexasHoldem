@@ -104,6 +104,7 @@ public class Lobby {
                 } else {
                     System.out.println("Removing player " + player.getName() + " from table.");
                     playerCount--;
+                    break;
                 }
             }
         }
