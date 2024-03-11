@@ -40,6 +40,7 @@ import org.pokergame.actions.RaiseAction;
 import org.pokergame.bots.BasicBot;
 import org.pokergame.server.ClientHandler;
 import org.pokergame.server.Lobby;
+import org.pokergame.util.PokerUtils;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -346,7 +347,8 @@ public class Table extends Thread{
      * @return The new client of the player
      */
     private Client replacePlayer(Player actor) {
-        actor.setClient(new BasicBot(50, 50));
+        int[] stats = PokerUtils.getRandomBotStats();
+        actor.setClient(new BasicBot(stats[0], stats[1]));
         actor.setName(String.format("%s (bot)", actor.getName()));
         return actor.getClient();
     }

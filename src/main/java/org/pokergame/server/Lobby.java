@@ -5,6 +5,7 @@ import org.pokergame.Player;
 import org.pokergame.Table;
 import org.pokergame.TableType;
 import org.pokergame.bots.BasicBot;
+import org.pokergame.util.PokerUtils;
 
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
@@ -125,10 +126,16 @@ public class Lobby {
         int playerCount = players.size();
 
         while (playerCount < 4) {
+
+            int[] stats = PokerUtils.getRandomBotStats();
+            String botName = getBotName();
+
+            System.out.printf("Bot %s tightness: %d, aggressiveness: %d%n", botName, stats[0], stats[1]);
+
             Player playerToAdd = new Player(
-                    getBotName(),
+                    botName,
                     startingCash,
-                    new BasicBot(50, 50));
+                    new BasicBot(stats[0], stats[1]));
 
             players.add(playerToAdd);
             table.addPlayer(playerToAdd);

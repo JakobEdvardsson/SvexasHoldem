@@ -19,6 +19,8 @@ package org.pokergame.util;
 
 import org.pokergame.Card;
 
+import java.util.Random;
+
 /**
  * Contains various utility methods.
  * 
@@ -102,6 +104,15 @@ public abstract class PokerUtils {
         
         // 6. Round half point scores up.
         return Math.round(score);        
+    }
+
+    public static int[] getRandomBotStats() {
+        Random random = new Random();
+        int[] stats = new int[2];
+
+        stats[0] = random.nextInt(50, 100);
+        stats[1] = random.nextInt(50, 100);
+        return stats;
     }
 
 }
