@@ -199,7 +199,6 @@ public class StartMenu extends JFrame {
         joinLobby1.addActionListener(e -> {
             if (joinLobby1.getText().equals("Join lobby")) {
                 playerInLobby = true;
-                System.out.println("You joined lobby 1");
                 startGame.setEnabled(true);
                 //joinLobby1.setEnabled(!button.isEnabled());
                 joinLobby2.setEnabled(false);
@@ -223,7 +222,6 @@ public class StartMenu extends JFrame {
         joinLobby2.addActionListener(e -> {
             if(joinLobby2.getText().equals("Join lobby")) {
                 playerInLobby = true;
-                System.out.println("You joined lobby 2");
                 startGame.setEnabled(true);
                 //joinLobby2.setEnabled(!button.isEnabled());
                 joinLobby1.setEnabled(false);
@@ -247,7 +245,6 @@ public class StartMenu extends JFrame {
         joinLobby3.addActionListener(e -> {
             if(joinLobby3.getText().equals("Join lobby")) {
                 playerInLobby = true;
-                System.out.println("You joined lobby 3");
                 startGame.setEnabled(true);
                 //joinLobby3.setEnabled(!button.isEnabled());
                 joinLobby1.setEnabled(false);

@@ -49,8 +49,6 @@ public final class ServerController {
 
             int index = 1;
             for (Player player : lobby.getPlayers()) {
-                System.out.println("player found!");
-                System.out.println(player.getName());
                 lobbyStrings[i][index++] = player.getName();
             }
         }

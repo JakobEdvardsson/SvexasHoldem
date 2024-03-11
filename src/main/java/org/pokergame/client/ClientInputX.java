@@ -42,20 +42,8 @@ public class ClientInputX extends Thread {
     public void getInput() {
         incomingMessage = recieveMessage();
 
-        if (incomingMessage instanceof String) {
-            System.out.println(incomingMessage);
-        }
-
         // Lobby information
         if (incomingMessage instanceof String[][]) {
-            System.out.println(((String[][]) incomingMessage).length);
-
-            for (int i = 0; i < ((String[][]) incomingMessage).length; i++) {
-                for (int j = 0; j < ((String[][]) incomingMessage)[i].length; j++) {
-                    System.out.println(((String[][]) incomingMessage)[i][j]);
-                }
-            }
-
             clientController.setLobbyInfo((String[][]) incomingMessage);
         }
 

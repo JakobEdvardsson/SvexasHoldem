@@ -6,13 +6,15 @@ import org.pokergame.Table;
 import org.pokergame.TableType;
 import org.pokergame.bots.BasicBot;
 
+import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Lobby {
     private final BigDecimal startingCash = new BigDecimal(500);
-    private final BigDecimal BIG_BLIND = new BigDecimal(100);
-    private final TableType TABLE_TYPE = TableType.FIXED_LIMIT;
+    private final BigDecimal BIG_BLIND = new BigDecimal(10);
+    private final TableType TABLE_TYPE = TableType.NO_LIMIT;
     private int lobbyIndex;
     private int size = 4;
 
@@ -38,6 +40,7 @@ public class Lobby {
 
     private boolean running;
 
+    private ArrayList<String> names;
 
     public Lobby(ServerController controller) {
         table = new Table(TABLE_TYPE, BIG_BLIND, this);
@@ -45,6 +48,25 @@ public class Lobby {
         this.controller = controller;
         playerCount = 0;
         running = false;
+        generateBotNames();
+    }
+
+    private ArrayList<String> generateBotNames() {
+        names = new ArrayList<String>() {{
+            add("Alex");
+            add("Bella");
+            add("Caleb");
+            add("Daisy");
+            add("Ethan");
+            add("Fiona");
+            add("Gavin");
+            add("Holly");
+            add("Ivan");
+            add("Jenna");
+        }};
+
+        Collections.shuffle(this.names);
+        return names;
     }
 
     /**
@@ -73,11 +95,14 @@ public class Lobby {
     public synchronized void removePlayer(ClientHandler ClientHandler) {
         synchronized (lock) {
             for (Player player : players) {
-                if (!table.isRunning() && player.getClient() == ClientHandler) {
+                if (!table.isRunning()) {
                     players.remove(player);
                     table.removePlayer(player);
                     playerCount--;
                     break;
+                } else {
+                    System.out.println("Removing player " + player.getName() + " from table.");
+                    playerCount--;
                 }
             }
         }
@@ -100,7 +125,8 @@ public class Lobby {
         int playerCount = players.size();
 
         while (playerCount < 4) {
-            Player playerToAdd = new Player("Player_" + (playerCount + 1),
+            Player playerToAdd = new Player(
+                    getBotName(),
                     startingCash,
                     new BasicBot(50, 50));
 
@@ -112,6 +138,10 @@ public class Lobby {
 
         running = true;
         this.table.start();
+    }
+
+    private String getBotName() {
+        return String.format("%s (bot)", names.removeFirst());
     }
 
     public boolean isRunning() {

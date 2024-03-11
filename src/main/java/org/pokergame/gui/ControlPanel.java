@@ -155,18 +155,15 @@ public class ControlPanel extends JPanel implements ActionListener {
                             add(checkButton);
                         }
                         if (newAllowedActions.contains(PlayerAction.CALL)) {
-                            System.out.println("call");
                             add(callButton);
                         }
                         if (newAllowedActions.contains(PlayerAction.BET)) {
                             add(betButton);
                         }
                         if (newAllowedActions.contains(PlayerAction.RAISE)) {
-                            System.out.println("raise");
                             add(raiseButton);
                         }
                         if (newAllowedActions.contains(PlayerAction.FOLD)) {
-                            System.out.println("fold");
                             add(foldButton);
                         }
                     }

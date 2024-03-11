@@ -248,4 +248,8 @@ public class PlayerPanel extends JPanel {
             setText(" ");
         }
     }
+
+    public void setNameLabel(String name) {
+        this.nameLabel.setText(name);
+    }
 }

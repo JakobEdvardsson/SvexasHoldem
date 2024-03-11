@@ -320,7 +320,6 @@ public class Table extends Thread{
         for (Player player : activePlayers) {
             player.setCards(deck.deal(2));
         }
-        System.out.println();
         notifyPlayersUpdated(false);
         notifyMessage("%s deals the hole cards.", dealer);
     }
@@ -348,6 +347,7 @@ public class Table extends Thread{
      */
     private Client replacePlayer(Player actor) {
         actor.setClient(new BasicBot(50, 50));
+        actor.setName(String.format("%s (bot)", actor.getName()));
         return actor.getClient();
     }
 
