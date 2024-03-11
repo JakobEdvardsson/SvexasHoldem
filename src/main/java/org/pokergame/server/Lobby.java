@@ -95,17 +95,18 @@ public class Lobby {
 
     public synchronized void removePlayer(ClientHandler ClientHandler) {
         synchronized (lock) {
-            for (Player player : players) {
-                if (!table.isRunning()) {
-                    players.remove(player);
-                    table.removePlayer(player);
-                    playerCount--;
-                    break;
-                } else {
-                    System.out.println("Removing player " + player.getName() + " from table.");
-                    playerCount--;
-                    break;
+            if (!table.isRunning()) {
+                for (Player player : players) {
+                    if (player.getClient().equals(ClientHandler)) {
+                        players.remove(player);
+                        table.removePlayer(player);
+                        playerCount--;
+                        break;
+                    }
                 }
+            } else {
+                System.out.println("Removing player from table.");
+                playerCount--;
             }
         }
 

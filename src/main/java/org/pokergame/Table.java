@@ -352,11 +352,6 @@ public class Table extends Thread{
 
         Client playerClient = actor.getClient();
 
-        if (playerClient instanceof ClientHandler) {
-            System.out.printf("Removing player %s from lobby.%n", actor.getName());
-            lobby.removePlayer((ClientHandler) playerClient);
-        }
-
         actor.setClient(new BasicBot(stats[0], stats[1]));
         actor.setName(String.format("%s (bot)", actor.getName()));
 
