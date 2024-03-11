@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class Lobby {
-    private final BigDecimal startingCash = new BigDecimal(500);
+    private BigDecimal startingCash = new BigDecimal(500);
     private final BigDecimal BIG_BLIND = new BigDecimal(10);
     private final TableType TABLE_TYPE = TableType.NO_LIMIT;
     private int lobbyIndex;
@@ -137,6 +137,11 @@ public class Lobby {
         }
 
         running = true;
+
+        for (Player player : players) {
+            player.setCash(startingCash);
+        }
+
         this.table.start();
     }
 
@@ -186,5 +191,9 @@ public class Lobby {
 
     public void setLobbyIndex(int lobbyIndex) {
         this.lobbyIndex = lobbyIndex;
+    }
+
+    public void setStackSize(BigDecimal stack) {
+        startingCash = stack.divide(new BigDecimal(4));
     }
 }

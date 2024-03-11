@@ -284,4 +284,9 @@ public class Player implements Serializable {
     public void setName(String s) {
         this.name = s;
     }
+
+    public void setCash(BigDecimal cash) {
+        this.cash = cash;
+    }
+
 }
