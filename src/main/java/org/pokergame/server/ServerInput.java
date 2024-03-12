@@ -32,39 +32,43 @@ public class ServerInput extends Thread {
             in = new ObjectInputStream(socket.getInputStream());
 
             while (isRunning) {
-                Object incomingMessage = recieveMessage();
-
-                if (incomingMessage instanceof JoinLobby) {
-                    System.out.println("Player tried to join table " + ((JoinLobby) incomingMessage).tableId() + "!");
-                    clientHandler.joinTable((JoinLobby) incomingMessage);
-                }
-
-                if (incomingMessage instanceof Register) {
-                    Register message = (Register) incomingMessage;
-                    clientHandler.registerClient(message);
-                }
-
-                if(incomingMessage instanceof LeaveLobby){
-                    clientHandler.leaveLobby((LeaveLobby) incomingMessage);
-                }
-
-                if(incomingMessage instanceof PlayerAction){
-                    packetBuffer.add((PlayerAction) incomingMessage);
-                }
-
-                if(incomingMessage instanceof Disconnect){
-                    clientHandler.disconnectClient();
-                    isRunning = false;
-                    continue;
-                }
-
-                if (incomingMessage instanceof StartGame) {
-                    clientHandler.startGame(incomingMessage);
-                }
+                getInput();
             }
 
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void getInput() {
+        Object incomingMessage = recieveMessage();
+
+        if (incomingMessage instanceof JoinLobby) {
+            System.out.println("Player tried to join table " + ((JoinLobby) incomingMessage).tableId() + "!");
+            clientHandler.joinTable((JoinLobby) incomingMessage);
+        }
+
+        if (incomingMessage instanceof Register) {
+            Register message = (Register) incomingMessage;
+            clientHandler.registerClient(message);
+        }
+
+        if(incomingMessage instanceof LeaveLobby){
+            clientHandler.leaveLobby((LeaveLobby) incomingMessage);
+        }
+
+        if(incomingMessage instanceof PlayerAction){
+            packetBuffer.add((PlayerAction) incomingMessage);
+        }
+
+        if(incomingMessage instanceof Disconnect){
+            clientHandler.disconnectClient();
+            isRunning = false;
+            return;
+        }
+
+        if (incomingMessage instanceof StartGame) {
+            clientHandler.startGame(incomingMessage);
         }
     }
 
@@ -79,5 +83,17 @@ public class ServerInput extends Thread {
         catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public ClientHandler getClientHandler() {
+        return clientHandler;
+    }
+
+    public Buffer<PlayerAction> getPacketBuffer() {
+        return packetBuffer;
+    }
+
+    public boolean isRunning() {
+        return isRunning;
     }
 }
