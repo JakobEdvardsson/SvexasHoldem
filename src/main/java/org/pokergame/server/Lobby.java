@@ -93,7 +93,7 @@ public class Lobby {
         }
     }
 
-    public synchronized void removePlayer(ClientHandler ClientHandler) {
+    public synchronized Player removePlayer(ClientHandler ClientHandler) {
         synchronized (lock) {
             if (!table.isRunning()) {
                 for (Player player : players) {
