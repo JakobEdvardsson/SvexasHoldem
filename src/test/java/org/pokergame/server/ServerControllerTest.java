@@ -163,7 +163,7 @@ class ServerControllerTest {
 
         boolean found = false;
         for (String[] lobbyInfo : lobbies) {
-            if (lobbyInfo[0] != null && lobbyInfo[0].equals(name)) {
+            if (lobbyInfo[1] != null && lobbyInfo[1].equals(name)) {
                 found = true;
                 break;
             }

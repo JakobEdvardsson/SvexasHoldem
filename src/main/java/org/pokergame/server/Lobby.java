@@ -4,12 +4,18 @@ import org.pokergame.Client;
 import org.pokergame.Player;
 import org.pokergame.Table;
 import org.pokergame.TableType;
+import org.pokergame.bots.BasicBot;
+import org.pokergame.util.PokerUtils;
 
+import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Lobby {
-    private final BigDecimal startingCash = new BigDecimal(1000);
+    private BigDecimal startingCash = new BigDecimal(500);
+    private final BigDecimal BIG_BLIND = new BigDecimal(10);
+    private final TableType TABLE_TYPE = TableType.NO_LIMIT;
     private int lobbyIndex;
     private int size = 4;
 
@@ -29,12 +35,39 @@ public class Lobby {
     private ArrayList<Player> players;
     private Object lock = new Object();
 
+    private int playerCount;
 
-    public Lobby() {
-        table = new Table(TableType.FIXED_LIMIT, new BigDecimal(100));
-        // Todo figure out where to start the table thread
-        // table.start();
+    private ServerController controller;
+
+    private boolean running;
+
+    private ArrayList<String> names;
+
+    public Lobby(ServerController controller) {
+        table = new Table(TABLE_TYPE, BIG_BLIND, this);
         players = new ArrayList<>();
+        this.controller = controller;
+        playerCount = 0;
+        running = false;
+        generateBotNames();
+    }
+
+    private ArrayList<String> generateBotNames() {
+        names = new ArrayList<String>() {{
+            add("Alex");
+            add("Bella");
+            add("Caleb");
+            add("Daisy");
+            add("Ethan");
+            add("Fiona");
+            add("Gavin");
+            add("Holly");
+            add("Ivan");
+            add("Jenna");
+        }};
+
+        Collections.shuffle(this.names);
+        return names;
     }
 
     /**
@@ -49,26 +82,84 @@ public class Lobby {
 
     public synchronized Player addPlayer(String playerName, Client client) {
         synchronized (lock) {
-            Player player = new Player(playerName, startingCash, client);
-            players.add(player);
-            return player;
+            if (!table.isRunning() && playerCount < 5) {
+                Player player = new Player(playerName, startingCash, client);
+                players.add(player);
+                table.addPlayer(player);
+                playerCount++;
+                return player;
+            }
+            return null;
         }
     }
 
     public synchronized Player removePlayer(ClientHandler ClientHandler) {
         synchronized (lock) {
-            for (Player player : players) {
-                if (player.getClient() == ClientHandler) {
-                    players.remove(player);
-                    return player;
+            if (!table.isRunning()) {
+                for (Player player : players) {
+                    if (player.getClient().equals(ClientHandler)) {
+                        players.remove(player);
+                        table.removePlayer(player);
+                        playerCount--;
+                        break;
+                    }
                 }
+            } else {
+                System.out.println("Removing player from table.");
+                playerCount--;
             }
         }
-        return null;
+
+        // If only bot players remain
+        if (playerCount == 0 && table.isRunning()) {
+            System.out.println("No remaining players in the lobby, exiting game.");
+            table.exitGame();
+        }
+    }
+
+    public void gameFinished() {
+        players.clear();
+        this.running = false;
+        table = new Table(TABLE_TYPE, BIG_BLIND, this);
+        if (controller != null) controller.updateLobbyStatus(); // Update clients with lobby status
     }
 
     public void startTable() {
+        int playerCount = players.size();
+
+        while (playerCount < 4) {
+
+            int[] stats = PokerUtils.getRandomBotStats();
+            String botName = getBotName();
+
+            System.out.printf("Bot %s tightness: %d, aggressiveness: %d%n", botName, stats[0], stats[1]);
+
+            Player playerToAdd = new Player(
+                    botName,
+                    startingCash,
+                    new BasicBot(stats[0], stats[1]));
+
+            players.add(playerToAdd);
+            table.addPlayer(playerToAdd);
+
+            playerCount++;
+        }
+
+        running = true;
+
+        for (Player player : players) {
+            player.setCash(startingCash);
+        }
+
         this.table.start();
+    }
+
+    private String getBotName() {
+        return String.format("%s (bot)", names.removeFirst());
+    }
+
+    public boolean isRunning() {
+        return running;
     }
 
     public Boolean getAvailable() {
@@ -87,7 +178,7 @@ public class Lobby {
         this.table = table;
     }
 
-    public ArrayList<Player> getPlayers() {
+    public synchronized ArrayList<Player> getPlayers() {
         return players;
     }
 
@@ -99,7 +190,19 @@ public class Lobby {
         return lobbyIndex;
     }
 
+    public BigDecimal getBigBlind() {
+        return BIG_BLIND;
+    }
+
+    public TableType getTableType() {
+        return TABLE_TYPE;
+    }
+
     public void setLobbyIndex(int lobbyIndex) {
         this.lobbyIndex = lobbyIndex;
+    }
+
+    public void setStackSize(BigDecimal stack) {
+        startingCash = stack.divide(new BigDecimal(4));
     }
 }

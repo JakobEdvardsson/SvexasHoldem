@@ -18,9 +18,11 @@
 package org.pokergame;
 
 import org.pokergame.actions.PlayerAction;
+import org.pokergame.bots.BasicBot;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -35,10 +37,10 @@ import java.util.List;
 public class Player implements Serializable {
 
     /** Name. */
-    private final String name;
+    private String name;
 
     /** Client application responsible for the actual behavior. */
-    private final Client client;
+    private Client client;
 
     /** Hand of cards. */
     private final Hand hand;
@@ -112,7 +114,7 @@ public class Player implements Serializable {
                 hasCards = true;
                 //System.out.format("[CHEAT] %s's cards:\t%s\n", name, hand);
             } else {
-                throw new IllegalArgumentException("Invalid number of cards");
+                // throw new IllegalArgumentException("Invalid number of cards");
             }
         }
     }
@@ -260,10 +262,31 @@ public class Player implements Serializable {
         return clone;
     }
 
+    public Player packetClone() {
+        Player clone = new Player(name, cash, null);
+        clone.setCards(Arrays.stream(getCards()).toList());
+        clone.hasCards = hasCards;
+        clone.bet = bet;
+        clone.action = action;
+        return clone;
+    }
+
     /** {@inheritDoc} */
     @Override
     public String toString() {
         return name;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
+    public void setName(String s) {
+        this.name = s;
+    }
+
+    public void setCash(BigDecimal cash) {
+        this.cash = cash;
     }
 
 }

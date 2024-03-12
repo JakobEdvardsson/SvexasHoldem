@@ -37,8 +37,13 @@ package org.pokergame;
 import org.pokergame.actions.BetAction;
 import org.pokergame.actions.PlayerAction;
 import org.pokergame.actions.RaiseAction;
+import org.pokergame.bots.BasicBot;
+import org.pokergame.server.ClientHandler;
+import org.pokergame.server.Lobby;
+import org.pokergame.util.PokerUtils;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 
 /**
@@ -104,6 +109,10 @@ public class Table extends Thread{
     /** Number of raises in the current betting round. */
     private int raises;
 
+    private boolean gameRunning;
+
+    private Lobby lobby;
+
    // private List<Player> showingPlayers;
 
     /**
@@ -112,7 +121,7 @@ public class Table extends Thread{
      * @param bigBlind
      *            The size of the big blind.
      */
-    public Table(TableType type, BigDecimal bigBlind) {
+    public Table(TableType type, BigDecimal bigBlind, Lobby lobby) {
         this.tableType = type;
         this.bigBlind = bigBlind;
         players = new ArrayList<>();
@@ -120,7 +129,7 @@ public class Table extends Thread{
         deck = new Deck();
         board = new ArrayList<>();
         pots = new ArrayList<>();
-        //start();
+        this.lobby = lobby;
     }
 
     /**
@@ -137,17 +146,21 @@ public class Table extends Thread{
      * Main game loop.
      */
     public void run() {
+
+        gameRunning = true;
+
         for (Player player : players) {
             player.getClient().joinedTable(tableType, bigBlind, players);
         }
         dealerPosition = -1;
         actorPosition = -1;
-        while (true) {
+
+        while (gameRunning) {
             int noOfActivePlayers = 0;
-            for (Player player : players) {
-                if (player.getCash().compareTo(bigBlind) >= 0) {
-                    noOfActivePlayers++;
-                }
+                for (Player player : players) {
+                    if (player.getCash().compareTo(bigBlind) >= 0) {
+                        noOfActivePlayers++;
+                    }
             }
             if (noOfActivePlayers > 1) {
                 playHand();
@@ -166,6 +179,17 @@ public class Table extends Thread{
         }
         notifyPlayersUpdated(false);
         notifyMessage("Game over.");
+
+        // If there's an associated lobby, notify that the game is over
+        if (lobby != null) lobby.gameFinished();
+    }
+
+    public void exitGame() {
+        gameRunning = false;
+    }
+
+    public boolean isRunning() {
+        return gameRunning;
     }
 
     /**
@@ -189,7 +213,7 @@ public class Table extends Thread{
         doBettingRound();
 
         // Flop.
-        if (activePlayers.size() > 1) {
+        if (activePlayers.size() > 1 && gameRunning) {
             bet = BigDecimal.ZERO;
             dealCommunityCards("Flop", 3);
             doBettingRound();
@@ -298,7 +322,6 @@ public class Table extends Thread{
         for (Player player : activePlayers) {
             player.setCards(deck.deal(2));
         }
-        System.out.println();
         notifyPlayersUpdated(false);
         notifyMessage("%s deals the hole cards.", dealer);
     }
@@ -317,6 +340,22 @@ public class Table extends Thread{
         }
         notifyPlayersUpdated(false);
         notifyMessage("%s deals the %s.", dealer, phaseName);
+    }
+
+    /**
+     * Replaces the player with a bot if the player leaves the round.
+     * @param actor The player to replace
+     * @return The new client of the player
+     */
+    private Client replacePlayer(Player actor) {
+        int[] stats = PokerUtils.getRandomBotStats();
+
+        Client playerClient = actor.getClient();
+
+        actor.setClient(new BasicBot(stats[0], stats[1]));
+        actor.setName(String.format("%s (bot)", actor.getName()));
+
+        return actor.getClient();
     }
 
     /**
@@ -355,6 +394,25 @@ public class Table extends Thread{
                 // Otherwise allow client to act.
                 Set<PlayerAction> allowedActions = getAllowedActions(actor);
                 action = actor.getClient().act(minBet, bet, allowedActions);
+
+                if (action == null)  {
+                    System.out.printf("Player '%s' disconnected, replacing with bot.%n", actor.getName());
+                    replacePlayer(actor); // Replaces the player with a bot-client.
+                    actor.getClient().playerUpdated(actor); // Updates the new client with the necessary information.
+                    action = actor.getClient().act(minBet, bet, allowedActions);
+                }
+
+                if (action == PlayerAction.TIMED_OUT) {
+                    // Defaulting in order: fold, check, call
+                    if (allowedActions.contains(PlayerAction.FOLD)) action = PlayerAction.FOLD;
+                    else if (allowedActions.contains(PlayerAction.CHECK)) action = PlayerAction.CHECK;
+                    else if (allowedActions.contains(PlayerAction.CALL)) action = PlayerAction.CALL;
+
+                    System.out.printf("Player '%s' didn't act in time, defaulting action %s.%n",
+                            actor.getName(),
+                            action.getVerb());
+                }
+
                 // Verify chosen action to guard against broken clients (accidental or on purpose).
                 if (!allowedActions.contains(action)) {
                     if (action instanceof BetAction && !allowedActions.contains(PlayerAction.BET)) {
@@ -364,9 +422,9 @@ public class Table extends Thread{
                     }
                 }
                 playersToAct--;
-                if (action == PlayerAction.CHECK) {
+                if (action.getVerb().equals("checks") || action.getVerb().equals("continues")) {
                     // Do nothing.
-                } else if (action == PlayerAction.CALL) {
+                } else if (action.getVerb().equals("calls")) {
                     BigDecimal betIncrement = bet.subtract(actor.getBet());
                     if (betIncrement.compareTo(actor.getCash()) > 0) {
                         betIncrement = actor.getCash();
@@ -409,7 +467,7 @@ public class Table extends Thread{
                         // Max. number of raises reached; other players get one more turn.
                         playersToAct = activePlayers.size() - 1;
                     }
-                } else if (action == PlayerAction.FOLD) {
+                } else if (action.getVerb().equals("folds")) {
                     actor.setCards(null);
                     activePlayers.remove(actor);
                     actorPosition--;
@@ -544,7 +602,7 @@ public class Table extends Thread{
 
                 if (noOfWinnersInPot > 0) {
                     // Divide pot over winners.
-                    BigDecimal potShare = pot.getValue().divide(new BigDecimal(String.valueOf(noOfWinnersInPot))); //TODO
+                    BigDecimal potShare = pot.getValue().divide(new BigDecimal(String.valueOf(noOfWinnersInPot)), RoundingMode.FLOOR); //TODO
                     dividePotOverWinners(winners, pot, potDivision, potShare);
 
                     // Determine if we have any odd chips left in the pot.
@@ -814,7 +872,7 @@ public class Table extends Thread{
      */
     private void notifyPlayerActed() {
         for (Player p : players) {
-            Player playerInfo = p.equals(actor) ? actor : actor.publicClone();
+            Player playerInfo = p.equals(actor) ? actor.packetClone() : actor.publicClone();
             p.getClient().playerActed(playerInfo);
         }
     }
@@ -822,5 +880,9 @@ public class Table extends Thread{
 
     public List<Player> getPlayers() {
         return players;
+    }
+
+    public void removePlayer(Player player) {
+        players.remove(player);
     }
 }

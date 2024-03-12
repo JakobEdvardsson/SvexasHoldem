@@ -17,12 +17,14 @@
 
 package org.pokergame.actions;
 
+import java.io.Serializable;
+
 /**
  * The action of continuing (GUI action only).
  * 
  * @author Oscar Stigter
  */
-public class ContinueAction extends PlayerAction {
+public class ContinueAction extends PlayerAction implements Serializable {
 
     /**
      * Constructor.

@@ -20,6 +20,7 @@ package org.pokergame.gui;
 import org.pokergame.*;
 import org.pokergame.actions.PlayerAction;
 import org.pokergame.bots.BasicBot;
+import org.pokergame.client.ClientController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -34,46 +35,47 @@ import java.util.*;
  * 
  * @author Oscar Stigter
  */
-public class Main extends JFrame implements Client {
-    
+public class OnlineMain extends JFrame implements Client {
+
     /** Serial version UID. */
     private static final long serialVersionUID = -5414633931666096443L;
-    
+
     /** Table type (betting structure). */
     private static final TableType TABLE_TYPE = TableType.NO_LIMIT;
 
     /** The size of the big blind. */
     private static final BigDecimal BIG_BLIND = BigDecimal.valueOf(10);
 
-    /** The starting cash per player. */
-    private static final BigDecimal STARTING_CASH = BigDecimal.valueOf(500);
-
     /** The GridBagConstraints. */
     private final GridBagConstraints gc;
-    
+
     /** The board panel. */
     private final BoardPanel boardPanel;
-    
+
     /** The control panel. */
     private final ControlPanel controlPanel;
-    
+
     /** The player panels. */
     private final Map<String, PlayerPanel> playerPanels;
-    
+
     /** The human player. */
-    private final Player humanPlayer;
-    
+    private Player humanPlayer;
+
     /** The current dealer's name. */
-    private String dealerName; 
+    private String dealerName;
 
     /** The current actor's name. */
-    private String actorName; 
+    private String actorName;
+
+    private ClientController clientController;
 
     /**
      * Constructor.
      */
-    public Main(String playerName) {
+    public OnlineMain(String playerName, ClientController clientController) {
         super("Texas Hold'em poker");
+
+        this.clientController = clientController;
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setBackground(UIConstants.TABLE_COLOR);
@@ -86,22 +88,23 @@ public class Main extends JFrame implements Client {
         addComponent(boardPanel, 1, 1, 1, 1);
 
         /* The players at the table. */
-        Map<String, Player> players = new LinkedHashMap<>();
-        humanPlayer = new Player(playerName, STARTING_CASH, this);
-        players.put("Player", humanPlayer);
-        players.put("Joe", new Player("Joe", STARTING_CASH, new BasicBot(0, 75)));
-        players.put("Mike", new Player("Mike", STARTING_CASH, new BasicBot(25, 50)));
-        players.put("Eddie", new Player("Eddie", STARTING_CASH, new BasicBot(50, 25)));
+        humanPlayer = new Player(playerName, new BigDecimal(500), this);
+
+        playerPanels = new HashMap<String, PlayerPanel>();
 
         /* The table. */
-        Table table = new Table(TABLE_TYPE, BIG_BLIND, null);
-        for (Player player : players.values()) {
-            table.addPlayer(player);
-        }
 
-        playerPanels = new HashMap<>();
+        // Show the frame.
+
+    }
+
+    @Override
+    public void joinedTable(TableType type, BigDecimal bigBlind, List<Player> players) {
+
+        // TableType type, BigDecimal bigBlind, List<Player> players
+
         int i = 0;
-        for (Player player : players.values()) {
+        for (Player player : players) {
             PlayerPanel panel = new PlayerPanel();
             playerPanels.put(player.getName(), panel);
             switch (i++) {
@@ -126,24 +129,17 @@ public class Main extends JFrame implements Client {
             }
         }
 
-        // Show the frame.
-        pack();
-        setResizable(false);
-        setLocationRelativeTo(null);
-        setVisible(true);
-
-        // Start the game.
-        table.start();
-    }
-
-    @Override
-    public void joinedTable(TableType type, BigDecimal bigBlind, List<Player> players) {
         for (Player player : players) {
             PlayerPanel playerPanel = playerPanels.get(player.getName());
             if (playerPanel != null) {
                 playerPanel.update(player);
             }
         }
+
+        pack();
+        setResizable(false);
+        setLocationRelativeTo(null);
+        setVisible(true);
     }
 
     @Override
@@ -174,6 +170,7 @@ public class Main extends JFrame implements Client {
     @Override
     public void playerUpdated(Player player) {
         PlayerPanel playerPanel = playerPanels.get(player.getName());
+        if (humanPlayer.getName().equals(player.getName())) humanPlayer = player;
         if (playerPanel != null) {
             playerPanel.update(player);
         }
@@ -183,6 +180,12 @@ public class Main extends JFrame implements Client {
     public void playerActed(Player player) {
         String name = player.getName();
         PlayerPanel playerPanel = playerPanels.get(name);
+
+        if (playerPanel == null) {
+            String oldName = player.getName().substring(0, player.getName().length() - 6);
+            playerPanel = playerPanels.get(oldName);
+        }
+
         if (playerPanel != null) {
             playerPanel.update(player);
             PlayerAction action = player.getAction();

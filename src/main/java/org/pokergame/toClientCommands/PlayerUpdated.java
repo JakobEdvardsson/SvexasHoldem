@@ -2,5 +2,7 @@ package org.pokergame.toClientCommands;
 
 import org.pokergame.Player;
 
-public record PlayerUpdated(Player player) {
+import java.io.Serializable;
+
+public record PlayerUpdated(Player player) implements Serializable {
 }

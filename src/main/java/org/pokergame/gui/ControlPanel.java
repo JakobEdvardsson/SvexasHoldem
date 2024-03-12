@@ -17,6 +17,7 @@
 
 package org.pokergame.gui;
 
+import org.pokergame.Player;
 import org.pokergame.TableType;
 import org.pokergame.actions.BetAction;
 import org.pokergame.actions.PlayerAction;
@@ -26,6 +27,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -100,7 +102,22 @@ public class ControlPanel extends JPanel implements ActionListener {
         allowedActions.add(PlayerAction.CONTINUE);
         getUserInput(BigDecimal.ZERO, BigDecimal.ZERO, allowedActions);
     }
-    
+
+    private PlayerAction getTranslatedAction(PlayerAction action) {
+        PlayerAction translatedAction = null;
+
+        switch (action.getVerb()) {
+            case "continues" -> translatedAction = PlayerAction.CONTINUE;
+            case "checks" -> translatedAction = PlayerAction.CHECK;
+            case "calls" -> translatedAction = PlayerAction.CALL;
+            case "bets" -> translatedAction = PlayerAction.BET;
+            case "raises" -> translatedAction = PlayerAction.RAISE;
+            case "folds" -> translatedAction = PlayerAction.FOLD;
+        }
+
+        return translatedAction;
+    }
+
     /**
      * Waits for the user to click an action button and returns the selected
      * action.
@@ -116,31 +133,41 @@ public class ControlPanel extends JPanel implements ActionListener {
      */
     public PlayerAction getUserInput(BigDecimal minBet, BigDecimal cash, final Set<PlayerAction> allowedActions) {
         selectedAction = null;
+
+        ArrayList<PlayerAction> actions = new ArrayList<>();
+
+        for (PlayerAction action : allowedActions) {
+            actions.add(getTranslatedAction(action));
+        }
+
+        Set<PlayerAction> newAllowedActions = new HashSet<>(actions);
+
         while (selectedAction == null) {
             // Show the buttons for the allowed actions.
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
                     removeAll();
-                    if (allowedActions.contains(PlayerAction.CONTINUE)) {
+                    if (newAllowedActions.contains(PlayerAction.CONTINUE)) {
                         add(continueButton);
                     } else {
-                        if (allowedActions.contains(PlayerAction.CHECK)) {
+                        if (newAllowedActions.contains(PlayerAction.CHECK)) {
                             add(checkButton);
                         }
-                        if (allowedActions.contains(PlayerAction.CALL)) {
+                        if (newAllowedActions.contains(PlayerAction.CALL)) {
                             add(callButton);
                         }
-                        if (allowedActions.contains(PlayerAction.BET)) {
+                        if (newAllowedActions.contains(PlayerAction.BET)) {
                             add(betButton);
                         }
-                        if (allowedActions.contains(PlayerAction.RAISE)) {
+                        if (newAllowedActions.contains(PlayerAction.RAISE)) {
                             add(raiseButton);
                         }
-                        if (allowedActions.contains(PlayerAction.FOLD)) {
+                        if (newAllowedActions.contains(PlayerAction.FOLD)) {
                             add(foldButton);
                         }
                     }
+                    revalidate();
                     repaint();
                 }
             });

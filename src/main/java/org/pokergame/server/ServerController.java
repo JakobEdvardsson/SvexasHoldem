@@ -1,5 +1,11 @@
 package org.pokergame.server;
+import org.pokergame.Client;
 import org.pokergame.Player;
+import org.pokergame.bots.BasicBot;
+import org.pokergame.toClientCommands.JoinedTable;
+import org.pokergame.toServerCommands.StartGame;
+
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -19,9 +25,9 @@ public final class ServerController {
         lobbies = new ArrayList<Lobby>();
         connectedClients = new HashMap<ClientHandler, String>();
 
-        lobbies.add(new Lobby());
-        lobbies.add(new Lobby());
-        lobbies.add(new Lobby());
+        lobbies.add(new Lobby(this));
+        lobbies.add(new Lobby(this));
+        lobbies.add(new Lobby(this));
 
     }
 
@@ -35,15 +41,15 @@ public final class ServerController {
 
     public String[][] getLobbiesAsString() {
 
-        String[][] lobbyStrings = new String[lobbies.size()][4];
+        String[][] lobbyStrings = new String[lobbies.size()][5];
 
         for (int i = 0; i < lobbies.size(); i++) {
             Lobby lobby = lobbies.get(i);
 
-            int index = 0;
+            lobbyStrings[i][0] = String.format("%s", lobby.isRunning() ? "Running" : "Not Running");
+
+            int index = 1;
             for (Player player : lobby.getPlayers()) {
-                System.out.println("player found!");
-                System.out.println(player.getName());
                 lobbyStrings[i][index++] = player.getName();
             }
         }
@@ -52,7 +58,7 @@ public final class ServerController {
     }
 
     public synchronized Lobby createLobby() {
-        Lobby lobby = new Lobby();
+        Lobby lobby = new Lobby(this);
         lobby.setLobbyIndex(lobbies.size());
         lobbies.add(lobby);
         return lobby;
@@ -127,5 +133,46 @@ public final class ServerController {
 
     public HashMap<ClientHandler, String> getConnectedClients() {
         return connectedClients;
+    }
+
+    public void startGame(ClientHandler clientHandler, Object obj) {
+        Lobby foundLobby = null;
+
+        BigDecimal stack = ((StartGame) obj).stackSize();
+
+        for (Lobby lobby : lobbies) {
+            for (Player player : lobby.getPlayers()) {
+                if (player.getClient().equals(clientHandler)) {
+                    foundLobby = lobby;
+                    lobby.setStackSize(stack);
+                    lobby.startTable();
+                    break;
+                }
+            }
+        }
+
+
+        if (foundLobby!= null) {
+            for (Player player : foundLobby.getPlayers()) {
+                if (!(player.getClient() instanceof BasicBot)) {
+                    ((ClientHandler) player.getClient()).sendMessage(new StartGame(null));
+                }
+            }
+
+
+            ArrayList<String> players = new ArrayList<String>();
+            for (Player player : foundLobby.getPlayers()) {
+                players.add(player.getName());
+            }
+
+            JoinedTable packet = new JoinedTable(foundLobby.getTableType(), foundLobby.getBigBlind(), players);
+            for (Player player : foundLobby.getPlayers()) {
+                if (!(player.getClient() instanceof BasicBot)) {
+                    ((ClientHandler) player.getClient()).sendMessage(packet);
+                }
+            }
+        }
+
+        updateLobbyStatus();
     }
 }

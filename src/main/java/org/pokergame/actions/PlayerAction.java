@@ -17,6 +17,7 @@
 
 package org.pokergame.actions;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
@@ -24,7 +25,7 @@ import java.math.BigDecimal;
  * 
  * @author Oscar Stigter
  */
-public abstract class PlayerAction {
+public abstract class PlayerAction implements Serializable {
     
     /** Player went all-in. */
     public static final PlayerAction ALL_IN = new AllInAction();
@@ -52,6 +53,9 @@ public abstract class PlayerAction {
     
     /** Posting the small blind. */
     public static final PlayerAction SMALL_BLIND = new SmallBlindAction();
+
+    /** Timed out action. */
+    public static final PlayerAction TIMED_OUT = new TimedOutAction();
     
     /** The action's name. */
     private final String name;

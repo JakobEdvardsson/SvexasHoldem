@@ -17,6 +17,7 @@
 
 package org.pokergame.actions;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
@@ -24,7 +25,7 @@ import java.math.BigDecimal;
  * 
  * @author Oscar Stigter
  */
-public class RaiseAction extends PlayerAction {
+public class RaiseAction extends PlayerAction implements Serializable {
 
     /**
      * Constructor.

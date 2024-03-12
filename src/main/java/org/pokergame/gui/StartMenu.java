@@ -9,9 +9,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.math.BigDecimal;
 
 public class StartMenu extends JFrame {
-    public static final Color POKER_GREEN = new Color(0, 153, 0);
+    public static final Color POKER_GREEN = new Color(0, 128, 0);
     private JFrame frame;
     private JLabel usernameLabel;
     private JTextField username;
@@ -27,6 +28,7 @@ public class StartMenu extends JFrame {
     private String[] lobby2Players = {"Player6", "Player7", "Player8", "Player9", "Player10"};
     private String[] lobby3Players = {"Player11", "Player12", "Player13", "Player14", "Player15"};
     LanguageState state = LanguageState.ENGLISH;
+    private boolean playerInLobby;
 
     private ImageIcon flagIcon;
 
@@ -51,6 +53,7 @@ public class StartMenu extends JFrame {
 
     public StartMenu(ClientController controller) {
 
+        this.playerInLobby = false;
         this.controller = controller;
 
         setTitle("Start Menu");
@@ -178,8 +181,12 @@ public class StartMenu extends JFrame {
 
         stackSlide = new JSlider(1000, 10000);
         stackSlide.setBounds(410, 150, 250, 75);
-        stackSlide.setMajorTickSpacing(2500);
+        stackSlide.setMajorTickSpacing(1000);
+        stackSlide.setMinorTickSpacing(200);
         stackSlide.setPaintLabels(true);
+        stackSlide.setSnapToTicks(true);
+        stackSlide.setMinimum(500);
+        stackSlide.setMaximum(5000);
         stackSlide.setPaintTicks(true);
         playersStackLabel = new JLabel("Value: ");
         playersStackLabel.setBounds(360, 250, 100, 50);
@@ -196,7 +203,7 @@ public class StartMenu extends JFrame {
         joinLobby1.setBounds(20, 320, 100, 40);
         joinLobby1.addActionListener(e -> {
             if (joinLobby1.getText().equals("Join lobby")) {
-                System.out.println("You joined lobby 1");
+                playerInLobby = true;
                 startGame.setEnabled(true);
                 //joinLobby1.setEnabled(!button.isEnabled());
                 joinLobby2.setEnabled(false);
@@ -204,6 +211,7 @@ public class StartMenu extends JFrame {
                 controller.joinLobby(0);
                 joinLobby1.setText("Leave lobby");
             } else {
+                playerInLobby = false;
                 //controller.leaveLobby(0);
                 joinLobby2.setEnabled(true);
                 joinLobby3.setEnabled(true);
@@ -218,7 +226,7 @@ public class StartMenu extends JFrame {
         joinLobby2.setBounds(130, 320, 100, 40);
         joinLobby2.addActionListener(e -> {
             if(joinLobby2.getText().equals("Join lobby")) {
-                System.out.println("You joined lobby 2");
+                playerInLobby = true;
                 startGame.setEnabled(true);
                 //joinLobby2.setEnabled(!button.isEnabled());
                 joinLobby1.setEnabled(false);
@@ -226,6 +234,7 @@ public class StartMenu extends JFrame {
                 controller.joinLobby(1);
                 joinLobby2.setText("Leave lobby");
             } else {
+                playerInLobby = false;
                 //controller.leaveLobby(1);
                 joinLobby1.setEnabled(true);
                 joinLobby3.setEnabled(true);
@@ -240,7 +249,7 @@ public class StartMenu extends JFrame {
         joinLobby3.setBounds(240, 320, 100, 40);
         joinLobby3.addActionListener(e -> {
             if(joinLobby3.getText().equals("Join lobby")) {
-                System.out.println("You joined lobby 3");
+                playerInLobby = true;
                 startGame.setEnabled(true);
                 //joinLobby3.setEnabled(!button.isEnabled());
                 joinLobby1.setEnabled(false);
@@ -248,6 +257,7 @@ public class StartMenu extends JFrame {
                 controller.joinLobby(2);
                 joinLobby3.setText("Leave lobby");
             } else {
+                playerInLobby = false;
                 //controller.leaveLobby(2);
                 joinLobby1.setEnabled(true);
                 joinLobby2.setEnabled(true);
@@ -260,7 +270,9 @@ public class StartMenu extends JFrame {
 
         startGame = new JButton("Start Game");
         startGame.setBounds(275, 390, 150, 40);
-        startGame.addActionListener(e -> {System.out.println("Game started");
+        startGame.addActionListener(e -> {
+            controller.startGame(new BigDecimal(stackSlide.getValue()));
+            System.out.println("Game started");
         });
         startGame.setEnabled(false);
         frame.add(startGame);
@@ -384,16 +396,53 @@ public class StartMenu extends JFrame {
         return imgPath;
     }
 
+    /**
+     * If the lobby is joinable, allow a user to join.
+     * @param lobby String[] with the lobby information
+     * @return true if joinable, false otherwise
+     */
+    private boolean lobbyIsJoinable(String[] lobby) {
+        if (lobby[0].equals("Running")) return false;
+        boolean hasNull = false;
+
+        for (int i = 1; i < lobby.length; i++) {
+            if (lobby[i] == null) return true;
+        }
+
+        return hasNull;
+    }
+
     public void setLobbyInfo(String[][] info) {
+
+        String[] lobby1PlayerInfo = new String[4];
+        System.arraycopy(info[0], 1, lobby1PlayerInfo, 0, 4);
+
+        String[] lobby2PlayerInfo = new String[4];
+        System.arraycopy(info[1], 1, lobby2PlayerInfo, 0, 4);
+
+        String[] lobby3PlayerInfo = new String[4];
+        System.arraycopy(info[2], 1, lobby3PlayerInfo, 0, 4);
+
         SwingUtilities.invokeLater(() -> {
-            lobby1Players = info[0];
-            lobby2Players = info[1];
-            lobby3Players = info[2];
             if (lobby1 != null) {
-                lobby1.setListData(lobby1Players);
-                lobby2.setListData(lobby2Players);
-                lobby3.setListData(lobby3Players);
+                lobby1.setListData(lobby1PlayerInfo);
+                lobby2.setListData(lobby2PlayerInfo);
+                lobby3.setListData(lobby3PlayerInfo);
                 repaint();
+
+                if (!playerInLobby) {
+                    if (joinLobby1.getText().equals("Join lobby")) {
+                        joinLobby1.setEnabled(lobbyIsJoinable(info[0]));
+                    }
+
+                    if (joinLobby2.getText().equals("Join lobby")) {
+                        joinLobby2.setEnabled(lobbyIsJoinable(info[1]));
+                    }
+
+                    if (joinLobby3.getText().equals("Join lobby")) {
+                        joinLobby3.setEnabled(lobbyIsJoinable(info[2]));
+                    }
+                }
             }
         });
     }
