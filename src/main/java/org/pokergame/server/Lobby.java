@@ -94,6 +94,8 @@ public class Lobby {
     }
 
     public synchronized Player removePlayer(ClientHandler ClientHandler) {
+        Player ret = null;
+
         synchronized (lock) {
             if (!table.isRunning()) {
                 for (Player player : players) {
@@ -101,6 +103,7 @@ public class Lobby {
                         players.remove(player);
                         table.removePlayer(player);
                         playerCount--;
+                        ret = player;
                         break;
                     }
                 }
@@ -115,7 +118,7 @@ public class Lobby {
             System.out.println("No remaining players in the lobby, exiting game.");
             table.exitGame();
         }
-        return null;
+        return ret;
     }
 
     public void gameFinished() {

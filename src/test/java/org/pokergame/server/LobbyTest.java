@@ -39,7 +39,7 @@ class LobbyTest {
         assertEquals("testName", playerName);
 
         BigDecimal playerCash = testPlayer.getCash();
-        assertEquals(new BigDecimal(1000), playerCash);
+        assertEquals(new BigDecimal(500), playerCash);
 
         Client playerHandler = testPlayer.getClient();
         assertEquals(testHandler, playerHandler);
