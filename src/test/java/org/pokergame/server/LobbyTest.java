@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class LobbyTest {
 
-    private final Lobby lobby = new Lobby();
+    private Lobby lobby;
     private ServerController testController;
     private ClientHandler testHandler;
     private Player testPlayer;
@@ -24,6 +24,7 @@ class LobbyTest {
 
     @BeforeEach
     void setUp() {
+        this.lobby = new Lobby(testController);
         testController.setServerController(null);
         testController = ServerController.getInstance();
         testHandler = new ClientHandler(null, null);

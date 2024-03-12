@@ -115,6 +115,7 @@ public class Lobby {
             System.out.println("No remaining players in the lobby, exiting game.");
             table.exitGame();
         }
+        return null;
     }
 
     public void gameFinished() {
