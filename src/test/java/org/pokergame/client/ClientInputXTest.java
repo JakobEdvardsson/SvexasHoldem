@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 import java.net.Socket;
 import java.util.*;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
@@ -188,5 +189,15 @@ class ClientInputXTest {
 
         // Assert
         verify(onlineMain, times(1)).messageReceived(message);
+    }
+
+    @Test
+    void testNullMessage() {
+        // Arrange
+        doReturn(null).when(spyClientInputX).recieveMessage();
+
+        // Act and Assert
+        assertDoesNotThrow(() -> spyClientInputX.getInput());
+
     }
 }
