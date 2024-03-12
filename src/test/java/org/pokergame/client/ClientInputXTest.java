@@ -1,5 +1,6 @@
 package org.pokergame.client;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.pokergame.Card;
 import org.pokergame.Player;
@@ -25,36 +26,17 @@ class ClientInputXTest {
     private ClientController clientController;
 
 
-    @Test
+    @BeforeEach
     void getInput() {
         clientController = mock(ClientController.class);
 
         clientInputX = new ClientInputX(mock(Socket.class), clientController);
         spyClientInputX = spy(clientInputX);
 
-        // Possible messages from server
-        setLobbyInfo();
-
-        startGame();
-
-        joinedTable();
-
-        boardUpdated();
-
-        handStarted();
-
-        actorRotated();
-
-        playerActed();
-
-        playerUpdated();
-
-        act();
-
-        messageReceived();
     }
 
-    private void setLobbyInfo() {
+    @Test
+    void setLobbyInfo() {
         String[][] message = new String[][]{{"test1", "test2"}, {"test3", "test4"}};
         doReturn(message).when(spyClientInputX).recieveMessage();
         spyClientInputX.getInput();
@@ -62,7 +44,8 @@ class ClientInputXTest {
         verify(clientController, times(1)).setLobbyInfo(message);
     }
 
-    private void startGame() {
+    @Test
+    void startGame() {
         // Arrange
         StartGame startGame = new StartGame(null);
         doReturn(startGame).when(spyClientInputX).recieveMessage();
@@ -74,7 +57,8 @@ class ClientInputXTest {
         assertNotNull(spyClientInputX.getOnlineMain());
     }
 
-    private void joinedTable() {
+    @Test
+    void joinedTable() {
         // Arrange
         TableType type = TableType.NO_LIMIT;
         BigDecimal bigBlind = new BigDecimal(10);
@@ -92,7 +76,8 @@ class ClientInputXTest {
         verify(onlineMain, times(1)).joinedTable(any(), any(), any());
     }
 
-    private void handStarted() {
+    @Test
+    void handStarted() {
         // Arrange
         Player dealer = new Player("testDealer", new BigDecimal(500), null);
         HandStarted handStarted = new HandStarted(dealer);
@@ -107,7 +92,8 @@ class ClientInputXTest {
         verify(onlineMain, times(1)).handStarted(dealer);
     }
 
-    private void boardUpdated() {
+    @Test
+    void boardUpdated() {
         List<Card> cards = new ArrayList<>();
         BigDecimal bet = new BigDecimal(10);
         BigDecimal pot = new BigDecimal(100);
@@ -122,7 +108,8 @@ class ClientInputXTest {
         verify(onlineMain, times(1)).boardUpdated(cards, bet, pot);
     }
 
-    private void actorRotated() {
+    @Test
+    void actorRotated() {
         // Arrange
         Player actor = new Player("testActor", new BigDecimal(500), null);
         ActorRotated actorRotated = new ActorRotated(actor);
@@ -137,7 +124,8 @@ class ClientInputXTest {
         verify(onlineMain, times(1)).actorRotated(actor);
     }
 
-    private void playerActed() {
+    @Test
+    void playerActed() {
         // Arrange
         Player player = new Player("testPlayer", new BigDecimal(500), null);
         PlayerActed playerActed = new PlayerActed(player);
@@ -152,7 +140,8 @@ class ClientInputXTest {
         verify(onlineMain, times(1)).playerActed(player);
     }
 
-    private void playerUpdated() {
+    @Test
+    void playerUpdated() {
         // Arrange
         Player player = new Player("testPlayer", new BigDecimal(500), null);
         PlayerUpdated playerUpdated = new PlayerUpdated(player);
@@ -167,7 +156,8 @@ class ClientInputXTest {
         verify(onlineMain, times(1)).playerUpdated(player);
     }
 
-    private void act() {
+    @Test
+    void act() {
         // Arrange
         BigDecimal minBet = new BigDecimal(10);
         BigDecimal currentBet = new BigDecimal(20);
@@ -184,7 +174,8 @@ class ClientInputXTest {
         verify(onlineMain, times(1)).act(minBet, currentBet, allowedActions);
     }
 
-    private void messageReceived() {
+    @Test
+    void messageReceived() {
         // Arrange
         String message = "Test message";
         MessageReceived messageReceived = new MessageReceived(message);
