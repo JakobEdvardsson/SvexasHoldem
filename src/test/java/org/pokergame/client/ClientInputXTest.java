@@ -31,6 +31,10 @@ class ClientInputXTest {
     void getInput() {
         clientController = mock(ClientController.class);
 
+
+        doNothing().when(clientController).invokeLater();
+
+
         clientInputX = new ClientInputX(mock(Socket.class), clientController);
         spyClientInputX = spy(clientInputX);
 

@@ -27,23 +27,14 @@ public class ClientController {
         this.ip = ip;
         this.port = port;
 
+        invokeLater();
+    }
+
+    public void invokeLater() {
         SwingUtilities.invokeLater(() -> {
                 this.startMenu = new StartMenu(this);
                 startMenu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         });
-
-
-            //LÄGG IN VAD SPELAREN GÖR HÄR--->
-
-            //Gammalt test för att skicka en sträng över socket.
-            /*
-            //System.out.print("Enter message to send to server: ");
-            Scanner scanner = new Scanner(System.in);
-            //String message = scanner.nextLine();
-            /**clientOutput.sendMessage(message);
-            if (message.equals("exit")) {
-                break;
-            } */
     }
 
     public void playOnline() {
