@@ -2,6 +2,7 @@ package org.pokergame;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.pokergame.bots.BasicBot;
 import org.pokergame.gui.Main;
 
@@ -10,6 +11,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 class TableTest {
 
@@ -32,7 +34,7 @@ class TableTest {
     void setUp() {
         /* The players at the table. */
         Map<String, Player> players = new LinkedHashMap<>();
-        humanPlayer = new Player("Player", STARTING_CASH, new Main("Human"));
+        humanPlayer = new Player("Player", STARTING_CASH, mock(Main.class));
         players.put("Player", humanPlayer);
         players.put("Joe", new Player("Joe", STARTING_CASH, new BasicBot(0, 75)));
         players.put("Mike", new Player("Mike", STARTING_CASH, new BasicBot(25, 50)));
