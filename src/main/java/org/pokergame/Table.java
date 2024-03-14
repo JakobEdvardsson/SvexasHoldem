@@ -38,7 +38,6 @@ import org.pokergame.actions.BetAction;
 import org.pokergame.actions.PlayerAction;
 import org.pokergame.actions.RaiseAction;
 import org.pokergame.bots.BasicBot;
-import org.pokergame.server.ClientHandler;
 import org.pokergame.server.Lobby;
 import org.pokergame.util.PokerUtils;
 
@@ -49,77 +48,102 @@ import java.util.*;
 /**
  * Limit Texas Hold'em poker table. <br />
  * <br />
- *
+ * <p>
  * This class forms the heart of the poker engine. It controls the game flow for a single poker table.
  *
  * @author Oscar Stigter
  */
 
-public class Table extends Thread{
-    
+public class Table extends Thread {
 
-    /** In fixed-limit games, the maximum number of raises per betting round. */
+
+    /**
+     * In fixed-limit games, the maximum number of raises per betting round.
+     */
     private static final int MAX_RAISES = 3;
 
-    /** Whether players will always call the showdown, or fold when no chance. */
+    /**
+     * Whether players will always call the showdown, or fold when no chance.
+     */
     private static final boolean ALWAYS_CALL_SHOWDOWN = false;
 
-    /** Table type (poker variant). */
+    /**
+     * Table type (poker variant).
+     */
     private final TableType tableType;
 
-    /** The size of the big blind. */
+    /**
+     * The size of the big blind.
+     */
     private final BigDecimal bigBlind;
 
-    /** The players at the table. */
+    /**
+     * The players at the table.
+     */
     private final List<Player> players;
 
-    /** The active players in the current hand. */
+    /**
+     * The active players in the current hand.
+     */
     private final List<Player> activePlayers;
 
-    /** The deck of cards. */
+    /**
+     * The deck of cards.
+     */
     private final Deck deck;
 
-    /** The community cards on the board. */
+    /**
+     * The community cards on the board.
+     */
     private final List<Card> board;
-
-    /** The current dealer position. */
-    private int dealerPosition;
-
-    /** The current dealer. */
-    private Player dealer;
-
-    /** The position of the acting player. */
-    private int actorPosition;
-
-    /** The acting player. */
-    private Player actor;
-
-    /** The minimum bet in the current hand. */
-    private BigDecimal minBet;
-
-    /** The current bet in the current hand. */
-    private BigDecimal bet;
-
-    /** All pots in the current hand (main pot and any side pots). */
+    /**
+     * All pots in the current hand (main pot and any side pots).
+     */
     private final List<Pot> pots;
-
-    /** The player who bet or raised last (aggressor). */
+    /**
+     * The current dealer position.
+     */
+    private int dealerPosition;
+    /**
+     * The current dealer.
+     */
+    private Player dealer;
+    /**
+     * The position of the acting player.
+     */
+    private int actorPosition;
+    /**
+     * The acting player.
+     */
+    private Player actor;
+    /**
+     * The minimum bet in the current hand.
+     */
+    private BigDecimal minBet;
+    /**
+     * The current bet in the current hand.
+     */
+    private BigDecimal bet;
+    /**
+     * The player who bet or raised last (aggressor).
+     */
     private Player lastBettor;
 
-    /** Number of raises in the current betting round. */
+    /**
+     * Number of raises in the current betting round.
+     */
     private int raises;
 
     private boolean gameRunning;
 
     private Lobby lobby;
 
-   // private List<Player> showingPlayers;
+    // private List<Player> showingPlayers;
 
     /**
      * Constructor.
      *
-     * @param bigBlind
-     *            The size of the big blind.
+     * @param bigBlind The size of the big blind.
      */
     public Table(TableType type, BigDecimal bigBlind, Lobby lobby) {
         this.tableType = type;
@@ -135,8 +159,7 @@ public class Table extends Thread{
     /**
      * Adds a player.
      *
-     * @param player
-     *            The player.
+     * @param player The player.
      */
     public void addPlayer(Player player) {
         players.add(player);
@@ -155,12 +178,20 @@ public class Table extends Thread{
         dealerPosition = -1;
         actorPosition = -1;
 
+        // Main game loop. The actual game is played here.
+        gameLoop();
+
+        // Game over.
+        gameOver();
+    }
+
+    private void gameLoop() {
         while (gameRunning) {
             int noOfActivePlayers = 0;
-                for (Player player : players) {
-                    if (player.getCash().compareTo(bigBlind) >= 0) {
-                        noOfActivePlayers++;
-                    }
+            for (Player player : players) {
+                if (player.getCash().compareTo(bigBlind) >= 0) {
+                    noOfActivePlayers++;
+                }
             }
             if (noOfActivePlayers > 1) {
                 playHand();
@@ -168,8 +199,9 @@ public class Table extends Thread{
                 break;
             }
         }
+    }
 
-        // Game over.
+    private void gameOver() {
         board.clear();
         pots.clear();
         bet = BigDecimal.ZERO;
@@ -195,7 +227,7 @@ public class Table extends Thread{
     /**
      * Plays a single hand.
      */
-    private void playHand() {
+    public void playHand() {
         resetHand();
 
         // Small blind.
@@ -329,10 +361,8 @@ public class Table extends Thread{
     /**
      * Deals a number of community cards.
      *
-     * @param phaseName
-     *            The name of the phase.
-     * @param noOfCards
-     *            The number of cards to deal.
+     * @param phaseName The name of the phase.
+     * @param noOfCards The number of cards to deal.
      */
     private void dealCommunityCards(String phaseName, int noOfCards) {
         for (int i = 0; i < noOfCards; i++) {
@@ -344,6 +374,7 @@ public class Table extends Thread{
 
     /**
      * Replaces the player with a bot if the player leaves the round.
+     *
      * @param actor The player to replace
      * @return The new client of the player
      */
@@ -395,7 +426,7 @@ public class Table extends Thread{
                 Set<PlayerAction> allowedActions = getAllowedActions(actor);
                 action = actor.getClient().act(minBet, bet, allowedActions);
 
-                if (action == null)  {
+                if (action == null) {
                     System.out.printf("Player '%s' disconnected, replacing with bot.%n", actor.getName());
                     replacePlayer(actor); // Replaces the player with a bot-client.
                     actor.getClient().playerUpdated(actor); // Updates the new client with the necessary information.
@@ -505,45 +536,50 @@ public class Table extends Thread{
     /**
      * Returns the allowed actions of a specific player.
      *
-     * @param player
-     *            The player.
-     *
+     * @param player The player.
      * @return The allowed actions.
      */
-    private Set<PlayerAction> getAllowedActions(Player player) {
+    public Set<PlayerAction> getAllowedActions(Player player) {
         Set<PlayerAction> actions = new HashSet<>();
         if (player.isAllIn()) {
             actions.add(PlayerAction.CHECK);
-        } else {
-            BigDecimal actorBet = actor.getBet();
-            if (bet.equals(BigDecimal.ZERO)) {
-                actions.add(PlayerAction.CHECK);
-                if (tableType == TableType.NO_LIMIT || raises < MAX_RAISES || activePlayers.size() == 2) {
-                    actions.add(PlayerAction.BET);
-                }
-            } else {
-                if (actorBet.compareTo(bet) < 0) {
-                    actions.add(PlayerAction.CALL);
-                    if (tableType == TableType.NO_LIMIT || raises < MAX_RAISES || activePlayers.size() == 2) {
-                        actions.add(PlayerAction.RAISE);
-                    }
-                } else {
-                    actions.add(PlayerAction.CHECK);
-                    if (tableType == TableType.NO_LIMIT || raises < MAX_RAISES || activePlayers.size() == 2) {
-                        actions.add(PlayerAction.RAISE);
-                    }
-                }
+            return actions;
+
+        }
+
+        BigDecimal actorBet = actor.getBet();
+        if (bet.equals(BigDecimal.ZERO)) {
+            // No bet yet in this betting round.
+            actions.add(PlayerAction.CHECK);
+            if (tableType == TableType.NO_LIMIT || raises < MAX_RAISES || activePlayers.size() == 2) {
+                // Allow bet only if no bet yet in this betting round, and we're not at the raise limit.
+                actions.add(PlayerAction.BET);
             }
             actions.add(PlayerAction.FOLD);
+            return actions;
         }
+
+
+        if (actorBet.compareTo(bet) < 0) {
+            actions.add(PlayerAction.CALL);
+            if (tableType == TableType.NO_LIMIT || raises < MAX_RAISES || activePlayers.size() == 2) {
+                actions.add(PlayerAction.RAISE);
+            }
+        } else {
+            actions.add(PlayerAction.CHECK);
+            if (tableType == TableType.NO_LIMIT || raises < MAX_RAISES || activePlayers.size() == 2) {
+                actions.add(PlayerAction.RAISE);
+            }
+        }
+        actions.add(PlayerAction.FOLD);
+
         return actions;
     }
 
     /**
      * Contributes to the pot.
      *
-     * @param amount
-     *            The amount to contribute.
+     * @param amount The amount to contribute.
      */
     private void contributePot(BigDecimal amount) {
         for (Pot pot : pots) {
@@ -693,7 +729,7 @@ public class Table extends Thread{
         int noOfWinnersInPot = 0;
         for (Player winner : winners) {
             if (pot.hasContributer(winner)) {
-               noOfWinnersInPot++;
+                noOfWinnersInPot++;
             }
         }
         return noOfWinnersInPot;
@@ -771,7 +807,7 @@ public class Table extends Thread{
 
     private List<Player> showPlayerOrder() {
         // Determine show order; start with all-in players...
-       ArrayList orderedPlayerList = new ArrayList<>();
+        ArrayList orderedPlayerList = new ArrayList<>();
         for (Pot pot : pots) {
             for (Player contributor : pot.getContributors()) {
                 if (!orderedPlayerList.contains(contributor) && contributor.isAllIn()) {
@@ -805,10 +841,8 @@ public class Table extends Thread{
     /**
      * Notifies listeners with a custom game message.
      *
-     * @param message
-     *            The formatted message.
-     * @param args
-     *            Any arguments.
+     * @param message The formatted message.
+     * @param args    Any arguments.
      */
     private void notifyMessage(String message, Object... args) {
         message = String.format(message, args);
@@ -843,12 +877,11 @@ public class Table extends Thread{
     /**
      * Notifies clients that one or more players have been updated. <br />
      * <br />
-     *
+     * <p>
      * A player's secret information is only sent its own client; other clients
      * see only a player's public information.
      *
-     * @param showdown
-     *            Whether we are at the showdown phase.
+     * @param showdown Whether we are at the showdown phase.
      */
     private void notifyPlayersUpdated(boolean showdown) {
         for (Player playerToNotify : players) {
@@ -877,6 +910,13 @@ public class Table extends Thread{
         }
     }
 
+    public Player getActor() {
+        return actor;
+    }
+
+    public void setActor(Player actor) {
+        this.actor = actor;
+    }
 
     public List<Player> getPlayers() {
         return players;
@@ -884,5 +924,9 @@ public class Table extends Thread{
 
     public void removePlayer(Player player) {
         players.remove(player);
+    }
+
+    public void setBet(BigDecimal bet) {
+        this.bet = bet;
     }
 }
