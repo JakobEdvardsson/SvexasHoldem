@@ -92,4 +92,68 @@ class LobbyTest {
     @Test
     void setLobbyIndex() {
     }
+
+    @Test
+    void testAddPlayer() {
+    }
+
+    @Test
+    void testRemovePlayer() {
+    }
+
+    @Test
+    void gameFinished() {
+    }
+
+    @Test
+    void testStartTable() {
+    }
+
+    @Test
+    void isRunning() {
+    }
+
+    @Test
+    void testGetAvailable() {
+    }
+
+    @Test
+    void testSetAvailable() {
+    }
+
+    @Test
+    void testGetTable() {
+    }
+
+    @Test
+    void testSetTable() {
+    }
+
+    @Test
+    void testGetPlayers() {
+    }
+
+    @Test
+    void testSetPlayers() {
+    }
+
+    @Test
+    void testGetLobbyIndex() {
+    }
+
+    @Test
+    void getBigBlind() {
+    }
+
+    @Test
+    void getTableType() {
+    }
+
+    @Test
+    void testSetLobbyIndex() {
+    }
+
+    @Test
+    void setStackSize() {
+    }
 }
