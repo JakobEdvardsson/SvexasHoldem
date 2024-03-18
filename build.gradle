@@ -1,6 +1,5 @@
 plugins {
     id 'java'
-    id 'application'
 }
 
 group = 'org.pokergame'
@@ -10,15 +9,41 @@ repositories {
     mavenCentral()
 }
 
-application {
-    mainClass = 'org.pokergame.gui.Main'
-}
-
 compileJava.options.encoding = 'UTF-8'
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
+
+// Run the client and server
+tasks.register('runClient', JavaExec) {
+    mainClass.set('org.pokergame.client.ClientStart')
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+tasks.register('runServer', JavaExec) {
+    mainClass.set('org.pokergame.server.ServerStart')
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+// Create a JAR file for the client and server
+tasks.register('jarClient', Jar) {
+    from sourceSets.main.output
+
+    manifest {
+        attributes 'Main-Class': 'org.pokergame.client.ClientStart'
+    }
+    archiveBaseName.set('client')
+}
+
+tasks.register('jarServer', Jar) {
+    from sourceSets.main.output
+    manifest {
+        attributes 'Main-Class': 'org.pokergame.server.ServerStart'
+    }
+    archiveBaseName.set('server')
+}
+
 
 dependencies {
     testImplementation platform('org.junit:junit-bom:5.9.1')
