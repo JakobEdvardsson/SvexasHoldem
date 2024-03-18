@@ -77,11 +77,8 @@ public class ServerInput extends Thread {
             return in.readObject();
 
         }
-        catch (SocketException e) {
-            return new Disconnect();
-        }
         catch (IOException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            return new Disconnect();
         }
     }
 
