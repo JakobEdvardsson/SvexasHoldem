@@ -58,7 +58,9 @@ public class ServerInput extends Thread {
         }
 
         if(incomingMessage instanceof PlayerAction){
-            packetBuffer.add((PlayerAction) incomingMessage);
+            if (!packetBuffer.ignorePacket()) {
+                packetBuffer.add((PlayerAction) incomingMessage);
+            }
         }
 
         if(incomingMessage instanceof Disconnect){
