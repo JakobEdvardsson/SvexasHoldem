@@ -66,66 +66,6 @@ public class ClientController {
         clientOutput.sendMessage(lobby);
     }
 
-    /**
-     * Command from the server to the client
-     * Acts as interface between the server and the client
-     * ClientInput lyssnar på objekt -> som i sin tur kallar på denna metoden
-     *
-     * @param message
-     */
-    public Object inputObject(Object message) {
-        /*
-          - message.getClass().getSimpleName()
-          Gives the class (record) name of the object
-         */
-        switch (message.getClass().getSimpleName()) {
-            case "JoinedTable" -> {
-                JoinedTable joinedTable = (JoinedTable) message;
-                // ClientGUI.joinedTable(joinedTable.type(), joinedTable.bigBlind(), joinedTable.players());
-                return joinedTable;
-            }
-            case "MessageReceived" -> {
-                MessageReceived messageReceived = (MessageReceived) message;
-                ClientGUI.messageReceived(messageReceived.message());
-                return messageReceived;
-            }
-            case "HandStarted" -> {
-                HandStarted handStarted = (HandStarted) message;
-                ClientGUI.handStarted(handStarted.dealer());
-                return handStarted;
-            }
-            case "ActorRotated" -> {
-                ActorRotated actorRotated = (ActorRotated) message;
-                ClientGUI.actorRotated(actorRotated.actor());
-                return actorRotated;
-            }
-            case "BoardUpdated" -> {
-                BoardUpdated boardUpdated = (BoardUpdated) message;
-                ClientGUI.boardUpdated(boardUpdated.cards(), boardUpdated.bet(), boardUpdated.pot());
-                return boardUpdated;
-            }
-            case "PlayerUpdated" -> {
-                PlayerUpdated playerUpdated = (PlayerUpdated) message;
-                ClientGUI.playerUpdated(playerUpdated.player());
-                return playerUpdated;
-            }
-            case "PlayerActed" -> {
-                PlayerActed playerActed = (PlayerActed) message;
-                ClientGUI.playerActed(playerActed.player().publicClone());
-                return playerActed;
-            }
-            case "Act" -> {
-                Act act = (Act) message;
-                ClientGUI.act(act.minBet(), act.currentBet(), act.allowedActions());
-                return act;
-            }
-            default -> {
-                System.out.println("Unknown object");
-                return null;
-            }
-        }
-    }
-
     public void setLobbyInfo(String[][] info) {
         startMenu.setLobbyInfo(info);
     }
@@ -151,5 +91,10 @@ public class ClientController {
 
     public void hideLobbyWindow() {
         startMenu.hideLobbyWindow();
+    }
+
+    public void showLobbyWindow() {
+        startMenu.showLobbyWindow();
+        clientInput.gameOver();
     }
 }

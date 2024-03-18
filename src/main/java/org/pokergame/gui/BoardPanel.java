@@ -18,6 +18,7 @@
 package org.pokergame.gui;
 
 import org.pokergame.Card;
+import org.pokergame.Client;
 
 import javax.swing.*;
 import java.awt.*;
@@ -51,6 +52,9 @@ public class BoardPanel extends JPanel {
     
     /** Label with a custom message. */
     private final JLabel messageLabel;
+
+    /** Label with a custom message. */
+    private final IHandler client;
     
     /**
      * Constructor.
@@ -58,9 +62,10 @@ public class BoardPanel extends JPanel {
      * @param controlPanel
      *            The control panel.
      */
-    public BoardPanel(ControlPanel controlPanel) {
+    public BoardPanel(ControlPanel controlPanel, IHandler client) {
         this.controlPanel = controlPanel;
-        
+        this.client = client;
+
         setBorder(UIConstants.PANEL_BORDER);
         setBackground(UIConstants.TABLE_COLOR);
         setLayout(new GridBagLayout());
@@ -217,7 +222,12 @@ public class BoardPanel extends JPanel {
      * Waits for the user to continue.
      */
     public void waitForUserInput() {
-        controlPanel.waitForUserInput();
+        if (messageLabel.getText().equals("Game over.")) {
+            controlPanel.waitForGameoverAck();
+            client.gameOver();
+
+        } else {
+            controlPanel.waitForUserInput();
+        }
     }
-    
 }

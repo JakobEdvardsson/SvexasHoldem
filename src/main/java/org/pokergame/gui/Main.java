@@ -34,7 +34,7 @@ import java.util.*;
  * 
  * @author Oscar Stigter
  */
-public class Main extends JFrame implements Client {
+public class Main extends JFrame implements Client, IHandler {
     
     /** Serial version UID. */
     private static final long serialVersionUID = -5414633931666096443L;
@@ -82,7 +82,7 @@ public class Main extends JFrame implements Client {
         gc = new GridBagConstraints();
 
         controlPanel = new ControlPanel(TABLE_TYPE);
-        boardPanel = new BoardPanel(controlPanel);
+        boardPanel = new BoardPanel(controlPanel, this);
         addComponent(boardPanel, 1, 1, 1, 1);
 
         /* The players at the table. */
@@ -260,5 +260,8 @@ public class Main extends JFrame implements Client {
         }
     }
 
-
+    @Override
+    public void gameOver() {
+        // todo
+    }
 }

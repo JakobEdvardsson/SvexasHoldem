@@ -61,6 +61,9 @@ public class ControlPanel extends JPanel implements ActionListener {
     
     /** The Continue button. */
     private final JButton continueButton;
+
+    /** Button to exit the game. */
+    private final JButton exitButton;
     
     /** The betting panel. */
     private final AmountPanel amountPanel;
@@ -83,6 +86,7 @@ public class ControlPanel extends JPanel implements ActionListener {
         betButton = createActionButton(PlayerAction.BET);
         raiseButton = createActionButton(PlayerAction.RAISE);
         foldButton = createActionButton(PlayerAction.FOLD);
+        exitButton = createActionButton(PlayerAction.EXIT);
         amountPanel = new AmountPanel();
     }
     
@@ -103,6 +107,20 @@ public class ControlPanel extends JPanel implements ActionListener {
         getUserInput(BigDecimal.ZERO, BigDecimal.ZERO, allowedActions);
     }
 
+    public void waitForGameoverAck() {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                removeAll();
+                add(exitButton);
+                repaint();
+            }
+        });
+        Set<PlayerAction> allowedActions = new HashSet<>();
+        allowedActions.add(PlayerAction.EXIT);
+        PlayerAction action = getUserInput(BigDecimal.ZERO, BigDecimal.ZERO, allowedActions);
+    }
+
     private PlayerAction getTranslatedAction(PlayerAction action) {
         PlayerAction translatedAction = null;
 
@@ -113,6 +131,7 @@ public class ControlPanel extends JPanel implements ActionListener {
             case "bets" -> translatedAction = PlayerAction.BET;
             case "raises" -> translatedAction = PlayerAction.RAISE;
             case "folds" -> translatedAction = PlayerAction.FOLD;
+            case "exits" -> translatedAction = PlayerAction.EXIT;
         }
 
         return translatedAction;
@@ -166,6 +185,9 @@ public class ControlPanel extends JPanel implements ActionListener {
                         if (newAllowedActions.contains(PlayerAction.FOLD)) {
                             add(foldButton);
                         }
+                        if (newAllowedActions.contains(PlayerAction.EXIT)) {
+                            add(exitButton);
+                        }
                     }
                     revalidate();
                     repaint();
@@ -215,6 +237,9 @@ public class ControlPanel extends JPanel implements ActionListener {
         Object source = e.getSource();
         if (source == continueButton) {
             selectedAction = PlayerAction.CONTINUE;
+        } else if (source == exitButton) {
+            selectedAction = PlayerAction.EXIT;
+            System.out.println("Exiting game");
         } else if (source == checkButton) {
             selectedAction = PlayerAction.CHECK;
         } else if (source == callButton) {

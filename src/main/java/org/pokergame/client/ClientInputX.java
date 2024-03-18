@@ -135,4 +135,11 @@ public class ClientInputX extends Thread {
         return onlineMain;
     }
 
+    /**
+     * Destroys the online main instance.
+     */
+    public void gameOver() {
+        this.onlineMain.dispose();
+        this.onlineMain = null;
+    }
 }
