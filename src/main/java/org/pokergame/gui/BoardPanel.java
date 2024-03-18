@@ -54,7 +54,14 @@ public class BoardPanel extends JPanel {
     private final JLabel messageLabel;
 
     /** Label with a custom message. */
+    private final JLabel timerLabel;
+
+    /** Label with a custom message. */
     private final IHandler client;
+
+    /** Timer to control acting **/
+    Timer timer;
+
     
     /**
      * Constructor.
@@ -169,12 +176,37 @@ public class BoardPanel extends JPanel {
         gc.weightx = 1.0;
         gc.weighty = 1.0;
         add(controlPanel, gc);
-        
-        setPreferredSize(new Dimension(400, 270));
+
+
+        this.timerLabel = new JLabel("<html>Time to act<br /><center>60 s</center></html>");
+        timerLabel.setFont(new Font("Arial", Font.BOLD, 13));
+        timerLabel.setForeground(Color.YELLOW);
+        // Timer.
+        gc.gridx = 4;
+        gc.gridy = 5;
+        gc.gridwidth = 1;
+        // gc.gridheight = 1;
+        gc.insets = new Insets(0, 0, 0, 0);
+        gc.anchor = GridBagConstraints.CENTER;
+        gc.fill = GridBagConstraints.BOTH;
+        gc.weightx = 1;
+        gc.weighty = 1;
+        timerLabel.setBorder(UIConstants.LABEL_BORDER);
+        add(timerLabel, gc);
+        this.timerLabel.setVisible(false);
+
+        setPreferredSize(new Dimension(400, 325));
 
         update(null, BigDecimal.ZERO, BigDecimal.ZERO);
     }
-    
+
+    private String timeRemainingHTML(long time) {
+        long timeLeft = time/1000;
+        if (timeLeft < 10) timerLabel.setForeground(Color.RED);
+        else timerLabel.setForeground(Color.YELLOW);
+        return String.format("<html><center>Time to act<br /><center>%d s</center></center></html>", time/1000);
+    }
+
     /**
      * Updates the current hand status.
      * 
@@ -228,6 +260,38 @@ public class BoardPanel extends JPanel {
 
         } else {
             controlPanel.waitForUserInput();
+        }
+    }
+
+    /**
+     * Update timer every 1000 ms, when timer runs out, stop the timer.
+     * @param timeout
+     */
+    public void setTimeout(long timeout) {
+        if (timer == null) {
+            timer = new Timer(1000, e -> {
+                long currentTime = System.currentTimeMillis();
+                this.timerLabel.setText(timeRemainingHTML(timeout - currentTime));
+                if (timeout < currentTime) {
+                    stopTimer();
+                }
+            });
+            timer.start();
+            long currentTime = System.currentTimeMillis();
+            this.timerLabel.setText(timeRemainingHTML(timeout - currentTime));
+            timerLabel.setVisible(true);
+        } else {
+            throw new IllegalStateException("Timer is already running");
+        }
+
+    }
+
+    public void stopTimer() {
+        if (timer != null) {
+            timer.stop();
+            timer = null;
+            timerLabel.setVisible(false);
+            repaint();
         }
     }
 }
