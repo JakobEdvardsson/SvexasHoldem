@@ -50,6 +50,7 @@ public class ClientInputX extends Thread {
         if (incomingMessage instanceof StartGame) {
             if (onlineMain == null) {
                 onlineMain = new OnlineMain(clientController.getUsername(), clientController);
+                clientController.hideLobbyWindow();
             }
         }
 

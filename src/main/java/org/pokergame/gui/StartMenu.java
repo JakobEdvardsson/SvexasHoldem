@@ -34,6 +34,14 @@ public class StartMenu extends JFrame {
 
     ClientController controller;
 
+    public void hideLobbyWindow() {
+        frame.setVisible(false);
+    }
+
+    public void showLobbyWindow() {
+        frame.setVisible(true);
+    }
+
     public enum LanguageState {
         ENGLISH,
         SWEDISH

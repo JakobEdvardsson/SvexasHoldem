@@ -148,4 +148,8 @@ public class ClientController {
     public void sendMessage(PlayerAction action) {
         clientOutput.sendMessage(action);
     }
+
+    public void hideLobbyWindow() {
+        startMenu.hideLobbyWindow();
+    }
 }
