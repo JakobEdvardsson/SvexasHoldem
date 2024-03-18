@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class HandValueTest {
-
     private Hand hand;
     private HandValue zeroHandValue; //Value of 0
     private HandValue handValue; //Value of 0
