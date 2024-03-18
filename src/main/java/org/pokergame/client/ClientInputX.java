@@ -96,9 +96,11 @@ public class ClientInputX extends Thread {
         }
 
         if (incomingMessage instanceof Act) {
+            long timeout = ((Act) incomingMessage).timeout();
             BigDecimal minBet = ((Act) incomingMessage).minBet();
             BigDecimal currentBet = ((Act) incomingMessage).currentBet();
             Set<PlayerAction> allowedActions = ((Act) incomingMessage).allowedActions();
+            onlineMain.setTimeout(timeout);
             PlayerAction action = onlineMain.act(minBet, currentBet, allowedActions);
             clientController.sendMessage(action);
         }

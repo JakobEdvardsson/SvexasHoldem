@@ -53,4 +53,9 @@ public class Buffer<T> {
     public int size() {
         return pointer;
     }
+
+    public long getTimeoutMillis() {
+        return timeoutMillis;
+    }
+
 }
