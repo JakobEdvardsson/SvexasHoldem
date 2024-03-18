@@ -8,11 +8,13 @@ public class Buffer<T> {
     private int pointer;
     private final Object lock = new Object();
     private long timeoutMillis;
+    private int ignoreCount;
 
     public Buffer(int capacity, long timeout) {
         this.pointer = 0;
         this.items = (T[]) new Object[capacity];
         this.timeoutMillis = timeout;
+        ignoreCount = 0;
     }
 
     public synchronized void add(T item) {
@@ -42,6 +44,7 @@ public class Buffer<T> {
         }
 
         if (size() == 0) {
+            ignoreCount++;
             return (T) PlayerAction.TIMED_OUT;
         }
 
@@ -52,6 +55,14 @@ public class Buffer<T> {
 
     public int size() {
         return pointer;
+    }
+
+    public boolean ignorePacket() {
+        if (ignoreCount > 0) {
+            ignoreCount--;
+            return true;
+        }
+        return false;
     }
 
     public long getTimeoutMillis() {
