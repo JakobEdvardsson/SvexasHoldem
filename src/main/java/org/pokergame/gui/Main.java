@@ -67,13 +67,18 @@ public class Main extends JFrame implements Client, IHandler {
     private String dealerName; 
 
     /** The current actor's name. */
-    private String actorName; 
+    private String actorName;
+
+    /** The start menu to callback. */
+    private StartMenu menu;
 
     /**
      * Constructor.
      */
-    public Main(String playerName) {
+    public Main(String playerName, StartMenu menu) {
         super("Texas Hold'em poker");
+
+        this.menu = menu;
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setBackground(UIConstants.TABLE_COLOR);
@@ -262,6 +267,7 @@ public class Main extends JFrame implements Client, IHandler {
 
     @Override
     public void gameOver() {
-        // todo
+        menu.showLobbyWindow();
+        this.dispose();
     }
 }
