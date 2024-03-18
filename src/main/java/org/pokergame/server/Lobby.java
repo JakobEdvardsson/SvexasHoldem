@@ -7,7 +7,6 @@ import org.pokergame.TableType;
 import org.pokergame.bots.BasicBot;
 import org.pokergame.util.PokerUtils;
 
-import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -52,8 +51,8 @@ public class Lobby {
         generateBotNames();
     }
 
-    private ArrayList<String> generateBotNames() {
-        names = new ArrayList<String>() {{
+    public void generateBotNames() {
+        names = new ArrayList<>() {{
             add("Alex");
             add("Bella");
             add("Caleb");
@@ -67,7 +66,6 @@ public class Lobby {
         }};
 
         Collections.shuffle(this.names);
-        return names;
     }
 
     /**
@@ -78,8 +76,6 @@ public class Lobby {
      * return player;
      * }
      */
-
-
     public synchronized Player addPlayer(String playerName, Client client) {
         synchronized (lock) {
             if (!table.isRunning() && playerCount < 5) {
@@ -123,7 +119,7 @@ public class Lobby {
 
     public void gameFinished() {
         players.clear();
-        this.running = false;
+        running = false;
         table = new Table(TABLE_TYPE, BIG_BLIND, this);
         if (controller != null) controller.updateLobbyStatus(); // Update clients with lobby status
     }
@@ -158,8 +154,16 @@ public class Lobby {
         this.table.start();
     }
 
-    private String getBotName() {
+    public String getBotName() {
         return String.format("%s (bot)", names.removeFirst());
+    }
+
+    public int getPlayerCount() {
+        return playerCount;
+    }
+
+    public ArrayList<String> getNames() {
+        return names;
     }
 
     public boolean isRunning() {
@@ -194,6 +198,10 @@ public class Lobby {
         return lobbyIndex;
     }
 
+    public void setLobbyIndex(int lobbyIndex) {
+        this.lobbyIndex = lobbyIndex;
+    }
+
     public BigDecimal getBigBlind() {
         return BIG_BLIND;
     }
@@ -202,11 +210,11 @@ public class Lobby {
         return TABLE_TYPE;
     }
 
-    public void setLobbyIndex(int lobbyIndex) {
-        this.lobbyIndex = lobbyIndex;
-    }
-
     public void setStackSize(BigDecimal stack) {
         startingCash = stack.divide(new BigDecimal(4));
+    }
+
+    public BigDecimal getStackSize() {
+        return startingCash;
     }
 }

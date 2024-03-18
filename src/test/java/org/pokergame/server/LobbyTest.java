@@ -4,6 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.pokergame.Client;
 import org.pokergame.Player;
+import org.pokergame.Table;
+import org.pokergame.TableType;
 import org.pokergame.bots.BasicBot;
 
 import java.math.BigDecimal;
@@ -34,6 +36,27 @@ class LobbyTest {
     }
 
     @Test
+    void generateBotNames() {
+        lobby.generateBotNames();
+        ArrayList<String> names = new ArrayList<>() {{
+            add("Alex");
+            add("Bella");
+            add("Caleb");
+            add("Daisy");
+            add("Ethan");
+            add("Fiona");
+            add("Gavin");
+            add("Holly");
+            add("Ivan");
+            add("Jenna");
+        }};
+
+        for (String name : names) {
+            assertTrue(lobby.getNames().contains(name));
+        }
+    }
+
+    @Test
     void addPlayer() {
         String playerName = testPlayer.getName();
         assertEquals("testName", playerName);
@@ -43,17 +66,41 @@ class LobbyTest {
 
         Client playerHandler = testPlayer.getClient();
         assertEquals(testHandler, playerHandler);
+
+        //To test null check if more than 5 players are added
+        // (There's one player in the lobby from the beginning)
+        for(int i = 0; i < 4; i++){
+            lobby.addPlayer("testPlayer", testHandler);
+        }
+
+        assertNull(lobby.addPlayer("testPlayer", testHandler));
     }
 
     @Test
     void removePlayer() {
         Player player = lobby.removePlayer(testHandler);
         assertEquals(testPlayer, player);
+
+        assertEquals(0, lobby.getPlayerCount());
+        assertFalse(lobby.getTable().isRunning());
+    }
+
+    @Test
+    void gameFinished() {
+        lobby.gameFinished();
+
+        assertTrue(lobby.getPlayers().isEmpty());
+        assertFalse(lobby.isRunning());
     }
 
     @Test
     void startTable() {
-        //Method not currently used
+        //Revisit
+    }
+
+    @Test
+    void getBotName() {
+        assertEquals(lobby.getNames().getFirst() + " (bot)", lobby.getBotName());
     }
 
     @Test
@@ -64,17 +111,23 @@ class LobbyTest {
 
     @Test
     void setAvailable() {
-        //Method not currently used
+        lobby.setAvailable(true);
+        assertTrue(lobby.getAvailable());
+
+        lobby.setAvailable(false);
+        assertFalse(lobby.getAvailable());
     }
 
     @Test
     void getTable() {
-        //Method not currently used
     }
 
     @Test
     void setTable() {
-        //Method not currently used
+        Table table =  new Table(TableType.FIXED_LIMIT, BigDecimal.ZERO, lobby);
+        lobby.setTable(table);
+
+        assertEquals(table, lobby.getTable());
     }
 
     @Test
@@ -83,6 +136,10 @@ class LobbyTest {
 
     @Test
     void setPlayers() {
+        ArrayList<Player> players = new ArrayList<>();
+        lobby.setPlayers(players);
+
+        assertEquals(players, lobby.getPlayers());
     }
 
     @Test
@@ -91,69 +148,21 @@ class LobbyTest {
 
     @Test
     void setLobbyIndex() {
+        int lobbyIndex = 0;
+        lobby.setLobbyIndex(lobbyIndex);
+
+        assertEquals(lobbyIndex, lobby.getLobbyIndex());
     }
 
     @Test
-    void testAddPlayer() {
+    void testSetStackSize() {
     }
 
     @Test
-    void testRemovePlayer() {
-    }
+    void testGetStackSize() {
+        BigDecimal decimal = new BigDecimal(100);
+        lobby.setStackSize(decimal);
 
-    @Test
-    void gameFinished() {
-    }
-
-    @Test
-    void testStartTable() {
-    }
-
-    @Test
-    void isRunning() {
-    }
-
-    @Test
-    void testGetAvailable() {
-    }
-
-    @Test
-    void testSetAvailable() {
-    }
-
-    @Test
-    void testGetTable() {
-    }
-
-    @Test
-    void testSetTable() {
-    }
-
-    @Test
-    void testGetPlayers() {
-    }
-
-    @Test
-    void testSetPlayers() {
-    }
-
-    @Test
-    void testGetLobbyIndex() {
-    }
-
-    @Test
-    void getBigBlind() {
-    }
-
-    @Test
-    void getTableType() {
-    }
-
-    @Test
-    void testSetLobbyIndex() {
-    }
-
-    @Test
-    void setStackSize() {
+        assertEquals(decimal.divide(new BigDecimal(4)), lobby.getStackSize());
     }
 }
