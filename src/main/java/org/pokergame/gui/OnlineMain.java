@@ -209,7 +209,9 @@ public class OnlineMain extends JFrame implements Client, IHandler {
     @Override
     public PlayerAction act(BigDecimal minBet, BigDecimal currentBet, Set<PlayerAction> allowedActions) {
         boardPanel.setMessage("Please select an action:");
-        return controlPanel.getUserInput(minBet, humanPlayer.getCash(), allowedActions);
+        PlayerAction action = controlPanel.getUserInput(minBet, humanPlayer.getCash(), allowedActions);
+        boardPanel.stopTimer();
+        return action;
     }
 
     /**
@@ -272,4 +274,7 @@ public class OnlineMain extends JFrame implements Client, IHandler {
         clientController.showLobbyWindow();
     }
 
+    public void setTimeout(long timeout) {
+        boardPanel.setTimeout(timeout);
+    }
 }

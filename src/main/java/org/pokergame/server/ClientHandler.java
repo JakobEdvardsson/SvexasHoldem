@@ -57,7 +57,9 @@ public class ClientHandler extends Thread implements Client {
     }
 
     public PlayerAction act(BigDecimal minBet, BigDecimal bet, Set<PlayerAction> allowedActions) {
-        serverOutput.sendMessage(new Act(minBet, bet, allowedActions));
+        long timeout = packetBuffer.getTimeoutMillis();
+        long timeoutRemaining = System.currentTimeMillis() + timeout;
+        serverOutput.sendMessage(new Act(minBet, bet, allowedActions, timeoutRemaining));
         return packetBuffer.get();
     }
 
