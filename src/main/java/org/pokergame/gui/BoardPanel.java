@@ -269,7 +269,6 @@ public class BoardPanel extends JPanel {
      */
     public void setTimeout(long timeout) {
         if (timer == null) {
-            timerLabel.setVisible(true);
             timer = new Timer(1000, e -> {
                 long currentTime = System.currentTimeMillis();
                 this.timerLabel.setText(timeRemainingHTML(timeout - currentTime));
@@ -278,6 +277,9 @@ public class BoardPanel extends JPanel {
                 }
             });
             timer.start();
+            long currentTime = System.currentTimeMillis();
+            this.timerLabel.setText(timeRemainingHTML(timeout - currentTime));
+            timerLabel.setVisible(true);
         } else {
             throw new IllegalStateException("Timer is already running");
         }
