@@ -50,6 +50,7 @@ public class ClientInputX extends Thread {
         if (incomingMessage instanceof StartGame) {
             if (onlineMain == null) {
                 onlineMain = new OnlineMain(clientController.getUsername(), clientController);
+                clientController.hideLobbyWindow();
             }
         }
 
@@ -134,4 +135,11 @@ public class ClientInputX extends Thread {
         return onlineMain;
     }
 
+    /**
+     * Destroys the online main instance.
+     */
+    public void gameOver() {
+        this.onlineMain.dispose();
+        this.onlineMain = null;
+    }
 }
