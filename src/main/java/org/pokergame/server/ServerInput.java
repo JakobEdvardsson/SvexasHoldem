@@ -58,7 +58,9 @@ public class ServerInput extends Thread {
         }
 
         if(incomingMessage instanceof PlayerAction){
-            packetBuffer.add((PlayerAction) incomingMessage);
+            if (!packetBuffer.ignorePacket()) {
+                packetBuffer.add((PlayerAction) incomingMessage);
+            }
         }
 
         if(incomingMessage instanceof Disconnect){
@@ -77,11 +79,8 @@ public class ServerInput extends Thread {
             return in.readObject();
 
         }
-        catch (SocketException e) {
-            return new Disconnect();
-        }
         catch (IOException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            return new Disconnect();
         }
     }
 

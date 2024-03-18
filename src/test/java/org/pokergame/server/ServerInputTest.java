@@ -21,7 +21,9 @@ class ServerInputTest {
 
     @BeforeEach
     void getInput() {
-        serverInput = new ServerInput(mock(Socket.class), mock(ClientHandler.class), mock(Buffer.class));
+        @SuppressWarnings("unchecked")
+        Buffer<PlayerAction> buffer = mock(Buffer.class);
+        serverInput = new ServerInput(mock(Socket.class), mock(ClientHandler.class), buffer);
     }
 
     @Test
@@ -112,7 +114,6 @@ class ServerInputTest {
     @Test
     void testNullMessage() {
         // Arrange
-        serverInput = new ServerInput(mock(Socket.class), mock(ClientHandler.class), mock(Buffer.class));
         spyServerInput = spy(serverInput);
         doReturn(null).when(spyServerInput).recieveMessage();
 

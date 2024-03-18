@@ -34,6 +34,28 @@ public class StartMenu extends JFrame {
 
     ClientController controller;
 
+    public void hideLobbyWindow() {
+        frame.setVisible(false);
+        playerInLobby = false;
+        buttonDefaults();
+    }
+
+    private void buttonDefaults() {
+        SwingUtilities.invokeLater(() -> {
+            joinLobby1.setEnabled(true);
+            joinLobby2.setEnabled(true);
+            joinLobby3.setEnabled(true);
+            joinLobby1.setText("Join lobby");
+            joinLobby2.setText("Join lobby");
+            joinLobby3.setText("Join lobby");
+            repaint();
+        });
+    }
+
+    public void showLobbyWindow() {
+        frame.setVisible(true);
+    }
+
     public enum LanguageState {
         ENGLISH,
         SWEDISH
@@ -112,7 +134,7 @@ public class StartMenu extends JFrame {
         button.setBounds(70, 220, 150, 50);
         button.addActionListener(e -> {
             System.out.println("New game button pressed. Username: " + username.getText());
-            main = new Main(getUsernameText());
+            main = new Main(getUsernameText(), this);
             frame.setVisible(false);
         });
         frame.add(button);

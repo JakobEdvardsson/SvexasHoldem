@@ -167,7 +167,7 @@ class ClientInputXTest {
         BigDecimal minBet = new BigDecimal(10);
         BigDecimal currentBet = new BigDecimal(20);
         Set<PlayerAction> allowedActions = new HashSet<>(Arrays.asList(PlayerAction.CHECK, PlayerAction.FOLD));
-        Act act = new Act(minBet, currentBet, allowedActions);
+        Act act = new Act(minBet, currentBet, allowedActions, 100);
         doReturn(act).when(spyClientInputX).recieveMessage();
         OnlineMain onlineMain = mock(OnlineMain.class);
         spyClientInputX.setOnlineMain(onlineMain);

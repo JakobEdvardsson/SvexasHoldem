@@ -50,6 +50,7 @@ public class ClientInputX extends Thread {
         if (incomingMessage instanceof StartGame) {
             if (onlineMain == null) {
                 onlineMain = new OnlineMain(clientController.getUsername(), clientController);
+                clientController.hideLobbyWindow();
             }
         }
 
@@ -95,9 +96,11 @@ public class ClientInputX extends Thread {
         }
 
         if (incomingMessage instanceof Act) {
+            long timeout = ((Act) incomingMessage).timeout();
             BigDecimal minBet = ((Act) incomingMessage).minBet();
             BigDecimal currentBet = ((Act) incomingMessage).currentBet();
             Set<PlayerAction> allowedActions = ((Act) incomingMessage).allowedActions();
+            onlineMain.setTimeout(timeout);
             PlayerAction action = onlineMain.act(minBet, currentBet, allowedActions);
             clientController.sendMessage(action);
         }
@@ -134,4 +137,11 @@ public class ClientInputX extends Thread {
         return onlineMain;
     }
 
+    /**
+     * Destroys the online main instance.
+     */
+    public void gameOver() {
+        this.onlineMain.dispose();
+        this.onlineMain = null;
+    }
 }

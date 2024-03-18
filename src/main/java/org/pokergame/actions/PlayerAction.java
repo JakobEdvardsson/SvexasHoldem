@@ -56,6 +56,9 @@ public abstract class PlayerAction implements Serializable {
 
     /** Timed out action. */
     public static final PlayerAction TIMED_OUT = new TimedOutAction();
+
+    /** Timed out action. */
+    public static final PlayerAction EXIT = new ExitAction();
     
     /** The action's name. */
     private final String name;

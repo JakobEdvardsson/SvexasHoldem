@@ -34,7 +34,7 @@ import java.util.*;
  * 
  * @author Oscar Stigter
  */
-public class Main extends JFrame implements Client {
+public class Main extends JFrame implements Client, IHandler {
     
     /** Serial version UID. */
     private static final long serialVersionUID = -5414633931666096443L;
@@ -67,13 +67,18 @@ public class Main extends JFrame implements Client {
     private String dealerName; 
 
     /** The current actor's name. */
-    private String actorName; 
+    private String actorName;
+
+    /** The start menu to callback. */
+    private StartMenu menu;
 
     /**
      * Constructor.
      */
-    public Main(String playerName) {
+    public Main(String playerName, StartMenu menu) {
         super("Texas Hold'em poker");
+
+        this.menu = menu;
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setBackground(UIConstants.TABLE_COLOR);
@@ -82,7 +87,7 @@ public class Main extends JFrame implements Client {
         gc = new GridBagConstraints();
 
         controlPanel = new ControlPanel(TABLE_TYPE);
-        boardPanel = new BoardPanel(controlPanel);
+        boardPanel = new BoardPanel(controlPanel, this);
         addComponent(boardPanel, 1, 1, 1, 1);
 
         /* The players at the table. */
@@ -260,5 +265,9 @@ public class Main extends JFrame implements Client {
         }
     }
 
-
+    @Override
+    public void gameOver() {
+        menu.showLobbyWindow();
+        this.dispose();
+    }
 }
