@@ -18,7 +18,7 @@
 package org.pokergame.gui;
 
 import org.pokergame.Card;
-import org.pokergame.Client;
+import org.pokergame.client.ClientController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -261,6 +261,25 @@ public class BoardPanel extends JPanel {
         } else {
             controlPanel.waitForUserInput();
         }
+    }
+
+    public void returnFromGame(String status, ClientController clientController){
+        switch(status){
+            case "online":
+
+                clientController.disconnectClient();
+                int lobbyId = clientController.getLobbyId();
+                clientController.leaveLobby(lobbyId);
+                clientController.hideLobbyWindow();
+                client.returnToMainMenu();
+
+                break;
+            case "offline":
+                System.out.println("Exiting offline game");
+                client.gameOver();
+                break;
+        }
+
     }
 
     /**
