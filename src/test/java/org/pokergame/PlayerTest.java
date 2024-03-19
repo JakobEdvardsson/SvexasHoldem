@@ -1,9 +1,9 @@
-package org.svexasHoldem;
+package org.pokergame;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.svexasHoldem.actions.PlayerAction;
+import org.pokergame.actions.PlayerAction;
 
 import java.math.BigDecimal;
 import java.util.List;

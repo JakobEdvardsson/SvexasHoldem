@@ -1,10 +1,10 @@
-package org.svexasHoldem;
+package org.pokergame;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.svexasHoldem.actions.PlayerAction;
-import org.svexasHoldem.bots.BasicBot;
-import org.svexasHoldem.gui.Main;
+import org.pokergame.actions.PlayerAction;
+import org.pokergame.bots.BasicBot;
+import org.pokergame.gui.Main;
 
 import java.math.BigDecimal;
 import java.util.LinkedHashMap;
