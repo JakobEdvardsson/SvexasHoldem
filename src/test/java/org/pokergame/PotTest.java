@@ -38,7 +38,6 @@ class PotTest {
 
     @Test
     void getContributors() {
-        //System.out.println("---------- " + pot.getContributors());
     }
 
     @Test
@@ -57,14 +56,25 @@ class PotTest {
 
     @Test
     void split() {
-        System.out.println("---------- " + pot.split(player, bet));
+        pot.split(player, bet.divide(new BigDecimal(10)));
+
+        assertEquals(new BigDecimal(10), pot.getBet());
+        assertEquals(new BigDecimal(10), pot.getValue());
+        assertFalse(pot.getContributors().isEmpty());
     }
 
     @Test
     void clear() {
+        pot.clear();
+
+        assertEquals(new BigDecimal(0), pot.getBet());
+        assertTrue(pot.getContributors().isEmpty());
     }
 
     @Test
     void testToString() {
+        assertTrue(pot.toString().contains("100"));
+        assertTrue(pot.toString().contains("test"));
+        assertTrue(pot.toString().contains("Total: 100"));
     }
 }
