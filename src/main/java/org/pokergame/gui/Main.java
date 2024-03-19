@@ -183,8 +183,7 @@ public class Main extends JFrame implements Client, IHandler {
             tutorial.showTutorial(tutorial.getSlides());
         });
 
-
-
+        showHumanPlayerName();
         // Show the frame.
         pack();
         setResizable(false);
@@ -193,6 +192,18 @@ public class Main extends JFrame implements Client, IHandler {
 
         // Start the game.
         table.start();
+    }
+
+    private void showHumanPlayerName() {
+        JLabel playerName = new JLabel("Player name: " + humanPlayer.getName());
+        playerName.setFont(new Font("Arial", Font.BOLD, 20));
+        playerName.setForeground(Color.YELLOW);
+        playerName.setOpaque(true);
+        playerName.setBackground(UIConstants.TABLE_COLOR);
+        playerName.setHorizontalAlignment(SwingConstants.CENTER);
+        playerName.setVerticalAlignment(SwingConstants.CENTER);
+        playerName.setPreferredSize(new Dimension(250, 50));
+        addComponent(playerName, 0, 0, 1, 1);
     }
 
     private JButton createCustomButton(String imgPath) {

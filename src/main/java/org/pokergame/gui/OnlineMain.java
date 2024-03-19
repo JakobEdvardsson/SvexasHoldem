@@ -115,10 +115,21 @@ public class OnlineMain extends JFrame implements Client, IHandler {
             StartMenu tutorial = new StartMenu();
             tutorial.showTutorial(tutorial.getSlides());
         });
-        /* The table. */
 
-        // Show the frame.
+        showHumanPlayerName();
 
+    }
+
+    private void showHumanPlayerName() {
+        JLabel playerName = new JLabel("Player name: " + humanPlayer.getName());
+        playerName.setFont(new Font("Arial", Font.BOLD, 20));
+        playerName.setForeground(Color.YELLOW);
+        playerName.setOpaque(true);
+        playerName.setBackground(UIConstants.TABLE_COLOR);
+        playerName.setHorizontalAlignment(SwingConstants.CENTER);
+        playerName.setVerticalAlignment(SwingConstants.CENTER);
+        playerName.setPreferredSize(new Dimension(250, 50));
+        addComponent(playerName, 0, 0, 1, 1);
     }
 
     private JButton createCustomButton(String imgPath) {
