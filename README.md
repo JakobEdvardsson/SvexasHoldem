@@ -35,7 +35,7 @@ To get a local copy up and running follow these simple steps.
 
 ### Prerequisites
  * Java 21 or higher
- * Gradle 8.6 or higher
+ * Gradle 8.5 or higher
  * Git
  
 
