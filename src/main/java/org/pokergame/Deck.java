@@ -166,5 +166,8 @@ public class Deck {
         }
         return sb.toString().trim();
     }
-    
+
+    public Card[] getCards() {
+        return cards;
+    }
 }
