@@ -2,8 +2,8 @@ plugins {
     id 'java'
 }
 
-group = 'org.pokergame'
-version = '1.0-SNAPSHOT'
+group = 'org.SvexasHoldem'
+version = '1.0'
 
 repositories {
     mavenCentral()
@@ -17,12 +17,12 @@ tasks.withType(JavaCompile).configureEach {
 
 // Run the client and server
 tasks.register('runClient', JavaExec) {
-    mainClass.set('org.pokergame.client.ClientStart')
+    mainClass.set('org.svexasHoldem.client.ClientStart')
     classpath = sourceSets.main.runtimeClasspath
 }
 
 tasks.register('runServer', JavaExec) {
-    mainClass.set('org.pokergame.server.ServerStart')
+    mainClass.set('org.svexasHoldem.server.ServerStart')
     classpath = sourceSets.main.runtimeClasspath
 }
 
@@ -31,7 +31,7 @@ tasks.register('jarClient', Jar) {
     from sourceSets.main.output
 
     manifest {
-        attributes 'Main-Class': 'org.pokergame.client.ClientStart'
+        attributes 'Main-Class': 'org.svexasHoldem.client.ClientStart'
     }
     archiveBaseName.set('client')
 }
@@ -39,7 +39,7 @@ tasks.register('jarClient', Jar) {
 tasks.register('jarServer', Jar) {
     from sourceSets.main.output
     manifest {
-        attributes 'Main-Class': 'org.pokergame.server.ServerStart'
+        attributes 'Main-Class': 'org.svexasHoldem.server.ServerStart'
     }
     archiveBaseName.set('server')
 }
