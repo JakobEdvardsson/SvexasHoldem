@@ -1,12 +1,12 @@
-package org.pokergame;
+package org.svexasHoldem;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import org.pokergame.actions.*;
-import org.pokergame.bots.BasicBot;
-import org.pokergame.util.PokerUtils;
+import org.svexasHoldem.actions.*;
+import org.svexasHoldem.bots.BasicBot;
+import org.svexasHoldem.util.PokerUtils;
 
 import java.lang.IllegalArgumentException;
 import java.lang.reflect.InvocationTargetException;

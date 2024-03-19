@@ -1,4 +1,4 @@
-package org.pokergame;
+package org.svexasHoldem;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -6,8 +6,8 @@ import org.junit.jupiter.api.BeforeEach;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.pokergame.Card;
-import org.pokergame.Hand;
+import org.svexasHoldem.Card;
+import org.svexasHoldem.Hand;
 
 import java.util.*;
 

@@ -1,4 +1,4 @@
-package org.pokergame;
+package org.svexasHoldem;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
