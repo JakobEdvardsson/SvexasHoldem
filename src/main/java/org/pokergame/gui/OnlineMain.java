@@ -27,6 +27,8 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.*;
 
+import static org.pokergame.gui.StartMenu.POKER_GREEN;
+
 /**
  * The game's main frame.
  * 
@@ -70,6 +72,8 @@ public class OnlineMain extends JFrame implements Client, IHandler {
 
     private JButton returnButton;
 
+    private JButton tutorialButton;
+
     /**
      * Constructor.
      */
@@ -93,38 +97,60 @@ public class OnlineMain extends JFrame implements Client, IHandler {
 
         playerPanels = new HashMap<String, PlayerPanel>();
 
-        createArrowButton();
+        returnButton = createCustomButton("src/main/resources/images/leftarrow.png");
+        placeCustomButton(10,10,0,0, GridBagConstraints.NORTHWEST, returnButton);
+        setUpCustomButton(returnButton);
+        returnButton.addActionListener(e -> {
+            JPanel panel = warningMessage("Are you sure you want to leave the game?");
+            int result = getYesOrNoOption(panel);
+            if (result == 1) {
+                boardPanel.returnFromGame("online", clientController);
+            }
+        });
+
+        tutorialButton = createCustomButton("src/main/resources/images/questionmark.png");
+        placeCustomButton(10, 10, 0, 0, GridBagConstraints.NORTHEAST, tutorialButton); // Use GridBagConstraints.NORTHEAST
+        setUpCustomButton(tutorialButton);
+        tutorialButton.addActionListener(e -> {
+            StartMenu tutorial = new StartMenu();
+            tutorial.showTutorial(tutorial.getSlides());
+        });
         /* The table. */
 
         // Show the frame.
 
     }
 
-    private void createArrowButton() {
-        ImageIcon originalIcon = new ImageIcon("src/main/resources/images/leftarrow.png");
+    private JButton createCustomButton(String imgPath) {
+        ImageIcon originalIcon = new ImageIcon(imgPath);
         Image originalImage = originalIcon.getImage();
 
         Image scaledImage = originalImage.getScaledInstance(40, 40, Image.SCALE_SMOOTH);
         ImageIcon scaledIcon = new ImageIcon(scaledImage);
-        returnButton = new JButton(scaledIcon);
+        JButton customButton = new JButton(scaledIcon);
 
-        // Set layout constraints for the arrowButton
-        GridBagConstraints arrowButtonConstraints = new GridBagConstraints();
-        arrowButtonConstraints.gridx = 0; // column
-        arrowButtonConstraints.gridy = 0; // row
-        arrowButtonConstraints.anchor = GridBagConstraints.NORTHWEST; // top left corner
-        arrowButtonConstraints.insets = new Insets(10, 10, 0, 0); // optional: adds some margin
-
-        // Add the arrowButton to the layout
-        getContentPane().add(returnButton, arrowButtonConstraints);
-
-        returnButton.setOpaque(false);
-        returnButton.setContentAreaFilled(false);
-        returnButton.setBorderPainted(false);
-        returnButton.addActionListener(e -> {
-            boardPanel.returnFromGame("online", clientController);
-        });
+        return customButton;
     }
+
+    public void placeCustomButton(int top, int left, int bottom, int right, int constraints, JButton button) {
+        // Set layout constraints for the button
+        GridBagConstraints buttonConstraints = new GridBagConstraints();
+        buttonConstraints.gridx = (constraints == GridBagConstraints.NORTHWEST) ? 0 : 2; // column (0 for left, 2 for right)
+        buttonConstraints.gridy = 0; // row
+        buttonConstraints.anchor = constraints; // top left or top right corner
+        buttonConstraints.insets = new Insets(top, left, bottom, right); // optional: adds some margin
+
+        // Add the button to the layout
+        getContentPane().add(button, buttonConstraints);
+    }
+
+    public void setUpCustomButton(JButton customButton){
+        customButton.setOpaque(false);
+        customButton.setContentAreaFilled(false);
+        customButton.setBorderPainted(false);
+    }
+
+
     @Override
     public void joinedTable(TableType type, BigDecimal bigBlind, List<Player> players) {
 
@@ -297,6 +323,28 @@ public class OnlineMain extends JFrame implements Client, IHandler {
         }
     }
 
+    private JPanel warningMessage(String warningMessage) {
+
+        JPanel panel = new JPanel();
+        panel.setBackground(POKER_GREEN);
+        UIManager.put("OptionPane.background", POKER_GREEN);
+        UIManager.put("Panel.background", POKER_GREEN);
+
+        JLabel label = new JLabel(warningMessage);
+        panel.add(label);
+
+        return panel;
+    }
+
+    private int getYesOrNoOption(JPanel panel) {
+        int result = JOptionPane.showConfirmDialog(null, panel, "Warning", JOptionPane.YES_NO_OPTION);
+        if (result == JOptionPane.YES_OPTION) {// Koden för när användaren väljer Yes
+            return 1;
+        } else if (result == JOptionPane.NO_OPTION) {// Koden för när användaren väljer No
+            return 0;
+        }
+        return -1;
+    }
 
 
     public void gameOver() {

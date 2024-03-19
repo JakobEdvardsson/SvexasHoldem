@@ -31,50 +31,77 @@ import static org.pokergame.gui.StartMenu.POKER_GREEN;
 
 /**
  * The game's main frame.
- * 
+ * <p>
  * This is the core class of the Swing UI client application.
- * 
+ *
  * @author Oscar Stigter
  */
 public class Main extends JFrame implements Client, IHandler {
-    
-    /** Serial version UID. */
+
+    /**
+     * Serial version UID.
+     */
     private static final long serialVersionUID = -5414633931666096443L;
-    
-    /** Table type (betting structure). */
+
+    /**
+     * Table type (betting structure).
+     */
     private static final TableType TABLE_TYPE = TableType.NO_LIMIT;
 
-    /** The size of the big blind. */
+    /**
+     * The size of the big blind.
+     */
     private static final BigDecimal BIG_BLIND = BigDecimal.valueOf(10);
 
-    /** The starting cash per player. */
+    /**
+     * The starting cash per player.
+     */
     private static final BigDecimal STARTING_CASH = BigDecimal.valueOf(500);
 
-    /** The GridBagConstraints. */
+    /**
+     * The GridBagConstraints.
+     */
     private final GridBagConstraints gc;
-    
-    /** The board panel. */
-    private final BoardPanel boardPanel;
-    
-    /** The control panel. */
-    private final ControlPanel controlPanel;
-    
-    /** The player panels. */
-    private final Map<String, PlayerPanel> playerPanels;
-    
-    /** The human player. */
-    private final Player humanPlayer;
-    
-    /** The current dealer's name. */
-    private String dealerName; 
 
-    /** The current actor's name. */
+    /**
+     * The board panel.
+     */
+    private final BoardPanel boardPanel;
+
+    /**
+     * The control panel.
+     */
+    private final ControlPanel controlPanel;
+
+    /**
+     * The player panels.
+     */
+    private final Map<String, PlayerPanel> playerPanels;
+
+    /**
+     * The human player.
+     */
+    private final Player humanPlayer;
+
+    /**
+     * The current dealer's name.
+     */
+    private String dealerName;
+
+    /**
+     * The current actor's name.
+     */
     private String actorName;
 
-    /** The start menu to callback. */
+    /**
+     * The start menu to callback.
+     */
     private StartMenu menu;
 
     private JButton returnButton;
+
+    private JButton tutorialButton;
+
     /**
      * Constructor.
      */
@@ -134,7 +161,30 @@ public class Main extends JFrame implements Client, IHandler {
             }
         }
 
-        createReturnButton();
+        returnButton = createCustomButton("src/main/resources/images/leftarrow.png");
+        placeCustomButton(10,10,0,0, GridBagConstraints.NORTHWEST, returnButton);
+        setUpCustomButton(returnButton);
+        returnButton.addActionListener(e -> {
+            SwingUtilities.invokeLater(() -> {
+                JPanel panel = warningMessage("Are you sure you want to leave the game?");
+                int result = getYesOrNoOption(panel);
+                if (result == 1) {
+                    boardPanel.returnFromGame("offline", null);
+                }
+
+            });
+        });
+
+        tutorialButton = createCustomButton("src/main/resources/images/questionmark.png");
+        placeCustomButton(10, 10, 0, 0, GridBagConstraints.NORTHEAST, tutorialButton); // Use GridBagConstraints.NORTHEAST
+        setUpCustomButton(tutorialButton);
+        tutorialButton.addActionListener(e -> {
+            StartMenu tutorial = new StartMenu();
+            tutorial.showTutorial(tutorial.getSlides());
+        });
+
+
+
         // Show the frame.
         pack();
         setResizable(false);
@@ -145,32 +195,33 @@ public class Main extends JFrame implements Client, IHandler {
         table.start();
     }
 
-    private void createReturnButton() {
-        ImageIcon originalIcon = new ImageIcon("src/main/resources/images/leftarrow.png");
+    private JButton createCustomButton(String imgPath) {
+        ImageIcon originalIcon = new ImageIcon(imgPath);
         Image originalImage = originalIcon.getImage();
 
         Image scaledImage = originalImage.getScaledInstance(40, 40, Image.SCALE_SMOOTH);
         ImageIcon scaledIcon = new ImageIcon(scaledImage);
-        returnButton = new JButton(scaledIcon);
+        JButton customButton = new JButton(scaledIcon);
 
-        // Set layout constraints for the arrowButton
-        GridBagConstraints arrowButtonConstraints = new GridBagConstraints();
-        arrowButtonConstraints.gridx = 0; // column
-        arrowButtonConstraints.gridy = 0; // row
-        arrowButtonConstraints.anchor = GridBagConstraints.NORTHWEST; // top left corner
-        arrowButtonConstraints.insets = new Insets(10, 10, 0, 0); // optional: adds some margin
+        return customButton;
+    }
 
-        // Add the arrowButton to the layout
-        getContentPane().add(returnButton, arrowButtonConstraints);
+    public void placeCustomButton(int top, int left, int bottom, int right, int constraints, JButton button) {
+        // Set layout constraints for the button
+        GridBagConstraints buttonConstraints = new GridBagConstraints();
+        buttonConstraints.gridx = (constraints == GridBagConstraints.NORTHWEST) ? 0 : 2; // column (0 for left, 2 for right)
+        buttonConstraints.gridy = 0; // row
+        buttonConstraints.anchor = constraints; // top left or top right corner
+        buttonConstraints.insets = new Insets(top, left, bottom, right); // optional: adds some margin
 
-        returnButton.setOpaque(false);
-        returnButton.setContentAreaFilled(false);
-        returnButton.setBorderPainted(false);
-        returnButton.addActionListener(e -> {
-            SwingUtilities.invokeLater(() -> {
-                boardPanel.returnFromGame("offline", null);
-            });
-        });
+        // Add the button to the layout
+        getContentPane().add(button, buttonConstraints);
+    }
+
+    public void setUpCustomButton(JButton customButton){
+        customButton.setOpaque(false);
+        customButton.setContentAreaFilled(false);
+        customButton.setBorderPainted(false);
     }
 
     @Override
@@ -243,17 +294,12 @@ public class Main extends JFrame implements Client, IHandler {
 
     /**
      * Adds an UI component.
-     * 
-     * @param component
-     *            The component.
-     * @param x
-     *            The column.
-     * @param y
-     *            The row.
-     * @param width
-     *            The number of columns to span.
-     * @param height
-     *            The number of rows to span.
+     *
+     * @param component The component.
+     * @param x         The column.
+     * @param y         The row.
+     * @param width     The number of columns to span.
+     * @param height    The number of rows to span.
      */
     private void addComponent(Component component, int x, int y, int width, int height) {
         gc.gridx = x;
@@ -269,9 +315,8 @@ public class Main extends JFrame implements Client, IHandler {
 
     /**
      * Sets whether the actor  is in turn.
-     * 
-     * @param isInTurn
-     *            Whether the actor is in turn.
+     *
+     * @param isInTurn Whether the actor is in turn.
      */
     private void setActorInTurn(boolean isInTurn) {
         if (actorName != null) {
@@ -284,9 +329,8 @@ public class Main extends JFrame implements Client, IHandler {
 
     /**
      * Sets the dealer.
-     * 
-     * @param isDealer
-     *            Whether the player is the dealer.
+     *
+     * @param isDealer Whether the player is the dealer.
      */
     private void setDealer(boolean isDealer) {
         if (dealerName != null) {
@@ -309,20 +353,28 @@ public class Main extends JFrame implements Client, IHandler {
     }
 
 
-    private void warningMessage(String warningMessage) {
-        // Skapa en JPanel med önskad bakgrundsfärg
+    private JPanel warningMessage(String warningMessage) {
+
         JPanel panel = new JPanel();
         panel.setBackground(POKER_GREEN);
         UIManager.put("OptionPane.background", POKER_GREEN);
         UIManager.put("Panel.background", POKER_GREEN);
-        // Lägg till meddelandetext i panelen
+
         JLabel label = new JLabel(warningMessage);
         panel.add(label);
-        // Visa dialogrutan med den anpassade panelen
-        JOptionPane.showMessageDialog(null, panel);
 
+        return panel;
     }
 
+    private int getYesOrNoOption(JPanel panel) {
+        int result = JOptionPane.showConfirmDialog(null, panel, "Warning", JOptionPane.YES_NO_OPTION);
+        if (result == JOptionPane.YES_OPTION) {// Koden för när användaren väljer Yes
+            return 1;
+        } else if (result == JOptionPane.NO_OPTION) {// Koden för när användaren väljer No
+            return 0;
+        }
+        return -1;
+    }
 
 
 }

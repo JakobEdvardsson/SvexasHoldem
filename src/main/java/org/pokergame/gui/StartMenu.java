@@ -130,6 +130,13 @@ public class StartMenu extends JFrame {
 
     }
 
+    public StartMenu(){
+    }
+
+    public ImageIcon[] getSlides() {
+        return slides;
+    }
+
     public void initializeGUI() {
         frame.getContentPane().remove(username);
         frame.getContentPane().remove(usernameLabel);
@@ -387,7 +394,7 @@ public class StartMenu extends JFrame {
         playerStackLabel.setVisible(false);
         playersStackLabel.setVisible(false);
         label.setBounds(240, 80, 220, 80);
-        label.setText("TeachMe poker");
+        label.setText("TeachMePoker");
         frame.repaint();
         initializeGUI();
     }
@@ -498,7 +505,7 @@ public class StartMenu extends JFrame {
     public void disconnectPlayer(){
         controller.disconnectClient();
     }
-    private void showTutorial(ImageIcon[] slides) {
+    public void showTutorial(ImageIcon[] slides) {
         TutorialSlideshow tutorialSlideshow = new TutorialSlideshow(this, slides);
         tutorialSlideshow.setVisible(true);
     }
