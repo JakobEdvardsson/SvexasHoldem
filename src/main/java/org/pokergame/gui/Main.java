@@ -27,6 +27,8 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.*;
 
+import static org.pokergame.gui.StartMenu.POKER_GREEN;
+
 /**
  * The game's main frame.
  * 
@@ -72,6 +74,7 @@ public class Main extends JFrame implements Client, IHandler {
     /** The start menu to callback. */
     private StartMenu menu;
 
+    private JButton returnButton;
     /**
      * Constructor.
      */
@@ -131,6 +134,7 @@ public class Main extends JFrame implements Client, IHandler {
             }
         }
 
+        createReturnButton();
         // Show the frame.
         pack();
         setResizable(false);
@@ -139,6 +143,34 @@ public class Main extends JFrame implements Client, IHandler {
 
         // Start the game.
         table.start();
+    }
+
+    private void createReturnButton() {
+        ImageIcon originalIcon = new ImageIcon("src/main/resources/images/leftarrow.png");
+        Image originalImage = originalIcon.getImage();
+
+        Image scaledImage = originalImage.getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+        ImageIcon scaledIcon = new ImageIcon(scaledImage);
+        returnButton = new JButton(scaledIcon);
+
+        // Set layout constraints for the arrowButton
+        GridBagConstraints arrowButtonConstraints = new GridBagConstraints();
+        arrowButtonConstraints.gridx = 0; // column
+        arrowButtonConstraints.gridy = 0; // row
+        arrowButtonConstraints.anchor = GridBagConstraints.NORTHWEST; // top left corner
+        arrowButtonConstraints.insets = new Insets(10, 10, 0, 0); // optional: adds some margin
+
+        // Add the arrowButton to the layout
+        getContentPane().add(returnButton, arrowButtonConstraints);
+
+        returnButton.setOpaque(false);
+        returnButton.setContentAreaFilled(false);
+        returnButton.setBorderPainted(false);
+        returnButton.addActionListener(e -> {
+            SwingUtilities.invokeLater(() -> {
+                boardPanel.returnFromGame("offline", null);
+            });
+        });
     }
 
     @Override
@@ -265,9 +297,32 @@ public class Main extends JFrame implements Client, IHandler {
         }
     }
 
+
     @Override
     public void gameOver() {
         menu.showLobbyWindow();
         this.dispose();
     }
+
+    @Override
+    public void returnToMainMenu() {
+    }
+
+
+    private void warningMessage(String warningMessage) {
+        // Skapa en JPanel med önskad bakgrundsfärg
+        JPanel panel = new JPanel();
+        panel.setBackground(POKER_GREEN);
+        UIManager.put("OptionPane.background", POKER_GREEN);
+        UIManager.put("Panel.background", POKER_GREEN);
+        // Lägg till meddelandetext i panelen
+        JLabel label = new JLabel(warningMessage);
+        panel.add(label);
+        // Visa dialogrutan med den anpassade panelen
+        JOptionPane.showMessageDialog(null, panel);
+
+    }
+
+
+
 }

@@ -3,7 +3,6 @@ package org.pokergame.client;
 import org.pokergame.actions.PlayerAction;
 import org.pokergame.gui.Main;
 import org.pokergame.gui.StartMenu;
-import org.pokergame.toClientCommands.*;
 import org.pokergame.toServerCommands.*;
 
 import javax.swing.*;
@@ -96,5 +95,16 @@ public class ClientController {
     public void showLobbyWindow() {
         startMenu.showLobbyWindow();
         clientInput.gameOver();
+    }
+
+    public int getLobbyId() {
+        return startMenu.getLobbyId();
+    }
+
+    public void showStartMenu() {
+
+        startMenu.showStartMenu();
+        clientInput.gameOver();
+
     }
 }

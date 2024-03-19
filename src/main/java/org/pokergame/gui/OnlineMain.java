@@ -19,7 +19,6 @@ package org.pokergame.gui;
 
 import org.pokergame.*;
 import org.pokergame.actions.PlayerAction;
-import org.pokergame.bots.BasicBot;
 import org.pokergame.client.ClientController;
 
 import javax.swing.*;
@@ -69,6 +68,8 @@ public class OnlineMain extends JFrame implements Client, IHandler {
 
     private ClientController clientController;
 
+    private JButton returnButton;
+
     /**
      * Constructor.
      */
@@ -92,12 +93,38 @@ public class OnlineMain extends JFrame implements Client, IHandler {
 
         playerPanels = new HashMap<String, PlayerPanel>();
 
+        createArrowButton();
         /* The table. */
 
         // Show the frame.
 
     }
 
+    private void createArrowButton() {
+        ImageIcon originalIcon = new ImageIcon("src/main/resources/images/leftarrow.png");
+        Image originalImage = originalIcon.getImage();
+
+        Image scaledImage = originalImage.getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+        ImageIcon scaledIcon = new ImageIcon(scaledImage);
+        returnButton = new JButton(scaledIcon);
+
+        // Set layout constraints for the arrowButton
+        GridBagConstraints arrowButtonConstraints = new GridBagConstraints();
+        arrowButtonConstraints.gridx = 0; // column
+        arrowButtonConstraints.gridy = 0; // row
+        arrowButtonConstraints.anchor = GridBagConstraints.NORTHWEST; // top left corner
+        arrowButtonConstraints.insets = new Insets(10, 10, 0, 0); // optional: adds some margin
+
+        // Add the arrowButton to the layout
+        getContentPane().add(returnButton, arrowButtonConstraints);
+
+        returnButton.setOpaque(false);
+        returnButton.setContentAreaFilled(false);
+        returnButton.setBorderPainted(false);
+        returnButton.addActionListener(e -> {
+            boardPanel.returnFromGame("online", clientController);
+        });
+    }
     @Override
     public void joinedTable(TableType type, BigDecimal bigBlind, List<Player> players) {
 
@@ -270,9 +297,17 @@ public class OnlineMain extends JFrame implements Client, IHandler {
         }
     }
 
+
+
     public void gameOver() {
         clientController.showLobbyWindow();
     }
+
+    @Override
+    public void returnToMainMenu(){
+        clientController.showStartMenu();
+    }
+
 
     public void setTimeout(long timeout) {
         boardPanel.setTimeout(timeout);

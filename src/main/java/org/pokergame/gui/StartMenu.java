@@ -34,6 +34,8 @@ public class StartMenu extends JFrame {
 
     ClientController controller;
 
+    private int lobbyId;
+
     public void hideLobbyWindow() {
         frame.setVisible(false);
         playerInLobby = false;
@@ -55,6 +57,12 @@ public class StartMenu extends JFrame {
     public void showLobbyWindow() {
         frame.setVisible(true);
     }
+
+    public void showStartMenu() {
+        returnToMainMenu();
+        frame.setVisible(true);
+    }
+
 
     public enum LanguageState {
         ENGLISH,
@@ -122,7 +130,7 @@ public class StartMenu extends JFrame {
 
     }
 
-    private void initializeGUI() {
+    public void initializeGUI() {
         frame.getContentPane().remove(username);
         frame.getContentPane().remove(usernameLabel);
         frame.getContentPane().remove(saveUsernameButton);
@@ -179,6 +187,14 @@ public class StartMenu extends JFrame {
         frame.add(button3);
     }
 
+    public int getLobbyId() {
+        return lobbyId;
+    }
+
+    public void setLobbyId(int lobbyId) {
+        this.lobbyId = lobbyId;
+    }
+
     private void lobbyView() {
         button.setVisible(false);
         button1.setVisible(false);
@@ -230,7 +246,8 @@ public class StartMenu extends JFrame {
                 //joinLobby1.setEnabled(!button.isEnabled());
                 joinLobby2.setEnabled(false);
                 joinLobby3.setEnabled(false);
-                controller.joinLobby(0);
+                setLobbyId(0);
+                controller.joinLobby(lobbyId);
                 joinLobby1.setText("Leave lobby");
             } else {
                 playerInLobby = false;
@@ -239,7 +256,7 @@ public class StartMenu extends JFrame {
                 joinLobby3.setEnabled(true);
                 joinLobby1.setText("Join lobby");
                 startGame.setEnabled(false);
-                controller.leaveLobby(0);
+                controller.leaveLobby(lobbyId);
             }
         });
         frame.add(joinLobby1);
@@ -253,7 +270,8 @@ public class StartMenu extends JFrame {
                 //joinLobby2.setEnabled(!button.isEnabled());
                 joinLobby1.setEnabled(false);
                 joinLobby3.setEnabled(false);
-                controller.joinLobby(1);
+                setLobbyId(1);
+                controller.joinLobby(lobbyId);
                 joinLobby2.setText("Leave lobby");
             } else {
                 playerInLobby = false;
@@ -262,7 +280,7 @@ public class StartMenu extends JFrame {
                 joinLobby3.setEnabled(true);
                 joinLobby2.setText("Join lobby");
                 startGame.setEnabled(false);
-                controller.leaveLobby(1);
+                controller.leaveLobby(lobbyId);
             }
         });
         frame.add(joinLobby2);
@@ -276,7 +294,8 @@ public class StartMenu extends JFrame {
                 //joinLobby3.setEnabled(!button.isEnabled());
                 joinLobby1.setEnabled(false);
                 joinLobby2.setEnabled(false);
-                controller.joinLobby(2);
+                setLobbyId(2);
+                controller.joinLobby(lobbyId);
                 joinLobby3.setText("Leave lobby");
             } else {
                 playerInLobby = false;
@@ -285,7 +304,7 @@ public class StartMenu extends JFrame {
                 joinLobby2.setEnabled(true);
                 joinLobby3.setText("Join lobby");
                 startGame.setEnabled(false);
-                controller.leaveLobby(2);
+                controller.leaveLobby(lobbyId);
             }
         });
         frame.add(joinLobby3);
@@ -476,6 +495,9 @@ public class StartMenu extends JFrame {
         }
     }
 
+    public void disconnectPlayer(){
+        controller.disconnectClient();
+    }
     private void showTutorial(ImageIcon[] slides) {
         TutorialSlideshow tutorialSlideshow = new TutorialSlideshow(this, slides);
         tutorialSlideshow.setVisible(true);
