@@ -133,7 +133,5 @@ class TableTest {
         table.getActor().setBet(BigDecimal.valueOf(0));
         results = table.getAllowedActions(player);
         assertFalse(results.contains(PlayerAction.CHECK), "Player should be able to check");
-
-
     }
 }

@@ -107,4 +107,14 @@ public class ClientController {
         clientInput.gameOver();
 
     }
+
+    public StartMenu getStartMenu() {
+        return startMenu;
+    }
+
+    public ClientInputX getClientInput() {
+        return clientInput;
+    }
+
+
 }
