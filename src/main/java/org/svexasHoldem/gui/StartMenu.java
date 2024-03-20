@@ -84,7 +84,7 @@ public class StartMenu extends JFrame {
         this.controller = controller;
 
         setTitle("Start Menu");
-        label = new JLabel("TeachMePoker");
+        label = new JLabel("SvexasHoldem");
         label.setBounds(240, 80, 220, 80);
         label.setFont(new Font("Arial", Font.BOLD, 30));
 
@@ -391,7 +391,7 @@ public class StartMenu extends JFrame {
         playerStackLabel.setVisible(false);
         playersStackLabel.setVisible(false);
         label.setBounds(240, 80, 220, 80);
-        label.setText("TeachMePoker");
+        label.setText("SvexasHoldem");
         frame.repaint();
         initializeGUI();
     }
@@ -416,7 +416,7 @@ public class StartMenu extends JFrame {
                 state = LanguageState.SWEDISH;
                 break;
             case SWEDISH:
-                label.setText("TeachMePoker");
+                label.setText("SvexasHoldem");
                 label.setBounds(240, 80, 220, 80);
                 button.setText("Play offline");
                 button1.setText("Play Online");
