@@ -106,7 +106,7 @@ public class Main extends JFrame implements Client, IHandler {
      * Constructor.
      */
     public Main(String playerName, StartMenu menu) {
-        super("Texas Hold'em poker");
+        super("SvexasHoldem - " + playerName);
 
         this.menu = menu;
 

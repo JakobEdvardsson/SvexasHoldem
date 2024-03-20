@@ -408,7 +408,7 @@ public class StartMenu extends JFrame {
     private void changeLanguage() {
         switch (state) {
             case ENGLISH:
-                label.setText("LärMigPoker");
+                label.setText("SvexasHoldem");
                 label.setBounds(260, 80, 220, 80);
                 button.setText("Spela offline");
                 button1.setText("Spela online");
